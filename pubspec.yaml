@@ -1,0 +1,40 @@
+name: link4launches
+description: Aim to the stars.
+
+publish_to: 'none'
+
+
+version: 1.0.0+1
+
+
+environment:
+  sdk: '>=2.18.4 <3.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  loading_animation_widget: ^1.2.0+3
+  path_provider: ^2.0.11
+  shimmer: ^2.0.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  flutter_launcher_icons: "^0.11.0"
+  url_launcher: ^6.1.6
+  http: ^0.13.5
+  change_app_package_name: ^1.1.0
+
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/app-icon/app-icon.png"
+
+
+flutter:
+  uses-material-design: true
