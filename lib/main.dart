@@ -121,11 +121,11 @@ class _L4LHomePageState extends State<L4LHomePage> {
             : ListView.builder(
                 controller: _scrollController,
                 itemCount: _ll2API.data['count'],
-                itemBuilder: (context, index) => _getListItem(index),
+                itemBuilder: (context, index) => _buildListItem(index),
               ));
   }
 
-  Widget _getListItem(int index) {
+  Widget _buildListItem(int index) {
     final LaunchStatus status =
         LaunchStatus(state: _ll2API.data['results'][index]['status']['abbrev']);
     return GestureDetector(
@@ -139,6 +139,8 @@ class _L4LHomePageState extends State<L4LHomePage> {
                       ? const Color.fromARGB(255, 57, 58, 59)
                       : const Color.fromARGB(255, 230, 230, 230),
               elevation: 7,
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(18))),
               margin: const EdgeInsets.fromLTRB(8.0, 7.0, 8.0, 7.0),
               child: Row(
                 children: [
