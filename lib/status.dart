@@ -50,26 +50,35 @@ class LaunchStatus extends StatelessWidget {
         ),
       );
 
-  String _resizeStatus(String state) =>
-      (state.toUpperCase().contains('IN FLIGHT'))
-          ? 'FLIG'
-          : (state.length > 4)
-              ? state.toUpperCase().substring(0, 4)
-              : state.toUpperCase();
+  String _resizeStatus(String state) {
+    state = state.toUpperCase();
+
+    if (state.contains('IN FLIGHT')) {
+      return 'FLIG';
+    } else if (state.contains('PARTIAL FAILURE')) {
+      return 'PTFL';
+    } else {
+      return (state.length > 4) ? state.substring(0, 4) : state;
+    }
+  }
 
   String _getStatusDescription(String state) {
     if (state == 'GO') {
-      return 'Ready To Go';
+      return 'Ready to Go for Launch';
     } else if (state == 'TBC') {
-      return 'To Be Confirmed';
+      return 'To Be Confirmed - Awaiting official confirmation';
     } else if (state == 'TBD') {
       return 'To Be Defined';
     } else if (state == 'SUCC' || state == 'SUCCESS') {
       return 'Launch Successful';
-    } else if (state == 'FAIL' || state == 'FAILED') {
+    } else if (state == 'FAIL' || state == 'FAILED' || state == 'FAILURE') {
       return 'Launch Failed';
+    } else if (state == 'PTFL' || state == 'PARTIAL FAILURE') {
+      return 'Either a Partial Failure or an exceptional event made it impossible to consider the mission a success';
     } else if (state == 'FLIG' || state == 'IN FLIGHT') {
       return 'Rocket actually In Flight';
+    } else if (state == 'HOLD' || state == 'ON HOLD') {
+      return 'The launch has been paused, but it can still happen within the launch window.';
     } else {
       return 'Undefined';
     }
@@ -80,12 +89,18 @@ class LaunchStatus extends StatelessWidget {
       return Colors.green[900];
     } else if (state == 'TBC') {
       return Colors.orange[900];
-    } else if (state == 'TBD' || state == 'FAIL' || state == 'FAILED') {
+    } else if (state == 'TBD' ||
+        state == 'FAIL' ||
+        state == 'FAILED' ||
+        state == 'PTFL' ||
+        state == 'PARTIAL FAILURE') {
       return Colors.red[800];
     } else if (state == 'SUCC' || state == 'SUCCESS') {
       return Colors.green[600];
     } else if (state == 'FLIG' || state == 'IN FLIGHT') {
       return Colors.deepPurple[600];
+    } else if (state == 'HOLD' || state == 'ON HOLD') {
+      return Colors.purpleAccent[400];
     } else {
       return Colors.blue;
     }

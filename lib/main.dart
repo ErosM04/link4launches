@@ -147,7 +147,7 @@ class _L4LHomePageState extends State<L4LHomePage> {
                   Expanded(
                       child: Padding(
                           padding:
-                              const EdgeInsets.fromLTRB(12.0, 18.0, 18.0, 18.0),
+                              const EdgeInsets.fromLTRB(12.0, 18.0, 10.0, 18.0),
                           child: Text(
                             _ll2API.data['results'][index]['name'],
                             textAlign: TextAlign.left,
