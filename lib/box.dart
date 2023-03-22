@@ -1,9 +1,9 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:link4launches/detail.dart';
 import 'package:link4launches/shimmer.dart';
 import 'package:link4launches/status.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as launcher;
+import 'package:cached_network_image/cached_network_image.dart';
 
 class DataBox extends StatelessWidget {
   final String imageLink;
@@ -116,22 +116,15 @@ class DataBox extends StatelessWidget {
   }
 
   Widget _buildImageItem() => Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(15.0),
-            child: Image.network(
-              imageLink,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress != null) {
-                  return const Center(child: ShimmerBox());
-                } else {
-                  return child;
-                }
-              },
-              errorBuilder: (context, error, stackTrace) => Container(),
-            ),
-          ));
-  
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15.0),
+        child: CachedNetworkImage(
+          imageUrl: imageLink,
+          placeholder: (context, url) => const Center(child: ShimmerBox()),
+          errorWidget: (context, error, stackTrace) => Container(),
+        ),
+      ));
 
   Widget _buildTextItem(String str,
           {double fontSize = 23,
@@ -153,7 +146,7 @@ class DataBox extends StatelessWidget {
     return SizedBox(
       width: 80,
       child: TextButton(
-          onPressed: () => launchUrl(Uri.parse(link)),
+          onPressed: () => launcher.launchUrl(Uri.parse(link)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
