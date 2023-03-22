@@ -24,22 +24,23 @@ The request vary based on many parameters, such as limit or the status (Ready To
 The main page of the app is the following:
 
 <p align='center'>
-<img src='./readme-images/main_page.jpg' width='200'>
+<img src='./readme_images/main_page.jpg' width='200'>
 </p>
 
 The list is made by the latest launches (like successful or failed launches [not in the image]) followed by all the upcoming launches order by launch date. The page can be scrolled to access the other launches, for a total number of 14. Every tile of the list contains both the name of the launch and his status that can be:
 - **GO**: Ready To Go;
-- **TBC**: To Be Confirmed;
+- **TBC**: To Be Confirmed - Awaiting official confirmation;
 - **TBD**: To Be Defined;
 - **SUCCESS**: Launch Successful;
 - **FAILURE**: Launch Failed;
-- **IN FLIGHT**: Actually flying;
-- **others**: Undefined.
+- **PARTIAL FAILURE**: Either a Partial Failure or an exceptional event made it impossible to consider the mission a success;
+- **IN FLIGHT**: Rocket actually In Flight;
+- **ON HOLD**: The launch has been paused, but it can still happen within the launch window.
 
 By clicking on the status icon is possible to show a snackbar that will describe the state:
 
 <p align='center'>
-<img src='./readme-images/status_snackbar.jpg' width='200'>
+<img src='./readme_images/status_snackbar.jpg' width='200'>
 </p>
 
 #### Appbar
@@ -47,7 +48,7 @@ The appbar contains the name of the app followed by 3 buttons:
 - TBD: used to hide the To Be Defined result, as often there are many TBD launches which are less important than the others, as they still have to be defined.
 
 <p align='center'>
-<img src='./readme-images/main_page_noTBD.jpg' width='200'>
+<img src='./readme_images/main_page_noTBD.jpg' width='200'>
 </p>
 
 - Recharge: used to send a request to the api and refresh data;
@@ -57,7 +58,7 @@ The appbar contains the name of the app followed by 3 buttons:
     - My fancy github account :)
 
 <p align='center'>
-<img src='./readme-images/dropdown_menu.jpg ' width='200'>
+<img src='./readme_images/dropdown_menu.jpg ' width='200'>
 </p>
 
 ### Launch page
@@ -66,7 +67,7 @@ By clicking on a element the info page (launch page) is open and different conta
     - an image of the rocket or the payload, with a shimmering loading animation;
 
     <p align='center'>
-    <img src='./readme-images/shimmering_loading.jpg' width='200'>
+    <img src='./readme_images/shimmering_loading.jpg' width='200'>
     </p>
 
     - the full name of the launch;
@@ -98,14 +99,14 @@ By clicking on a element the info page (launch page) is open and different conta
     - the description of the rocket.
 
 <p align='center'>
-<img src='./readme-images/launch_page.jpg' width='200'>
+<img src='./readme_images/launch_page.jpg' width='200'>
 </p>
 
 #### Details
 By clicking on a specific detail is possible to show a snackbar containing the description:
 
 <p align='center'>
-<img src='./readme-images/detail_snackbar.jpg' width='200'>
+<img src='./readme_images/detail_snackbar.jpg' width='200'>
 </p>
 
 ## Useful Links:
