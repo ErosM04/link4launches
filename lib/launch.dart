@@ -85,15 +85,17 @@ class LaunchInfoPage extends StatelessWidget {
                 data['rocket']['configuration']['url']['name'])
             ? ''
             : _readJsonField(['rocket', 'configuration', 'url', 'full_name']),
-        height: _convertToInt(_readJsonField(['rocket', 'configuration', 'url', 'length'])),
-        maxStages: _convertToInt(_readJsonField(['rocket', 'configuration', 'url', 'max_stage'])),
+        height: _convertToInt(
+            _readJsonField(['rocket', 'configuration', 'url', 'length'])),
+        maxStages: _convertToInt(
+            _readJsonField(['rocket', 'configuration', 'url', 'max_stage'])),
         liftoffThrust: _convertToInt(
             _readJsonField(['rocket', 'configuration', 'url', 'to_thrust'])),
         liftoffMass: _convertToInt(
             _readJsonField(['rocket', 'configuration', 'url', 'launch_mass'])),
         massToLEO: _convertToInt(
             _readJsonField(['rocket', 'configuration', 'url', 'leo_capacity'])),
-         massToGTO: _convertToInt(
+        massToGTO: _convertToInt(
             _readJsonField(['rocket', 'configuration', 'url', 'gto_capacity'])),
         successfulLaunches: _convertToInt(_readJsonField(
             ['rocket', 'configuration', 'url', 'successful_launches'])),
@@ -108,10 +110,10 @@ class LaunchInfoPage extends StatelessWidget {
 
   int _convertToInt(String str) {
     try {
-      if(str.contains('.')){
+      if (str.contains('.')) {
         str = str.substring(0, str.indexOf('.'));
       }
-      
+
       return (str == '') ? -1 : int.parse(str);
     } on FormatException catch (_) {
       return -1;
