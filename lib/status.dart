@@ -92,6 +92,7 @@ class LaunchStatus extends StatelessWidget {
     } else if (state == 'TBD' ||
         state == 'FAIL' ||
         state == 'FAILED' ||
+        state == 'FAILURE' ||
         state == 'PTFL' ||
         state == 'PARTIAL FAILURE') {
       return Colors.red[800];

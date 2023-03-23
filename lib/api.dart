@@ -37,7 +37,7 @@ class LaunchLibrary2API {
     //Throttled request (15 requests limit per hour exceeded), reads backup file
     ScaffoldMessenger.of(context).showSnackBar(SnackBarMessage(
             message:
-                'Error${(statusCode != -1) ? ' $statusCode ' : ''} ${(reasonPhrase.isEmpty) ? body.replaceAll('{', '').replaceAll('}', '').replaceAll('"detail":', '').replaceAll('"', '') : ':due to $reasonPhrase'}')
+                'Error${(statusCode != -1) ? ' $statusCode' : ''} ${(reasonPhrase.isEmpty) ? body.replaceAll('{', '').replaceAll('}', '').replaceAll('"detail":', '').replaceAll('"', '') : ': due to $reasonPhrase'}')
         .build(context));
     data = json.decode(await _loadFromFile(context));
 

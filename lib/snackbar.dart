@@ -3,39 +3,31 @@ import 'package:flutter/scheduler.dart';
 
 class SnackBarMessage {
   final String message;
-  final int duration;
+  final int durationInSec;
+  final int? durationInMil;
   final double fontSize;
 
   const SnackBarMessage({
     required this.message,
-    this.duration = 2,
+    this.durationInSec = 3,
+    this.durationInMil,
     this.fontSize = 15,
   });
 
   SnackBar build(BuildContext context) => SnackBar(
         content: _getContent(
             MediaQuery.of(context).platformBrightness == Brightness.dark),
-        duration: Duration(seconds: duration),
+        duration: (durationInMil == null)
+            ? Duration(seconds: durationInSec)
+            : Duration(milliseconds: durationInMil!),
         backgroundColor: _getBackgroundColor(
             MediaQuery.of(context).platformBrightness == Brightness.dark),
-      );
-
-  SnackBar buildWhitoutContext() => SnackBar(
-        content: _getContent(
-            SchedulerBinding.instance.window.platformBrightness ==
-                Brightness.dark),
-        duration: Duration(seconds: duration),
-        backgroundColor: _getBackgroundColor(
-            SchedulerBinding.instance.window.platformBrightness ==
-                Brightness.dark),
       );
 
   Widget _getContent(bool isDark) => Text(
         message,
         textAlign: TextAlign.center,
-        style: TextStyle(
-            // fontSize: fontSize,
-            color: _getTextColor(isDark)),
+        style: TextStyle(color: _getTextColor(isDark)),
       );
 
   Color _getTextColor(bool isDark) =>

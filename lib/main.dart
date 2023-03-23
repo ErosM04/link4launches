@@ -4,6 +4,7 @@ import 'package:link4launches/api.dart';
 import 'package:link4launches/app_bar.dart';
 import 'package:link4launches/launch.dart';
 import 'package:link4launches/status.dart';
+import 'package:link4launches/updater.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 void main() => runApp(const Link4Launches());
@@ -64,11 +65,18 @@ class _L4LHomePageState extends State<L4LHomePage> {
   @override
   void initState() {
     super.initState();
+
+    //Orientation lock in portrait (vertical) mode
     SystemChrome.setPreferredOrientations([
-      //Orientation lock in portrait (vertical) mode
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
+    //Check for app update
+    Updater updater = Updater(context: context);
+    updater
+        .checkForUpdate()
+        .then((value) => (value) ? updater.downloadUpdate() : null);
   }
 
   void _goToInfo(int index, LaunchStatus status) {
