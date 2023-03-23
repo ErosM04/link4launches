@@ -15,7 +15,8 @@ class Updater {
 
   Updater({required this.context});
 
-  /// TRUE if there is an update to do, false if it's ok
+  /// Performs a request to the Github API to verify the the latest version of the app,
+  /// if the version is ahead then returns ``true``, otherwise display an error ``SnackBar`` and returns ``false``.
   Future<bool> checkForUpdate() async {
     int statusCode = -1;
 
@@ -30,37 +31,42 @@ class Updater {
       }
     } on Exception catch (_) {}
 
-    // If something went wrong shows the error using a snackbar
-    callSnackBar(
+    _callSnackBar(
         message: 'Error $statusCode: while looking for the latest version');
     return false;
   }
 
-  /// Downloads the latest version of the app (apk) and save it in the Downloads folder
+  /// After 2 seconds shows a ``SnackBar`` to inform the user that the new version has been detected.
+  /// Two seconds later downloads the latest version of the app (link4launches.apk) and save it in the Downloads folder.
+  ///
+  /// Every single time the download progress is updated a new ``SnackBar``containing the progress percentage is called.
+  /// At the end of the download another ``SnackBar`` is called to inform the user about the path.
+  /// A ``SnackBar`` is also used in case of error.
   Future<void> downloadUpdate() async {
     Future.delayed(
         const Duration(seconds: 2),
-        () => callSnackBar(
+        () => _callSnackBar(
             message: 'New version $_newVersion detected', durationInSec: 2));
     Future.delayed(
         const Duration(seconds: 4),
         () => FileDownloader.downloadFile(
               url: _latestAPKLink,
-              onProgress: (fileName, progress) => callSnackBar(
+              onProgress: (fileName, progress) => _callSnackBar(
                   message: 'Download progress: ${progress.round()}%',
                   durationInMil: 700),
-              onDownloadCompleted: (path) => callSnackBar(
+              onDownloadCompleted: (path) => _callSnackBar(
                   message:
                       'Version $_newVersion downloaded at ${path.split('/')[4]}/${path.split('/').last}',
                   durationInSec: 3),
-              onDownloadError: (errorMessage) => callSnackBar(
+              onDownloadError: (errorMessage) => _callSnackBar(
                   message:
                       'Error while downloading $_newVersion: $errorMessage',
                   durationInSec: 3),
             ));
   }
 
-  void callSnackBar(
+  /// Function used to simplify the creation of a ``SnackBar``.
+  void _callSnackBar(
           {required String message,
           int durationInSec = 2,
           int? durationInMil}) =>
