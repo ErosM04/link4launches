@@ -57,7 +57,7 @@ class Updater {
               onDownloadCompleted: (path) => _callSnackBar(
                   message:
                       'Version $_newVersion downloaded at ${path.split('/')[4]}/${path.split('/').last}',
-                  durationInSec: 3),
+                  durationInSec: 5),
               onDownloadError: (errorMessage) => _callSnackBar(
                   message:
                       'Error while downloading $_newVersion: $errorMessage',
