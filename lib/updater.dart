@@ -5,7 +5,7 @@ import 'package:link4launches/snackbar.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 
 class Updater {
-  final String actualVersion = '1.3.0';
+  final String actualVersion = '1.4.0';
   final String _latestReleaseLink =
       'https://api.github.com/repos/ErosM04/link4launches/releases/latest';
   final String _latestAPKLink =
@@ -27,7 +27,7 @@ class Updater {
       if (statusCode == 200) {
         var data = json.decode(response.body);
         _newVersion = data['tag_name'];
-        return (actualVersion != data['tag_name']) ? true : false;
+        return ('v$actualVersion' != data['tag_name']) ? true : false;
       }
     } on Exception catch (_) {}
 
