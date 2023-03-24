@@ -18,6 +18,19 @@ The request vary based on many parameters, such as limit or the status (Ready To
 - The default request allows to get a 10 elements list: https://ll.thespacedevs.com/2.2.0/launch/upcoming/?format=json
 - And this is the full link with all the parameters: [Full link](https://ll.thespacedevs.com/2.2.0/launch/upcoming/?agency_launch_attempt_count=&agency_launch_attempt_count__gt=&agency_launch_attempt_count__gte=&agency_launch_attempt_count__lt=&agency_launch_attempt_count__lte=&agency_launch_attempt_count_year=&agency_launch_attempt_count_year__gt=&agency_launch_attempt_count_year__gte=&agency_launch_attempt_count_year__lt=&agency_launch_attempt_count_year__lte=&format=json&location_launch_attempt_count=&location_launch_attempt_count__gt=&location_launch_attempt_count__gte=&location_launch_attempt_count__lt=&location_launch_attempt_count__lte=&location_launch_attempt_count_year=&location_launch_attempt_count_year__gt=&location_launch_attempt_count_year__gte=&location_launch_attempt_count_year__lt=&location_launch_attempt_count_year__lte=&mission__orbit__name=&mission__orbit__name__icontains=&name=&orbital_launch_attempt_count=&orbital_launch_attempt_count__gt=&orbital_launch_attempt_count__gte=&orbital_launch_attempt_count__lt=&orbital_launch_attempt_count__lte=&orbital_launch_attempt_count_year=&orbital_launch_attempt_count_year__gt=&orbital_launch_attempt_count_year__gte=&orbital_launch_attempt_count_year__lt=&orbital_launch_attempt_count_year__lte=&pad_launch_attempt_count=&pad_launch_attempt_count__gt=&pad_launch_attempt_count__gte=&pad_launch_attempt_count__lt=&pad_launch_attempt_count__lte=&pad_launch_attempt_count_year=&pad_launch_attempt_count_year__gt=&pad_launch_attempt_count_year__gte=&pad_launch_attempt_count_year__lt=&pad_launch_attempt_count_year__lte=&r_spacex_api_id=&rocket__configuration__full_name=&rocket__configuration__full_name__icontains=&rocket__configuration__id=&rocket__configuration__manufacturer__name=&rocket__configuration__manufacturer__name__icontains=&rocket__configuration__name=&rocket__spacecraftflight__spacecraft__id=&rocket__spacecraftflight__spacecraft__name=&rocket__spacecraftflight__spacecraft__name__icontains=&slug=&status=1)
 
+## Self updating
+Every time the app is loaded a request to the Github API is performed, at the following link: https://api.github.com/repos/ErosM04/link4launches/releases/latest
+
+The url returns a json containing data about the latest **Github release**; if the version of the app is different from the one of the release, than a download of the latest release app ``link4launches.apk`` is performed and the file ends up in the ``Downloads`` folder. Here is the link: https://github.com/ErosM04/link4launches/releases/latest/download/link4launches.apk
+
+Thanks to the Android buil-in funtions, when building an apk file is possible to specify the version, so the new apk file is going to be recognized as an update.
+
+If the app hasn't been updated (despite downloading the update), even if the download ``Snackbars`` appear, a new download won't be really performed if the update file in the Download folder hasn't been touched.
+
+<p align='center'>
+<img src='./readme_images/update_message.jpg' width='200'>
+</p>
+
 ## Interface and Functions
 
 ### Main page
@@ -37,7 +50,7 @@ The list is made by the latest launches (like successful or failed launches [not
 - **IN FLIGHT**: Rocket actually In Flight;
 - **ON HOLD**: The launch has been paused, but it can still happen within the launch window.
 
-By clicking on the status icon is possible to show a snackbar that will describe the state:
+By clicking on the status icon is possible to show a ``Snackbar`` that will describe the state:
 
 <p align='center'>
 <img src='./readme_images/status_snackbar.jpg' width='200'>
@@ -103,7 +116,7 @@ By clicking on a element the info page (launch page) is open and different conta
 </p>
 
 #### Details
-By clicking on a specific detail is possible to show a snackbar containing the description:
+By clicking on a specific detail is possible to show a ``Snackbar`` containing the description:
 
 <p align='center'>
 <img src='./readme_images/detail_snackbar.jpg' width='200'>

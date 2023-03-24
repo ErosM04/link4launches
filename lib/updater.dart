@@ -46,9 +46,9 @@ class Updater {
     Future.delayed(
         const Duration(seconds: 2),
         () => _callSnackBar(
-            message: 'New version $_newVersion detected', durationInSec: 2));
+            message: 'New version $_newVersion detected', durationInSec: 3));
     Future.delayed(
-        const Duration(seconds: 4),
+        const Duration(seconds: 5),
         () => FileDownloader.downloadFile(
               url: _latestAPKLink,
               onProgress: (fileName, progress) => _callSnackBar(
