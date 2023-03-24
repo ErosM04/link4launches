@@ -21,15 +21,19 @@ The request vary based on many parameters, such as limit or the status (Ready To
 ## Self updating
 Every time the app is loaded a request to the Github API is performed, at the following link: https://api.github.com/repos/ErosM04/link4launches/releases/latest
 
-The url returns a json containing data about the latest **Github release**; if the version of the app is different from the one of the release, than a download of the latest release app ``link4launches.apk`` is performed and the file ends up in the ``Downloads`` folder. Here is the link: https://github.com/ErosM04/link4launches/releases/latest/download/link4launches.apk
+The url returns a json containing data about the latest **Github release**;
 
-Thanks to the Android buil-in funtions, when building an apk file is possible to specify the version, so the new apk file is going to be recognized as an update.
+if the version of the app is different from the one of the release, than a download of the latest release app ``link4launches.apk`` is performed and the file ends up in the ``Downloads`` folder.
 
-If the app hasn't been updated (despite downloading the update), even if the download ``Snackbars`` appear, a new download won't be really performed if the update file in the Download folder hasn't been touched.
+Here is the link: https://github.com/ErosM04/link4launches/releases/latest/download/link4launches.apk
 
 <p align='center'>
 <img src='./readme_images/update_message.jpg' width='200'>
 </p>
+
+Thanks to the Android buil-in funtions, when building an apk file is possible to specify the version, so the new apk file is going to be recognized as an update.
+
+If the app hasn't been updated (despite downloading the update), even if the download ``Snackbars`` appear, a new download won't be really performed if the update file in the Download folder hasn't been touched.
 
 ## Interface and Functions
 
