@@ -120,6 +120,7 @@ class DataBox extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15.0),
         child: CachedNetworkImage(
+          fadeOutDuration: const Duration(milliseconds: 400),
           imageUrl: imageLink,
           placeholder: (context, url) => const Center(child: ShimmerBox()),
           errorWidget: (context, error, stackTrace) => Container(),
