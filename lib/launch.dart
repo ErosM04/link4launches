@@ -20,7 +20,7 @@ class LaunchInfoPage extends StatelessWidget {
         backgroundColor:
             MediaQuery.of(context).platformBrightness == Brightness.dark
                 ? const Color.fromARGB(255, 27, 28, 29)
-                : Colors.white,
+                : const Color.fromARGB(255, 230, 230, 230),
         appBar: AppBar(
           title: Text(appbar.title),
           backgroundColor: appbar.color,

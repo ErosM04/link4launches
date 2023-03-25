@@ -97,7 +97,7 @@ class _L4LHomePageState extends State<L4LHomePage> {
         backgroundColor:
             MediaQuery.of(context).platformBrightness == Brightness.dark
                 ? const Color.fromARGB(255, 27, 28, 29)
-                : Colors.white,
+                : const Color.fromARGB(255, 230, 230, 230),
         appBar: AppBar(
           title: Text(appBar.title),
           backgroundColor: appBar.color,
@@ -143,8 +143,11 @@ class _L4LHomePageState extends State<L4LHomePage> {
               color:
                   MediaQuery.of(context).platformBrightness == Brightness.dark
                       ? const Color.fromARGB(255, 57, 58, 59)
-                      : const Color.fromARGB(255, 230, 230, 230),
-              elevation: 7,
+                      : Colors.white,
+              elevation:
+                  MediaQuery.of(context).platformBrightness == Brightness.light
+                      ? 5
+                      : null,
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(18))),
               margin: const EdgeInsets.fromLTRB(8.0, 7.0, 8.0, 7.0),

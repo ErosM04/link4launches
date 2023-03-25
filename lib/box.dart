@@ -48,13 +48,13 @@ class DataBox extends StatelessWidget {
         decoration: BoxDecoration(
             color: MediaQuery.of(context).platformBrightness == Brightness.dark
                 ? const Color.fromARGB(255, 57, 58, 59)
-                : const Color.fromARGB(255, 230, 230, 230),
+                : Colors.white,
             border: Border.all(
               width: 10,
               color:
                   MediaQuery.of(context).platformBrightness == Brightness.dark
                       ? const Color.fromARGB(255, 57, 58, 59)
-                      : const Color.fromARGB(255, 230, 230, 230),
+                      : Colors.white,
             ),
             borderRadius: const BorderRadius.all(Radius.circular(20.0))),
         alignment: Alignment.topCenter,
