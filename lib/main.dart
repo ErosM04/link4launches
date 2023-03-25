@@ -111,9 +111,7 @@ class _L4LHomePageState extends State<L4LHomePage> {
             ),
             IconButton(
                 onPressed: () => {
-                      setState(() {
-                        _ll2API.data = {};
-                      }),
+                      setState(() => _ll2API.data = {}),
                       _ll2API
                           .launch(launchNumber)
                           .then((value) => setState(() => _ll2API.data))

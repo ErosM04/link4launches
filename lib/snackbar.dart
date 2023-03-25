@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SnackBarMessage {
   final String message;
@@ -15,25 +15,53 @@ class SnackBarMessage {
   });
 
   SnackBar build(BuildContext context) => SnackBar(
-        content: _getContent(
-            MediaQuery.of(context).platformBrightness == Brightness.dark),
+        behavior: SnackBarBehavior.floating,
+        width: double.infinity,
         duration: (durationInMil == null)
             ? Duration(seconds: durationInSec)
             : Duration(milliseconds: durationInMil!),
-        backgroundColor: _getBackgroundColor(
-            MediaQuery.of(context).platformBrightness == Brightness.dark),
+        backgroundColor: Colors.transparent,
+        content: Container(
+          height: _getSnackbarHeight(),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18),
+            color: _getBackgroundColor(
+                MediaQuery.of(context).platformBrightness == Brightness.dark),
+          ),
+          child: _buildSnackBarContent(context),
+        ),
       );
 
-  Widget _getContent(bool isDark) => Text(
+  Widget _buildSnackBarContent(BuildContext context) => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 8, right: 1),
+            child: SvgPicture.asset(
+              'assets/snackbar/space_devs_rocket.svg',
+              height: 35,
+              width: 35,
+            ),
+          ),
+          Expanded(
+            child: _getContent(
+                MediaQuery.of(context).platformBrightness == Brightness.dark),
+          ),
+          const SizedBox(width: 3),
+        ],
+      );
+
+  Text _getContent(bool isDark) => Text(
         message,
         textAlign: TextAlign.center,
         style: TextStyle(color: _getTextColor(isDark)),
       );
 
+  double _getSnackbarHeight() => (message.length <= 40) ? 45 : 70;
+
   Color _getTextColor(bool isDark) =>
       isDark ? Colors.white : const Color.fromARGB(255, 47, 48, 49);
 
-  Color _getBackgroundColor(bool isDark) => isDark
-      ? const Color.fromARGB(255, 51, 52, 53)
-      : const Color.fromARGB(255, 240, 240, 240);
+  Color _getBackgroundColor(bool isDark) =>
+      isDark ? Colors.black : const Color.fromARGB(255, 240, 240, 240);
 }

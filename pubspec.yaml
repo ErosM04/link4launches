@@ -21,6 +21,7 @@ dependencies:
   cached_network_image: ^3.2.3
   flutter_native_splash: ^2.2.19
   flutter_file_downloader: ^1.1.0+1
+  flutter_svg: ^2.0.4
 
 
 dev_dependencies:
@@ -46,3 +47,5 @@ flutter_native_splash:
 
 flutter:
   uses-material-design: true
+  assets:
+    - 'assets/snackbar/space_devs_rocket.svg'
