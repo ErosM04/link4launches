@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:link4launches/app_bar.dart';
-import 'package:link4launches/box.dart';
-import 'package:link4launches/status.dart';
+import 'package:link4launches/constant.dart';
+import 'package:link4launches/pages/app_bar.dart';
+import 'package:link4launches/pages/box.dart';
+import 'package:link4launches/pages/status.dart';
 
 class LaunchInfoPage extends StatelessWidget {
   final L4LAppBar appbar;
@@ -19,8 +20,8 @@ class LaunchInfoPage extends StatelessWidget {
     return Scaffold(
         backgroundColor:
             MediaQuery.of(context).platformBrightness == Brightness.dark
-                ? const Color.fromARGB(255, 27, 28, 29)
-                : const Color.fromARGB(255, 230, 230, 230),
+                ? DARK_BACKGROUND
+                : LIGHT_BACKGROUND,
         appBar: AppBar(
           title: Text(appbar.title),
           backgroundColor: appbar.color,

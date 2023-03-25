@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'snackbar.dart';
+import 'package:link4launches/snackbar.dart';
 
 class DetailSection extends StatelessWidget {
   final List<int> valuesList;

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:link4launches/detail.dart';
-import 'package:link4launches/shimmer.dart';
-import 'package:link4launches/status.dart';
+import 'package:link4launches/constant.dart';
+import 'package:link4launches/pages/detail.dart';
+import 'package:link4launches/pages/shimmer.dart';
+import 'package:link4launches/pages/status.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -47,14 +48,14 @@ class DataBox extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
             color: MediaQuery.of(context).platformBrightness == Brightness.dark
-                ? const Color.fromARGB(255, 57, 58, 59)
-                : Colors.white,
+                ? DARK_ELEMENT
+                : LIGHT_ELEMENT,
             border: Border.all(
               width: 10,
               color:
                   MediaQuery.of(context).platformBrightness == Brightness.dark
-                      ? const Color.fromARGB(255, 57, 58, 59)
-                      : Colors.white,
+                      ? DARK_ELEMENT
+                      : LIGHT_ELEMENT,
             ),
             borderRadius: const BorderRadius.all(Radius.circular(20.0))),
         alignment: Alignment.topCenter,
