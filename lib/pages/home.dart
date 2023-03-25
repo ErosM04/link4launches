@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:link4launches/api.dart';
 import 'package:link4launches/constant.dart';
 import 'package:link4launches/pages/app_bar.dart';
+import 'package:link4launches/pages/brightness.dart';
 import 'package:link4launches/pages/launch.dart';
 import 'package:link4launches/pages/status.dart';
 import 'package:link4launches/updater.dart';
@@ -79,10 +80,8 @@ class _L4LHomePageState extends State<L4LHomePage> {
   Widget build(BuildContext context) {
     _ll2API.context = context;
     return Scaffold(
-        backgroundColor:
-            MediaQuery.of(context).platformBrightness == Brightness.dark
-                ? DARK_BACKGROUND
-                : LIGHT_BACKGROUND,
+        backgroundColor: BrightnessDetector.isDarkCol(
+            context, DARK_BACKGROUND, LIGHT_BACKGROUND),
         appBar: AppBar(
           title: Text(appBar.title),
           backgroundColor: appBar.color,
@@ -125,14 +124,9 @@ class _L4LHomePageState extends State<L4LHomePage> {
               !showTBD)
           ? Container()
           : Card(
-              color:
-                  MediaQuery.of(context).platformBrightness == Brightness.dark
-                      ? DARK_ELEMENT
-                      : LIGHT_ELEMENT,
-              elevation:
-                  MediaQuery.of(context).platformBrightness == Brightness.light
-                      ? 5
-                      : null,
+              color: BrightnessDetector.isDarkCol(
+                  context, DARK_ELEMENT, LIGHT_ELEMENT),
+              elevation: BrightnessDetector.isLightNum(context, 5, 0),
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(18))),
               margin: const EdgeInsets.fromLTRB(8.0, 7.0, 8.0, 7.0),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:link4launches/constant.dart';
+import 'package:link4launches/pages/brightness.dart';
 
 class SnackBarMessage {
   final String message;
@@ -15,6 +17,7 @@ class SnackBarMessage {
   });
 
   SnackBar build(BuildContext context) => SnackBar(
+        elevation: 0, // removes shadow
         behavior: SnackBarBehavior.floating,
         width: double.infinity,
         duration: (durationInMil == null)
@@ -22,11 +25,14 @@ class SnackBarMessage {
             : Duration(milliseconds: durationInMil!),
         backgroundColor: Colors.transparent,
         content: Container(
-          height: _getSnackbarHeight(),
+          height: (message.length <= 40) ? 45 : 70,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
-            color: _getBackgroundColor(
-                MediaQuery.of(context).platformBrightness == Brightness.dark),
+            color: BrightnessDetector.isDarkCol(
+              context,
+              Colors.black,
+              const Color.fromARGB(255, 240, 240, 240),
+            ),
           ),
           child: _buildSnackBarContent(context),
         ),
@@ -44,24 +50,17 @@ class SnackBarMessage {
             ),
           ),
           Expanded(
-            child: _getContent(
-                MediaQuery.of(context).platformBrightness == Brightness.dark),
+            child: _getContent(context),
           ),
           const SizedBox(width: 3),
         ],
       );
 
-  Text _getContent(bool isDark) => Text(
+  Text _getContent(BuildContext context) => Text(
         message,
         textAlign: TextAlign.center,
-        style: TextStyle(color: _getTextColor(isDark)),
+        style: TextStyle(
+            color: BrightnessDetector.isDarkCol(
+                context, LIGHT_ELEMENT, const Color.fromARGB(255, 47, 48, 49))),
       );
-
-  double _getSnackbarHeight() => (message.length <= 40) ? 45 : 70;
-
-  Color _getTextColor(bool isDark) =>
-      isDark ? Colors.white : const Color.fromARGB(255, 47, 48, 49);
-
-  Color _getBackgroundColor(bool isDark) =>
-      isDark ? Colors.black : const Color.fromARGB(255, 240, 240, 240);
 }

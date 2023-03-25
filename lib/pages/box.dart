@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:link4launches/constant.dart';
+import 'package:link4launches/pages/brightness.dart';
 import 'package:link4launches/pages/detail.dart';
 import 'package:link4launches/pages/shimmer.dart';
 import 'package:link4launches/pages/status.dart';
@@ -47,15 +48,12 @@ class DataBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
-            color: MediaQuery.of(context).platformBrightness == Brightness.dark
-                ? DARK_ELEMENT
-                : LIGHT_ELEMENT,
+            color: BrightnessDetector.isDarkCol(
+                context, DARK_ELEMENT, LIGHT_ELEMENT),
             border: Border.all(
               width: 10,
-              color:
-                  MediaQuery.of(context).platformBrightness == Brightness.dark
-                      ? DARK_ELEMENT
-                      : LIGHT_ELEMENT,
+              color: BrightnessDetector.isDarkCol(
+                  context, DARK_ELEMENT, LIGHT_ELEMENT),
             ),
             borderRadius: const BorderRadius.all(Radius.circular(20.0))),
         alignment: Alignment.topCenter,

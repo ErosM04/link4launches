@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:link4launches/constant.dart';
 import 'package:link4launches/pages/app_bar.dart';
 import 'package:link4launches/pages/box.dart';
+import 'package:link4launches/pages/brightness.dart';
 import 'package:link4launches/pages/status.dart';
 
 class LaunchInfoPage extends StatelessWidget {
@@ -18,10 +19,8 @@ class LaunchInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor:
-            MediaQuery.of(context).platformBrightness == Brightness.dark
-                ? DARK_BACKGROUND
-                : LIGHT_BACKGROUND,
+        backgroundColor: BrightnessDetector.isDarkCol(
+            context, DARK_BACKGROUND, LIGHT_BACKGROUND),
         appBar: AppBar(
           title: Text(appbar.title),
           backgroundColor: appbar.color,
