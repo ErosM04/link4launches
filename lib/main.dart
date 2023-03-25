@@ -15,10 +15,10 @@ class Link4Launches extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'link4launches',
+      title: 'Link4Launches',
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
-      home: const L4LHomePage(title: 'link4launches'),
+      home: const L4LHomePage(title: 'Link4Launches'),
     );
   }
 }
@@ -39,7 +39,7 @@ class _L4LHomePageState extends State<L4LHomePage> {
   final int launchNumber = 14;
   bool showTBD = true;
   L4LAppBar appBar = const L4LAppBar(
-      title: 'link4launches',
+      title: 'Link4Launches',
       color: Color.fromARGB(255, 3, 101, 140),
       popUpMenu: true,
       iconsListPopUp: [
@@ -55,7 +55,7 @@ class _L4LHomePageState extends State<L4LHomePage> {
       linksListPopUp: [
         'https://thespacedevs.com/llapi',
         'https://www.youtube.com/@link4universe',
-        'https://github.com/ErosM04'
+        'https://github.com/ErosM04/link4launches'
       ]);
 
   _L4LHomePageState() {
