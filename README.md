@@ -1,5 +1,5 @@
 # link4launches
-Rocket launches app inspired to [Link4Universe](https://www.adrianfartade.it), I mean, it's not rocket science🚀.
+Rocket launches app inspired to [Link4Universe](https://www.adrianfartade.it), I mean, it's not rocket science🚀
 
 
 ## Idea
@@ -8,7 +8,7 @@ This project is inspired to the YouTube Channel [Link4Universe](https://www.yout
 ### Icon
 The icon is inspired to the Telegram channel [L4U Space News](https://t.me/L4USpaceNews).
 
-<img src='./assets/app-icon/app-icon.png' width='100'>
+<img src='./readme_images/app-icon-nobackground.png' width='100'>
 
 
 ## API
@@ -89,7 +89,7 @@ The appbar contains the name of the app followed by 3 buttons:
 - Dropdown-menu: containg different links to:
     - The [API](https://thespacedevs.com/llapi);
     - The YouTube Channel [Link4Universe](https://www.youtube.com/@link4universe) which inspired the app;
-    - My fancy github account :)
+    - The Github project of the app.
 
 <div align='center'>
 <img src='./readme_images/dropdown_menu_dark.jpg ' width='200'>
