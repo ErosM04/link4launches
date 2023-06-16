@@ -60,9 +60,9 @@ class _L4LHomePageState extends State<L4LHomePage> {
 
     //Check for app update
     Updater updater = Updater(context: context);
-    updater
-        .checkForUpdate()
-        .then((value) => (value) ? updater.downloadUpdate() : null);
+    updater.checkForUpdate().then((value) {
+      return (value) ? updater.downloadUpdate() : null;
+    });
   }
 
   void _goToInfo(int index, LaunchStatus status) {

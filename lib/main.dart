@@ -8,12 +8,10 @@ class Link4Launches extends StatelessWidget {
   const Link4Launches({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: APP_NAME,
-      theme: ThemeData(brightness: Brightness.light),
-      darkTheme: ThemeData(brightness: Brightness.dark),
-      home: const L4LHomePage(title: APP_NAME),
-    );
-  }
+  Widget build(BuildContext context) => MaterialApp(
+        title: APP_NAME,
+        theme: ThemeData(brightness: Brightness.light),
+        darkTheme: ThemeData(brightness: Brightness.dark),
+        home: const L4LHomePage(title: APP_NAME),
+      );
 }

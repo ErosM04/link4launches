@@ -60,6 +60,8 @@ class LaunchInfoPage extends StatelessWidget {
         title: data['rocket']['configuration']['url']['manufacturer']['name'],
         h1: _readJsonField(
             ['rocket', 'configuration', 'url', 'manufacturer', 'type']),
+        countryCode: _readJsonField(
+            ['rocket', 'configuration', 'url', 'manufacturer', 'country_code']),
         h2: _readJsonField([
           'rocket',
           'configuration',
@@ -120,6 +122,15 @@ class LaunchInfoPage extends StatelessWidget {
     }
   }
 
+  /// Thakes a list of keys and then checks if the value corresponding with the sequence of keys
+  /// (in the data Map) exists and returns it as a string. The list can't have more than 5 elements.
+  ///
+  /// #### Parameters:
+  /// - **``list``** : a list of String, where wach string is a key of the json Map, e.g. ``['rocket', 'configuration', 'url', 'description']``
+  ///
+  /// ### Returns
+  /// The value corresponding to the keys position as a String, e.g. ``data['rocket']['configuration']['url']['description']``
+  /// In case of error an Exception is thrown and a empty String is returned.
   String _readJsonField(List<String> list) {
     try {
       if (list.isEmpty) {

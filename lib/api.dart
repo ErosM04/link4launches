@@ -34,7 +34,7 @@ class LaunchLibrary2API {
       }
     } on Exception catch (_) {}
 
-    //Throttled request (15 requests limit per hour exceeded), reads backup file
+    // Throttled request (15 requests limit per hour exceeded), reads backup file
     ScaffoldMessenger.of(context).showSnackBar(SnackBarMessage(
             message:
                 'Error${(statusCode != -1) ? ' $statusCode' : ''} ${(reasonPhrase.isEmpty) ? body.replaceAll('{', '').replaceAll('}', '').replaceAll('"detail":', '').replaceAll('"', '') : ': due to $reasonPhrase'}')
@@ -69,7 +69,7 @@ class LaunchLibrary2API {
           map['results'][i]['rocket']['configuration']['url'] =
               backup['results'][i]['rocket']['configuration']['url'];
         } else if (pos != -1) {
-          //If the rocket configuration already exists in the map (previous fetch)
+          // If the rocket configuration already exists in the map (previous fetch)
           map['results'][i]['rocket']['configuration']['url'] =
               map['results'][pos]['rocket']['configuration']['url'];
         } else {
@@ -78,6 +78,14 @@ class LaunchLibrary2API {
             map['results'][i]['rocket']['configuration']['url'] = json.decode(
                 convertGibberish(
                     res.body.replaceAll("\r", "").replaceAll("\n", "")));
+
+            // Changes the country code format
+            String countryCode = await _fetchCountryCode(map['results'][i]
+                        ['rocket']['configuration']['url']['manufacturer']
+                    ['country_code']
+                .toString());
+            map['results'][i]['rocket']['configuration']['url']['manufacturer']
+                ['country_code'] = countryCode;
           } else {
             ScaffoldMessenger.of(context).showSnackBar(SnackBarMessage(
                     message:
@@ -86,7 +94,7 @@ class LaunchLibrary2API {
           }
         }
 
-        //Add link for _findRecurrence() so as not to execute redundant fetches
+        // Add link for _findRecurrence() so as not to execute redundant fetches
         linkList.add(link);
       }
     } on Exception catch (_) {
@@ -95,6 +103,31 @@ class LaunchLibrary2API {
               .build(context));
     }
     return map;
+  }
+
+  /// Takes the cca3 country code (of the main api) and then use https://restcountries.com api to convert it to the cca2 format.
+  ///
+  /// #### Parameters
+  /// - **``String``** : the cca3 country code, e.g. ``USA`` (United States of America).
+  ///
+  /// #### Returns
+  /// **``async String``** : the cca2 country code.
+  Future<String> _fetchCountryCode(String countryCode) async {
+    try {
+      var response = await http
+          .get(Uri.parse('https://restcountries.com/v3.1/alpha/$countryCode'));
+
+      if (response.statusCode == 200) {
+        return json
+            .decode(response.body.replaceAll("\r", "").replaceAll("\n", ""))[0]
+                ['cca2']
+            .toString();
+      } else {
+        return '';
+      }
+    } on Exception catch (_) {
+      return '';
+    }
   }
 
   int _findRecurrence(List<dynamic> list, link) {

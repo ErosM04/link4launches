@@ -6,6 +6,7 @@ import 'package:link4launches/pages/shimmer.dart';
 import 'package:link4launches/pages/status.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class DataBox extends StatelessWidget {
   final String imageLink;
@@ -16,6 +17,7 @@ class DataBox extends StatelessWidget {
   final LaunchStatus status;
   final bool containsDate;
   final String padLink;
+  final String countryCode;
   final int height;
   final int maxStages;
   final int liftoffThrust;
@@ -35,6 +37,7 @@ class DataBox extends StatelessWidget {
     this.status = const LaunchStatus(state: ''),
     this.containsDate = false,
     this.padLink = '',
+    this.countryCode = '',
     this.height = -1,
     this.maxStages = -1,
     this.liftoffThrust = -1,
@@ -77,7 +80,10 @@ class DataBox extends StatelessWidget {
       ));
     }
 
-    if (h1.isNotEmpty) {
+    if (countryCode.isNotEmpty && h1.isNotEmpty) {
+      list.add(_buildTextWithFlag(
+          text: h1, image: countryCode, fontSize: 21, isDate: containsDate));
+    } else if (h1.isNotEmpty) {
       list.add(_buildTextItem(h1, fontSize: 21, isDate: containsDate));
     }
 
@@ -139,6 +145,43 @@ class DataBox extends StatelessWidget {
             fontSize: isDate ? 23 : fontSize,
             fontWeight: fontWeight,
           ),
+        ),
+      );
+
+  Widget _buildTextWithFlag(
+          {required String text,
+          required String image,
+          double fontSize = 23,
+          FontWeight fontWeight = FontWeight.normal,
+          bool isDate = false}) =>
+      Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              text,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: isDate ? 23 : fontSize,
+                fontWeight: fontWeight,
+              ),
+            ),
+            const SizedBox(width: 5),
+            Container(
+              height: 4,
+              width: 4,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(width: 5),
+            SvgPicture.network(
+              'https://flagcdn.com/${countryCode.toLowerCase()}.svg',
+              width: 32,
+            ),
+          ],
         ),
       );
 
