@@ -3,9 +3,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:link4launches/snackbar.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Updater {
-  final String actualVersion = '1.6.0';
+  final String actualVersion = '1.4.0';
   final String _latestReleaseLink =
       'https://api.github.com/repos/ErosM04/link4launches/releases/latest';
   final String _latestAPKLink =
@@ -42,28 +43,36 @@ class Updater {
   /// Every single time the download progress is updated a new ``SnackBar``containing the progress percentage is called.
   /// At the end of the download another ``SnackBar`` is called to inform the user about the path.
   /// A ``SnackBar`` is also used in case of error.
-  Future<void> downloadUpdate() async {
-    Future.delayed(
-        const Duration(seconds: 2),
-        () => _callSnackBar(
-            message: 'New version $_newVersion detected', durationInSec: 3));
-    Future.delayed(
-        const Duration(seconds: 5),
-        () => FileDownloader.downloadFile(
-              url: _latestAPKLink,
-              onProgress: (fileName, progress) => _callSnackBar(
-                  message: 'Download progress: ${progress.round()}%',
-                  durationInMil: 700),
-              onDownloadCompleted: (path) => _callSnackBar(
-                  message:
-                      'Version $_newVersion downloaded at ${path.split('/')[4]}/${path.split('/').last}',
-                  durationInSec: 5),
-              onDownloadError: (errorMessage) => _callSnackBar(
-                  message:
-                      'Error while downloading $_newVersion: $errorMessage',
-                  durationInSec: 3),
-            ));
-  }
+  Future<void> downloadUpdate() async =>
+      Future.delayed(const Duration(seconds: 2), () async {
+        if (true) {
+          _callSnackBar(
+              message: 'New version $_newVersion detected', durationInSec: 3);
+
+          // Starts the download
+          Future.delayed(
+              const Duration(seconds: 3),
+              () => FileDownloader.downloadFile(
+                    url: _latestAPKLink,
+                    onProgress: (fileName, progress) => _callSnackBar(
+                        message: 'Download progress: ${progress.round()}%',
+                        durationInMil: 700),
+                    onDownloadCompleted: (path) => _callSnackBar(
+                        message:
+                            'Version $_newVersion downloaded at ${path.split('/')[4]}/${path.split('/').last}',
+                        durationInSec: 5),
+                    onDownloadError: (errorMessage) => _callSnackBar(
+                        message:
+                            'Error while downloading $_newVersion: $errorMessage',
+                        durationInSec: 3),
+                  ));
+        } else {
+          // Happens if the permission is not given
+          _callSnackBar(
+              message: "Bro just give me the permission plz, I'm ok",
+              durationInSec: 5);
+        }
+      });
 
   /// Function used to simplify the creation of a ``SnackBar``.
   void _callSnackBar(
