@@ -92,54 +92,37 @@ class _L4LHomePageState extends State<L4LHomePage> {
     return Scaffold(
         backgroundColor: BrightnessDetector.isDarkCol(
             context, DARK_BACKGROUND, LIGHT_BACKGROUND),
-        appBar: L4LAppBar(actions: [
-          IconButton(
-            onPressed: () => setState(() => showTBD = !showTBD),
-            icon: Text(
-              'TBD',
-              style: TextStyle(color: showTBD ? Colors.white : Colors.grey),
-            ),
-          ),
-          IconButton(
-              onPressed: () => {
-                    setState(() => _ll2API.data = {}),
-                    _ll2API
-                        .launch(launchNumber)
-                        .then((value) => setState(() => _ll2API.data))
-                  },
-              icon: const Icon(Icons.autorenew)),
-        ]).buildAppBar(),
-        // AppBar(
-        //   title: Text(appBar.title),
-        //   backgroundColor: appBar.color,
-        //   actions: [
-        //     IconButton(
-        //       onPressed: () => setState(() => showTBD = !showTBD),
-        //       icon: Text(
-        //         'TBD',
-        //         style: TextStyle(color: showTBD ? Colors.white : Colors.grey),
-        //       ),
-        //     ),
-        //     IconButton(
-        //         onPressed: () => {
-        //               setState(() => _ll2API.data = {}),
-        //               _ll2API
-        //                   .launch(launchNumber)
-        //                   .then((value) => setState(() => _ll2API.data))
-        //             },
-        //         icon: const Icon(Icons.autorenew)),
-        //     appBar._getPopUpMenuButton(),
-        //   ],
-        // ),
-        body: _ll2API.data.isEmpty
-            ? Center(
-                child: LoadingAnimationWidget.dotsTriangle(
-                    color: Colors.white, size: 50))
-            : ListView.builder(
-                controller: _scrollController,
-                itemCount: _ll2API.data['count'],
-                itemBuilder: (context, index) => _buildListItem(index),
-              ));
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            L4LAppBar(actions: [
+              IconButton(
+                onPressed: () => setState(() => showTBD = !showTBD),
+                icon: Text(
+                  'TBD',
+                  style: TextStyle(color: showTBD ? Colors.white : Colors.grey),
+                ),
+              ),
+              IconButton(
+                  onPressed: () => {
+                        setState(() => _ll2API.data = {}),
+                        _ll2API
+                            .launch(launchNumber)
+                            .then((value) => setState(() => _ll2API.data))
+                      },
+                  icon: const Icon(Icons.autorenew)),
+            ]).buildAppBar(),
+          ],
+          body: _ll2API.data.isEmpty
+              ? Center(
+                  child: LoadingAnimationWidget.dotsTriangle(
+                      color: Colors.white, size: 50))
+              : ListView.builder(
+                  padding: EdgeInsets.zero,
+                  controller: _scrollController,
+                  itemCount: _ll2API.data['count'],
+                  itemBuilder: (context, index) => _buildListItem(index),
+                ),
+        ));
   }
 
   Widget _buildListItem(int index) {

@@ -16,17 +16,20 @@ class LaunchInfoPage extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: BrightnessDetector.isDarkCol(
-            context, DARK_BACKGROUND, LIGHT_BACKGROUND),
-        appBar: const L4LAppBar(
-          actions: [],
-        ).buildAppBar(),
+  Widget build(BuildContext context) => Scaffold(
+      backgroundColor: BrightnessDetector.isDarkCol(
+          context, DARK_BACKGROUND, LIGHT_BACKGROUND),
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          const L4LAppBar(
+            actions: [],
+          ).buildAppBar(),
+        ],
         body: ListView(
+          padding: EdgeInsets.zero,
           children: _buildDataBoxList(),
-        ));
-  }
+        ),
+      ));
 
   List<DataBox> _buildDataBoxList() {
     List<DataBox> list = [];

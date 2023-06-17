@@ -34,10 +34,15 @@ class L4LAppBar {
     ],
   });
 
-  AppBar buildAppBar() => AppBar(
+  SliverAppBar buildAppBar() => SliverAppBar(
         title: Text(title),
         backgroundColor: color,
         actions: _buildActions(),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(14),
+          ),
+        ),
       );
 
   List<Widget> _buildActions() {
