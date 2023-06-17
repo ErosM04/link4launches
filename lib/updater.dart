@@ -6,7 +6,7 @@ import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class Updater {
-  final String actualVersion = '1.4.0';
+  final String actualVersion = '1.6.0';
   final String _latestReleaseLink =
       'https://api.github.com/repos/ErosM04/link4launches/releases/latest';
   final String _latestAPKLink =

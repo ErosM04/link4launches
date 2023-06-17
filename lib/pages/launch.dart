@@ -6,28 +6,23 @@ import 'package:link4launches/pages/brightness.dart';
 import 'package:link4launches/pages/status.dart';
 
 class LaunchInfoPage extends StatelessWidget {
-  final L4LAppBar appbar;
   final Map<String, dynamic> data;
   final LaunchStatus status;
 
-  const LaunchInfoPage(
-      {super.key,
-      required this.appbar,
-      required this.data,
-      required this.status});
+  const LaunchInfoPage({
+    super.key,
+    required this.data,
+    required this.status,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: BrightnessDetector.isDarkCol(
             context, DARK_BACKGROUND, LIGHT_BACKGROUND),
-        appBar: AppBar(
-          title: Text(appbar.title),
-          backgroundColor: appbar.color,
-          actions: [
-            appbar.getPopUpMenuButton(),
-          ],
-        ),
+        appBar: const L4LAppBar(
+          actions: [],
+        ).buildAppBar(),
         body: ListView(
           children: _buildDataBoxList(),
         ));

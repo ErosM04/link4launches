@@ -24,25 +24,36 @@ class _L4LHomePageState extends State<L4LHomePage> {
   final _scrollController = ScrollController();
   final int launchNumber = 14;
   bool showTBD = true;
-  L4LAppBar appBar = const L4LAppBar(
-      title: APP_NAME,
-      color: MAIN_COLOR,
-      popUpMenu: true,
-      iconsListPopUp: [
-        Icons.rocket,
-        Icons.link,
-        Icons.code
-      ],
-      titlesListPopUp: [
-        'Api',
-        'L4U',
-        'Git'
-      ],
-      linksListPopUp: [
-        'https://thespacedevs.com/llapi',
-        'https://www.youtube.com/@link4universe',
-        'https://github.com/ErosM04/link4launches'
-      ]);
+  // L4LAppBar appBar = L4LAppBar(title: APP_NAME, color: MAIN_COLOR, actions: [
+  //   IconButton(
+  //     onPressed: () => setState(() => showTBD = !showTBD),
+  //     icon: Text(
+  //       'TBD',
+  //       style: TextStyle(color: showTBD ? Colors.white : Colors.grey),
+  //     ),
+  //   ),
+  //   IconButton(
+  //       onPressed: () => {
+  //             setState(() => _ll2API.data = {}),
+  //             _ll2API
+  //                 .launch(launchNumber)
+  //                 .then((value) => setState(() => _ll2API.data))
+  //           },
+  //       icon: const Icon(Icons.autorenew)),
+  //   appBar._getPopUpMenuButton(),
+  // ], iconsListPopUp: [
+  //   Icons.rocket,
+  //   Icons.link,
+  //   Icons.code
+  // ], titlesListPopUp: [
+  //   'Api',
+  //   'L4U',
+  //   'Git'
+  // ], linksListPopUp: [
+  //   'https://thespacedevs.com/llapi',
+  //   'https://www.youtube.com/@link4universe',
+  //   'https://github.com/ErosM04/link4launches'
+  // ]);
 
   _L4LHomePageState() {
     _ll2API.launch(launchNumber).then((value) => setState(() => _ll2API.data));
@@ -69,7 +80,6 @@ class _L4LHomePageState extends State<L4LHomePage> {
     if (_ll2API.data.isNotEmpty) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => LaunchInfoPage(
-                appbar: appBar,
                 data: _ll2API.data['results'][index],
                 status: status,
               )));
@@ -82,28 +92,45 @@ class _L4LHomePageState extends State<L4LHomePage> {
     return Scaffold(
         backgroundColor: BrightnessDetector.isDarkCol(
             context, DARK_BACKGROUND, LIGHT_BACKGROUND),
-        appBar: AppBar(
-          title: Text(appBar.title),
-          backgroundColor: appBar.color,
-          actions: [
-            IconButton(
-              onPressed: () => setState(() => showTBD = !showTBD),
-              icon: Text(
-                'TBD',
-                style: TextStyle(color: showTBD ? Colors.white : Colors.grey),
-              ),
+        appBar: L4LAppBar(actions: [
+          IconButton(
+            onPressed: () => setState(() => showTBD = !showTBD),
+            icon: Text(
+              'TBD',
+              style: TextStyle(color: showTBD ? Colors.white : Colors.grey),
             ),
-            IconButton(
-                onPressed: () => {
-                      setState(() => _ll2API.data = {}),
-                      _ll2API
-                          .launch(launchNumber)
-                          .then((value) => setState(() => _ll2API.data))
-                    },
-                icon: const Icon(Icons.autorenew)),
-            appBar.getPopUpMenuButton(),
-          ],
-        ),
+          ),
+          IconButton(
+              onPressed: () => {
+                    setState(() => _ll2API.data = {}),
+                    _ll2API
+                        .launch(launchNumber)
+                        .then((value) => setState(() => _ll2API.data))
+                  },
+              icon: const Icon(Icons.autorenew)),
+        ]).buildAppBar(),
+        // AppBar(
+        //   title: Text(appBar.title),
+        //   backgroundColor: appBar.color,
+        //   actions: [
+        //     IconButton(
+        //       onPressed: () => setState(() => showTBD = !showTBD),
+        //       icon: Text(
+        //         'TBD',
+        //         style: TextStyle(color: showTBD ? Colors.white : Colors.grey),
+        //       ),
+        //     ),
+        //     IconButton(
+        //         onPressed: () => {
+        //               setState(() => _ll2API.data = {}),
+        //               _ll2API
+        //                   .launch(launchNumber)
+        //                   .then((value) => setState(() => _ll2API.data))
+        //             },
+        //         icon: const Icon(Icons.autorenew)),
+        //     appBar._getPopUpMenuButton(),
+        //   ],
+        // ),
         body: _ll2API.data.isEmpty
             ? Center(
                 child: LoadingAnimationWidget.dotsTriangle(
