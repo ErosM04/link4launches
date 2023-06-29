@@ -157,3 +157,11 @@ Some useful links:
  - Example of the api use made by api creators: [api.launches.example](https://go4liftoff.com/launches)
  - Link used in the application to get the main data: [api.launches.upcoming](https://ll.thespacedevs.com/2.2.0/launch/upcoming/?format=json&limit=14)
  - A web site to format the json: [json pretty print](https://jsonformatter.org/json-pretty-print)
+
+
+## TODO
+- Fix Android 13 storage permission errror
+- Make the images zoomable
+- Improve DataBox code by creating an abstract class or a superclass and than for each box create a child.
+- Create a file for the theme
+- Implement a dialog to ask for user consent before downloading the new version
