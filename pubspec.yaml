@@ -20,7 +20,7 @@ dependencies:
   shimmer: ^2.0.0
   cached_network_image: ^3.2.3
   flutter_native_splash: ^2.2.19
-  flutter_file_downloader: ^1.1.0+1
+  flutter_file_downloader: ^1.1.2
   flutter_svg: ^2.0.7
   permission_handler: ^10.3.0
   http: ^0.13.5

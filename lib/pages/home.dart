@@ -6,7 +6,7 @@ import 'package:link4launches/pages/app_bar.dart';
 import 'package:link4launches/pages/brightness.dart';
 import 'package:link4launches/pages/launch.dart';
 import 'package:link4launches/pages/status.dart';
-import 'package:link4launches/updater.dart';
+import 'package:link4launches/updater/updater.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class L4LHomePage extends StatefulWidget {
@@ -71,9 +71,10 @@ class _L4LHomePageState extends State<L4LHomePage> {
 
     //Check for app update
     Updater updater = Updater(context: context);
-    updater.checkForUpdate().then((value) {
-      return (value) ? updater.downloadUpdate() : null;
-    });
+    // updater.checkForUpdate().then((value) {
+    //   return (value) ? updater.downloadUpdate() : null;
+    // });
+    updater.updateToNewVersion();
   }
 
   void _goToInfo(int index, LaunchStatus status) {
