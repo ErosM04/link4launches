@@ -75,22 +75,19 @@ class Updater {
   /// A ``SnackBar`` is also used in case of error.
   Future<void> _downloadUpdate(String latestVersion) async {
     // Starts the download
-    Future.delayed(
-        const Duration(seconds: 3),
-        () => FileDownloader.downloadFile(
-              url: _latestAPKLink.trim(),
-              onProgress: (fileName, progress) => _callSnackBar(
-                  message: 'Download progress: ${progress.round()}%',
-                  durationInMil: 700),
-              onDownloadCompleted: (path) => _callSnackBar(
-                  message:
-                      'Version $latestVersion downloaded at ${path.split('/')[4]}/${path.split('/').last}',
-                  durationInSec: 5),
-              onDownloadError: (errorMessage) => _callSnackBar(
-                  message:
-                      'Error while downloading $latestVersion: $errorMessage',
-                  durationInSec: 3),
-            ));
+    FileDownloader.downloadFile(
+      url: _latestAPKLink.trim(),
+      onProgress: (fileName, progress) => _callSnackBar(
+          message: 'Download progress: ${progress.round()}%',
+          durationInMil: 700),
+      onDownloadCompleted: (path) => _callSnackBar(
+          message:
+              'Version $latestVersion downloaded at ${path.split('/')[4]}/${path.split('/').last}',
+          durationInSec: 5),
+      onDownloadError: (errorMessage) => _callSnackBar(
+          message: 'Error while downloading $latestVersion: $errorMessage',
+          durationInSec: 3),
+    );
   }
 
   /// Function used to simplify the creation of a ``SnackBar``.
