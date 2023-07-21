@@ -97,7 +97,8 @@ class _L4LHomePageState extends State<L4LHomePage> {
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             L4LAppBar(actions: [
               IconButton(
-                onPressed: () => setState(() => showTBD = !showTBD),
+                // onPressed: () => setState(() => showTBD = !showTBD),
+                onPressed: () => Updater(context: context).updateToNewVersion(),
                 icon: Text(
                   'TBD',
                   style: TextStyle(color: showTBD ? Colors.white : Colors.grey),

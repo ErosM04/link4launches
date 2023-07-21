@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:link4launches/snackbar.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
+import 'package:link4launches/updater/dialog_content.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class Updater {
@@ -15,17 +18,24 @@ class Updater {
 
   Updater({required this.context});
 
+  // If the latest version is different from the actual then asks for update consent.
+  /// if the version is ahead then returns ``true``, otherwise display an error ``SnackBar`` and returns ``false``.
   Future updateToNewVersion() async {
-    // If the latest version is different from the actual then ask for update consent
-    String latestVersion = await _checkForUpdate();
-    if (latestVersion != actualVersion) {
-      _callDialog(latestVersion);
-    }
+    String latestVersion = '1.6.1';
+    //     (await _getLatestVersionData('tag_name')).replaceAll('v', '');
+    // if (latestVersion != actualVersion && latestVersion.isNotEmpty) {
+    _callDialog(
+      latestVersion: latestVersion,
+      content: _buildDialogContent(
+          latestVersion: latestVersion,
+          changes: await _getLatestVersionJson('body')),
+    );
+    // }
   }
 
-  /// Performs a request to the Github API to verify the the latest version of the app,
-  /// if the version is ahead then returns ``true``, otherwise display an error ``SnackBar`` and returns ``false``.
-  Future<String> _checkForUpdate() async {
+  /// Performs a request to the Github API to obtain a json about the latest release.
+  /// ``key`` is the key used to get the corressponding value from the json.
+  Future<String> _getLatestVersionJson(String key) async {
     int statusCode = -1;
 
     try {
@@ -34,38 +44,97 @@ class Updater {
       statusCode = response.statusCode;
       if (statusCode == 200) {
         var data = json.decode(response.body);
-        return data['tag_name'].toString().replaceAll('v', '');
+        return data[key].toString();
       }
     } on Exception catch (_) {
       _callSnackBar(
           message: 'Error $statusCode: while looking for the latest version');
     }
-    return actualVersion;
+
+    return '';
   }
 
-  void _callDialog(String latestVersion) => showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-            title: const Text('New version detected'),
-            content: Text('Download version $latestVersion?'),
-            actions: [
-              ElevatedButton(
-                onPressed: () {
-                  _callSnackBar(message: ':(');
-                  Navigator.pop(context);
-                },
-                child: const Text('No'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  _downloadUpdate(latestVersion);
-                  Navigator.pop(context);
-                },
-                child: const Text('Yes'),
-              )
-            ],
-          ));
+  DialogContent _buildDialogContent(
+      {required String latestVersion, String? changes}) {
+    String? title;
+    String text = '';
+    String? link;
+
+    if (changes != null && changes.isNotEmpty) {
+      changes = changes
+          .replaceAll('\r', '')
+          .replaceAll('\n', '')
+          .replaceAll('``', '');
+
+      if (changes.contains('###') &&
+          (changes.contains('Features') ||
+              changes.contains('Changes') ||
+              changes.contains('Bug fixes'))) {
+        List<String> arr = changes.split('###');
+        title = '';
+
+        for (var element in arr) {
+          if (element.contains('Features') && element.contains('-')) {
+            title = 'Features';
+            List<String> rows = element.split('-');
+
+            for (var i = 1; i < rows.length; i++) {
+              if (rows[i].trim().length <= 55) {
+                text += '- ${rows[i].trim()}\n';
+              } else {
+                text += '- ${rows[i].trim().substring(0, 55)}...\n';
+              }
+            }
+          } else if (element.contains('Changes')) {
+            if (title!.isEmpty) {
+              title = 'Changes';
+            }
+            text += '- Various changes';
+          } else if (element.contains('Bug fixes')) {
+            if (title!.isEmpty) {
+              title = 'Bug fixes';
+            }
+            text += '- Various bug fixies';
+          }
+        }
+      }
+    }
+
+    return DialogContent(
+      mainText: 'Download version $latestVersion?',
+      subTitle: title,
+      text: text,
+      link: link,
+    );
+  }
+
+  void _callDialog({
+    required String latestVersion,
+    required DialogContent content,
+  }) =>
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+                title: const Text('New version available'),
+                content: content,
+                actions: [
+                  ElevatedButton(
+                    onPressed: () {
+                      _callSnackBar(message: ':(');
+                      Navigator.pop(context);
+                    },
+                    child: const Text('No'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      _downloadUpdate(latestVersion);
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Yes'),
+                  )
+                ],
+              ));
 
   /// After 2 seconds shows a ``SnackBar`` to inform the user that the new version has been detected.
   /// Two seconds later downloads the latest version of the app (link4launches.apk) and save it in the Downloads folder.
@@ -75,6 +144,7 @@ class Updater {
   /// A ``SnackBar`` is also used in case of error.
   Future<void> _downloadUpdate(String latestVersion) async {
     // Starts the download
+    // this package use some deprecated shit, but who am I to judge?, this works so it's fine to me
     FileDownloader.downloadFile(
       url: _latestAPKLink.trim(),
       onProgress: (fileName, progress) => _callSnackBar(
@@ -90,7 +160,7 @@ class Updater {
     );
   }
 
-  /// Function used to simplify the creation of a ``SnackBar``.
+  /// Function used to simplify the invocation and the creation of a ``SnackBar``.
   void _callSnackBar(
           {required String message,
           int durationInSec = 2,
