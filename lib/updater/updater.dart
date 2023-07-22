@@ -1,12 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:link4launches/snackbar.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:link4launches/updater/dialog_content.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class Updater {
   final String actualVersion = '1.5.0';
@@ -59,6 +56,7 @@ class Updater {
     String? title;
     String text = '';
     String? link;
+    String? linkText;
 
     if (changes != null && changes.isNotEmpty) {
       changes = changes
@@ -97,6 +95,8 @@ class Updater {
             text += '- Various bug fixies';
           }
         }
+        linkText = 'More info at:';
+        link = 'https://github.com/ErosM04/link4launches/releases/latest';
       }
     }
 
@@ -104,6 +104,7 @@ class Updater {
       mainText: 'Download version $latestVersion?',
       subTitle: title,
       text: text,
+      linkText: linkText,
       link: link,
     );
   }
