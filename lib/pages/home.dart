@@ -69,11 +69,8 @@ class _L4LHomePageState extends State<L4LHomePage> {
       DeviceOrientation.portraitDown,
     ]);
 
-    //Check for app update
+    //Check for app new version and then performs update
     Updater updater = Updater(context: context);
-    // updater.checkForUpdate().then((value) {
-    //   return (value) ? updater.downloadUpdate() : null;
-    // });
     updater.updateToNewVersion();
   }
 

@@ -5,29 +5,32 @@ import 'package:link4launches/snackbar.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:link4launches/updater/dialog_content.dart';
 
+/// Can be used to update the app, by downloading the new version in the ``Download`` folder after
+/// the user gave the consent (with a dialog).
 class Updater {
-  final String actualVersion = '1.5.0';
+  final String actualVersion = '1.6.1';
   final String _latestReleaseLink =
       'https://api.github.com/repos/ErosM04/link4launches/releases/latest';
   final String _latestAPKLink =
       'https://github.com/ErosM04/link4launches/releases/latest/download/link4launches.apk';
   final BuildContext context;
 
-  Updater({required this.context});
+  const Updater({required this.context});
 
-  // If the latest version is different from the actual then asks for update consent.
+  /// If the latest version is different from the actual then asks for update consent.
   /// if the version is ahead then returns ``true``, otherwise display an error ``SnackBar`` and returns ``false``.
   Future updateToNewVersion() async {
-    String latestVersion = '1.6.1';
-    //     (await _getLatestVersionData('tag_name')).replaceAll('v', '');
-    // if (latestVersion != actualVersion && latestVersion.isNotEmpty) {
-    _callDialog(
-      latestVersion: latestVersion,
-      content: _buildDialogContent(
-          latestVersion: latestVersion,
-          changes: await _getLatestVersionJson('body')),
-    );
-    // }
+    String latestVersion =
+        (await _getLatestVersionJson('tag_name')).replaceAll('v', '');
+
+    if (latestVersion != actualVersion && latestVersion.isNotEmpty) {
+      _callDialog(
+        latestVersion: latestVersion,
+        content: _buildDialogContent(
+            latestVersion: latestVersion,
+            changes: await _getLatestVersionJson('body')),
+      );
+    }
   }
 
   /// Performs a request to the Github API to obtain a json about the latest release.
@@ -143,23 +146,20 @@ class Updater {
   /// Every single time the download progress is updated a new ``SnackBar``containing the progress percentage is called.
   /// At the end of the download another ``SnackBar`` is called to inform the user about the path.
   /// A ``SnackBar`` is also used in case of error.
-  Future<void> _downloadUpdate(String latestVersion) async {
-    // Starts the download
-    // this package use some deprecated shit, but who am I to judge?, this works so it's fine to me
-    FileDownloader.downloadFile(
-      url: _latestAPKLink.trim(),
-      onProgress: (fileName, progress) => _callSnackBar(
-          message: 'Download progress: ${progress.round()}%',
-          durationInMil: 700),
-      onDownloadCompleted: (path) => _callSnackBar(
-          message:
-              'Version $latestVersion downloaded at ${path.split('/')[4]}/${path.split('/').last}',
-          durationInSec: 5),
-      onDownloadError: (errorMessage) => _callSnackBar(
-          message: 'Error while downloading $latestVersion: $errorMessage',
-          durationInSec: 3),
-    );
-  }
+  Future<void> _downloadUpdate(String latestVersion) async =>
+      FileDownloader.downloadFile(
+        url: _latestAPKLink.trim(),
+        onProgress: (fileName, progress) => _callSnackBar(
+            message: 'Download progress: ${progress.round()}%',
+            durationInMil: 700),
+        onDownloadCompleted: (path) => _callSnackBar(
+            message:
+                'Version $latestVersion downloaded at ${path.split('/')[4]}/${path.split('/').last}',
+            durationInSec: 5),
+        onDownloadError: (errorMessage) => _callSnackBar(
+            message: 'Error while downloading $latestVersion: $errorMessage',
+            durationInSec: 3),
+      );
 
   /// Function used to simplify the invocation and the creation of a ``SnackBar``.
   void _callSnackBar(
