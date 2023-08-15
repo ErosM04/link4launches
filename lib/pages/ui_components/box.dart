@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:link4launches/constant.dart';
-import 'package:link4launches/pages/brightness.dart';
-import 'package:link4launches/pages/detail.dart';
-import 'package:link4launches/pages/shimmer.dart';
-import 'package:link4launches/pages/status.dart';
+import 'package:link4launches/pages/ui_components/brightness.dart';
+import 'package:link4launches/pages/launch/detail.dart';
+import 'package:link4launches/pages/launch/shimmer.dart';
+import 'package:link4launches/pages/ui_components/status.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_svg/flutter_svg.dart';

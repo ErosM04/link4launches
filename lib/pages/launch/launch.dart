@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:link4launches/constant.dart';
 import 'package:link4launches/pages/app_bar.dart';
-import 'package:link4launches/pages/box.dart';
-import 'package:link4launches/pages/brightness.dart';
-import 'package:link4launches/pages/status.dart';
+import 'package:link4launches/pages/ui_components/box.dart';
+import 'package:link4launches/pages/ui_components/brightness.dart';
+import 'package:link4launches/pages/ui_components/status.dart';
 
 class LaunchInfoPage extends StatelessWidget {
   final Map<String, dynamic> data;

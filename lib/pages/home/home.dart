@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:link4launches/api.dart';
+import 'package:link4launches/api/api.dart';
 import 'package:link4launches/constant.dart';
 import 'package:link4launches/pages/app_bar.dart';
-import 'package:link4launches/pages/brightness.dart';
+import 'package:link4launches/pages/ui_components/brightness.dart';
 import 'package:link4launches/pages/home/launch_tile.dart';
-import 'package:link4launches/pages/launch.dart';
-import 'package:link4launches/pages/status.dart';
-import 'package:link4launches/updater/updater.dart';
+import 'package:link4launches/pages/launch/launch.dart';
+import 'package:link4launches/pages/ui_components/status.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class L4LHomePage extends StatefulWidget {

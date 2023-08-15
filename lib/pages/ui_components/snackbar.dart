@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:link4launches/constant.dart';
-import 'package:link4launches/pages/brightness.dart';
+import 'package:link4launches/pages/ui_components/brightness.dart';
 
 class SnackBarMessage {
   final String message;
