@@ -4,6 +4,7 @@ import 'package:link4launches/api.dart';
 import 'package:link4launches/constant.dart';
 import 'package:link4launches/pages/app_bar.dart';
 import 'package:link4launches/pages/brightness.dart';
+import 'package:link4launches/pages/home/launch_tile.dart';
 import 'package:link4launches/pages/launch.dart';
 import 'package:link4launches/pages/status.dart';
 import 'package:link4launches/updater/updater.dart';
@@ -24,36 +25,6 @@ class _L4LHomePageState extends State<L4LHomePage> {
   final _scrollController = ScrollController();
   final int launchNumber = 14;
   bool showTBD = true;
-  // L4LAppBar appBar = L4LAppBar(title: APP_NAME, color: MAIN_COLOR, actions: [
-  //   IconButton(
-  //     onPressed: () => setState(() => showTBD = !showTBD),
-  //     icon: Text(
-  //       'TBD',
-  //       style: TextStyle(color: showTBD ? Colors.white : Colors.grey),
-  //     ),
-  //   ),
-  //   IconButton(
-  //       onPressed: () => {
-  //             setState(() => _ll2API.data = {}),
-  //             _ll2API
-  //                 .launch(launchNumber)
-  //                 .then((value) => setState(() => _ll2API.data))
-  //           },
-  //       icon: const Icon(Icons.autorenew)),
-  //   appBar._getPopUpMenuButton(),
-  // ], iconsListPopUp: [
-  //   Icons.rocket,
-  //   Icons.link,
-  //   Icons.code
-  // ], titlesListPopUp: [
-  //   'Api',
-  //   'L4U',
-  //   'Git'
-  // ], linksListPopUp: [
-  //   'https://thespacedevs.com/llapi',
-  //   'https://www.youtube.com/@link4universe',
-  //   'https://github.com/ErosM04/link4launches'
-  // ]);
 
   _L4LHomePageState() {
     _ll2API.launch(launchNumber).then((value) => setState(() => _ll2API.data));
@@ -100,8 +71,7 @@ class _L4LHomePageState extends State<L4LHomePage> {
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             L4LAppBar(actions: [
               IconButton(
-                // onPressed: () => setState(() => showTBD = !showTBD),
-                onPressed: () => Updater(context).updateToNewVersion(),
+                onPressed: () => setState(() => showTBD = !showTBD),
                 icon: Text(
                   'TBD',
                   style: TextStyle(color: showTBD ? Colors.white : Colors.grey),
@@ -133,47 +103,14 @@ class _L4LHomePageState extends State<L4LHomePage> {
   Widget _buildListItem(int index) {
     final LaunchStatus status =
         LaunchStatus(state: _ll2API.data['results'][index]['status']['abbrev']);
-    return GestureDetector(
-      onTap: () => _goToInfo(index, status),
-      child: (_ll2API.data['results'][index]['status']['abbrev'] == 'TBD' &&
-              !showTBD)
-          ? Container()
-          : Card(
-              color: BrightnessDetector.isDarkCol(
-                  context, DARK_ELEMENT, LIGHT_ELEMENT),
-              elevation: BrightnessDetector.isLightNum(context, 5, 0),
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(18))),
-              margin: const EdgeInsets.fromLTRB(8.0, 7.0, 8.0, 7.0),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 14, 0, 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _ll2API.data['results'][index]['name'],
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(fontSize: 17),
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          _cleanDate(
-                              _ll2API.data['results'][index]['net'].toString()),
-                          style:
-                              TextStyle(fontSize: 12, color: Colors.grey[400]),
-                        ),
-                      ],
-                    ),
-                  )),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 12, 8),
-                    child: status.buildSmallStatusBedge(context),
-                  )
-                ],
-              )),
+
+    return LaunchTile(
+      onPressed: () => _goToInfo(index, status),
+      condition: (_ll2API.data['results'][index]['status']['abbrev'] == 'TBD' &&
+          !showTBD),
+      title: _ll2API.data['results'][index]['name'],
+      smallText: _cleanDate(_ll2API.data['results'][index]['net'].toString()),
+      status: status,
     );
   }
 

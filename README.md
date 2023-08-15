@@ -168,3 +168,5 @@ Some useful links:
 
 ## Stuff changes for new version
 - Changed updater code
+- Added date to home page tile
+- Fixed bug of TBD which previously started the update process

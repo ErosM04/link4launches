@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:link4launches/constant.dart';
-import 'package:link4launches/pages/home.dart';
+import 'package:link4launches/pages/home/home.dart';
 
 void main() => runApp(const Link4Launches());
 
