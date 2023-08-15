@@ -149,19 +149,40 @@ class _L4LHomePageState extends State<L4LHomePage> {
                 children: [
                   Expanded(
                       child: Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(12.0, 18.0, 10.0, 18.0),
-                          child: Text(
-                            _ll2API.data['results'][index]['name'],
-                            textAlign: TextAlign.left,
-                            style: const TextStyle(fontSize: 17),
-                          ))),
+                    padding: const EdgeInsets.fromLTRB(12, 14, 0, 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _ll2API.data['results'][index]['name'],
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(fontSize: 17),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          _cleanDate(
+                              _ll2API.data['results'][index]['net'].toString()),
+                          style:
+                              TextStyle(fontSize: 12, color: Colors.grey[400]),
+                        ),
+                      ],
+                    ),
+                  )),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 12.0, 8.0),
+                    padding: const EdgeInsets.fromLTRB(8, 8, 12, 8),
                     child: status.buildSmallStatusBedge(context),
                   )
                 ],
               )),
     );
   }
+
+  String _cleanDate(String str) => str
+      .split('T')[0]
+      .split('-')
+      .reversed
+      .toString()
+      .replaceAll('(', '')
+      .replaceAll(')', '')
+      .replaceAll(', ', ' / ');
 }
