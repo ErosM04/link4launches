@@ -14,5 +14,6 @@ class Link4Launches extends StatelessWidget {
         darkTheme: ThemeData(brightness: Brightness.dark),
         // theme: L4Ltheme,
         home: const L4LHomePage(title: APP_NAME),
+        debugShowCheckedModeBanner: false,
       );
 }

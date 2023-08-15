@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:link4launches/snackbar.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
+import 'package:link4launches/updater/custom_dialog.dart';
 import 'package:link4launches/updater/dialog_content.dart';
 
 /// Can be used to update the app, by downloading the new version in the ``Download`` folder after
@@ -15,153 +16,142 @@ class Updater {
       'https://github.com/ErosM04/link4launches/releases/latest/download/link4launches.apk';
   final BuildContext context;
 
-  const Updater({required this.context});
+  const Updater(this.context);
 
-  /// If the latest version is different from the actual then asks for update consent.
-  /// if the version is ahead then returns ``true``, otherwise display an error ``SnackBar`` and returns ``false``.
+  /// Uses ``[_getLatestVersionJson]`` to get the latest version and if it is different from the actual version, asks for update consent
+  /// to the user. When asking for consent uses ``[_getLatestVersionJson]`` again to get info about the latest changes and insert them
+  /// into the dialog using [DialogContent].
   Future updateToNewVersion() async {
     String latestVersion =
         (await _getLatestVersionJson('tag_name')).replaceAll('v', '');
 
     if (latestVersion != actualVersion && latestVersion.isNotEmpty) {
-      _callDialog(
+      _invokeDialog(
         latestVersion: latestVersion,
-        content: _buildDialogContent(
+        content: DialogContent(
             latestVersion: latestVersion,
             changes: await _getLatestVersionJson('body')),
       );
     }
   }
 
-  /// Performs a request to the Github API to obtain a json about the latest release.
-  /// ``key`` is the key used to get the corressponding value from the json.
+//   Future updateToNewVersion() async {
+//     String latestVersion = '1.6.2';
+
+//     if (latestVersion != actualVersion && latestVersion.isNotEmpty) {
+//       _invokeDialog(
+//         latestVersion: latestVersion,
+//         content: DialogContent(latestVersion: latestVersion, changes: """
+// ## link4launches v1.5.0
+
+// ### Features
+// - Changed app name and name displayed in appbar from ``link4launches`` to ``Link4Launches``
+// - Introduced the ``Update`` functionality which, every time the app starts, verifies if the actual version is behind the latest release and than proceeds to download the update (apk file), more info in the readme
+// - Added ``Storage access`` permission request to allow the app to download the update file
+// - Set default duration of the ``Snackbars`` to 3 seconds
+
+// ### Changes
+// - Modified updater code
+// - Introduced a new grapich for updater which is super cool dude!
+// - Modfied images code in order to zoom in
+// - bla bla bla
+
+// ### Bug fixes
+// - fixed bug regarding ``FAILURE`` status color, which was read as undefined value and colored blue instead of red
+// - modified error message (displayed with a ``Snackbar``) for the api
+// - modified caching animation duration
+// """),
+//       );
+//     }
+//   }
+
+  /// Performs a request to the Github API to obtain a json about the latest release data.
+  /// If anything goes wrong an [Exception] is thrown and an error message [SnackBar] is called.
+  /// #### Parameters
+  /// - ``String [key]`` : is the key used to get the corressponding value from the json ``{['key'] => value}``.
+  ///
+  /// #### Returns
+  /// ``Future<String>`` : the value corresponding to ``[key]`` in the json.
   Future<String> _getLatestVersionJson(String key) async {
     int statusCode = -1;
 
     try {
       var response = await http.get(Uri.parse(_latestReleaseLink));
-
       statusCode = response.statusCode;
+
       if (statusCode == 200) {
         var data = json.decode(response.body);
         return data[key].toString();
+      } else {
+        throw Exception();
       }
     } on Exception catch (_) {
       _callSnackBar(
-          message: 'Error $statusCode: while looking for the latest version');
+          message:
+              'Errore $statusCode durante la ricerca di una nuova versione');
     }
 
     return '';
   }
 
-  DialogContent _buildDialogContent(
-      {required String latestVersion, String? changes}) {
-    String? title;
-    String text = '';
-    String? link;
-    String? linkText;
-
-    if (changes != null && changes.isNotEmpty) {
-      changes = changes
-          .replaceAll('\r', '')
-          .replaceAll('\n', '')
-          .replaceAll('``', '');
-
-      if (changes.contains('###') &&
-          (changes.contains('Features') ||
-              changes.contains('Changes') ||
-              changes.contains('Bug fixes'))) {
-        List<String> arr = changes.split('###');
-        title = '';
-
-        for (var element in arr) {
-          if (element.contains('Features') && element.contains('-')) {
-            title = 'Features';
-            List<String> rows = element.split('-');
-
-            for (var i = 1; i < rows.length; i++) {
-              if (rows[i].trim().length <= 55) {
-                text += '- ${rows[i].trim()}\n';
-              } else {
-                text += '- ${rows[i].trim().substring(0, 55)}...\n';
-              }
-            }
-          } else if (element.contains('Changes')) {
-            if (title!.isEmpty) {
-              title = 'Changes';
-            }
-            text += '- Various changes';
-          } else if (element.contains('Bug fixes')) {
-            if (title!.isEmpty) {
-              title = 'Bug fixes';
-            }
-            text += '- Various bug fixies';
-          }
-        }
-        linkText = 'More info at:';
-        link = 'https://github.com/ErosM04/link4launches/releases/latest';
-      }
-    }
-
-    return DialogContent(
-      mainText: 'Download version $latestVersion?',
-      subTitle: title,
-      text: text,
-      linkText: linkText,
-      link: link,
-    );
-  }
-
-  void _callDialog({
+  /// Uses ``[showGeneralDialog]`` to show an [AlertDialog] over the screen.
+  /// #### Parameters
+  /// - ``String [latestVersion]`` : the latest version available of the app.
+  /// - ``DialogContent [context]`` : the content to insert under the title in the [AlertDialog].
+  void _invokeDialog({
     required String latestVersion,
     required DialogContent content,
   }) =>
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-                title: const Text('New version available'),
-                content: content,
-                actions: [
-                  ElevatedButton(
-                    onPressed: () {
-                      _callSnackBar(message: ':(');
-                      Navigator.pop(context);
-                    },
-                    child: const Text('No'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      _downloadUpdate(latestVersion);
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Yes'),
-                  )
-                ],
-              ));
-
-  /// After 2 seconds shows a ``SnackBar`` to inform the user that the new version has been detected.
-  /// Two seconds later downloads the latest version of the app (link4launches.apk) and save it in the Downloads folder.
-  ///
-  /// Every single time the download progress is updated a new ``SnackBar``containing the progress percentage is called.
-  /// At the end of the download another ``SnackBar`` is called to inform the user about the path.
-  /// A ``SnackBar`` is also used in case of error.
-  Future<void> _downloadUpdate(String latestVersion) async =>
-      FileDownloader.downloadFile(
-        url: _latestAPKLink.trim(),
-        onProgress: (fileName, progress) => _callSnackBar(
-            message: 'Download progress: ${progress.round()}%',
-            durationInMil: 700),
-        onDownloadCompleted: (path) => _callSnackBar(
-            message:
-                'Version $latestVersion downloaded at ${path.split('/')[4]}/${path.split('/').last}',
-            durationInSec: 5),
-        onDownloadError: (errorMessage) => _callSnackBar(
-            message: 'Error while downloading $latestVersion: $errorMessage',
-            durationInSec: 3),
+      showGeneralDialog(
+        context: context,
+        pageBuilder: (context, animation, secondaryAnimation) => Container(),
+        transitionDuration: const Duration(milliseconds: 180),
+        transitionBuilder: (context, animation, secondaryAnimation, child) =>
+            SlideTransition(
+                position: Tween<Offset>(
+                        begin: const Offset(0.0, 0.5), end: Offset.zero)
+                    .animate(animation),
+                child: FadeTransition(
+                    opacity:
+                        Tween<double>(begin: 0.5, end: 1).animate(animation),
+                    child: CustomDialog(
+                      iconPath: 'assets/upgrade.png',
+                      title: 'New version available',
+                      denyButtonText: 'No',
+                      confirmButtonText: 'Yes',
+                      denyButtonAction: () {
+                        _callSnackBar(message: ':(');
+                        Navigator.pop(context);
+                      },
+                      confirmButtonAction: () {
+                        _downloadUpdate(latestVersion);
+                        Navigator.pop(context);
+                      },
+                      child: content,
+                    ))),
       );
 
-  /// Function used to simplify the invocation and the creation of a ``SnackBar``.
+  /// Infroms the user that the download started with a [SnackBar] and uses the ``[FileDownloader]`` object to downlaod the apk.
+  /// A [SnackBar] is shown at the end of the download to inform the user that the app has been downloaded and saved
+  /// in the ``Downloads`` folder. In case of error an error message [SnackBar] is shown. To show the snackbar
+  /// ``[_callSnackBar]`` method is used.
+  Future<void> _downloadUpdate(String latestVersion) async {
+    _callSnackBar(
+        message: 'Download of Link4Launches v$latestVersion has started');
+
+    FileDownloader.downloadFile(
+      url: _latestAPKLink.trim(),
+      onDownloadCompleted: (path) => _callSnackBar(
+          message:
+              'Version $latestVersion downloaded at ${path.split('/')[4]}/${path.split('/').last}',
+          durationInSec: 5),
+      onDownloadError: (errorMessage) => _callSnackBar(
+          message: 'Error while downloading $latestVersion: $errorMessage',
+          durationInSec: 3),
+    );
+  }
+
+  /// Function used to simplify the invocation and the creation of a ``[SnackBar]``.
   void _callSnackBar(
           {required String message,
           int durationInSec = 2,

@@ -160,9 +160,11 @@ Some useful links:
 
 
 ## TODO
-- Fix Android 13 storage permission errror
 - Make the images zoomable
 - Improve DataBox code by creating an abstract class or a superclass and than for each box create a child.
 - Create a file for the theme
-- Implement a dialog to ask for user consent before downloading the new version
 - Change package name to 'ErosM04.link4launches'
+- Add routes
+
+## Stuff changes for new version
+- Changed updater code

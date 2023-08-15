@@ -69,9 +69,15 @@ class _L4LHomePageState extends State<L4LHomePage> {
       DeviceOrientation.portraitDown,
     ]);
 
-    //Check for app new version and then performs update
-    Updater updater = Updater(context: context);
-    updater.updateToNewVersion();
+    // Checks if a new version exists and asks for download consent.
+    // The 2 seconds delay is to avoid errors (trust me).
+    // Probably because without the delay, the push of the consent dialog would
+    // be performed before the completion of the initState()
+    // Updater updater = Updater(context);
+    // Future.delayed(
+    //   const Duration(seconds: 2),
+    //   () => updater.updateToNewVersion(),
+    // );
   }
 
   void _goToInfo(int index, LaunchStatus status) {
@@ -95,7 +101,7 @@ class _L4LHomePageState extends State<L4LHomePage> {
             L4LAppBar(actions: [
               IconButton(
                 // onPressed: () => setState(() => showTBD = !showTBD),
-                onPressed: () => Updater(context: context).updateToNewVersion(),
+                onPressed: () => Updater(context).updateToNewVersion(),
                 icon: Text(
                   'TBD',
                   style: TextStyle(color: showTBD ? Colors.white : Colors.grey),

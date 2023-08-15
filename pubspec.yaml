@@ -26,7 +26,7 @@ dependencies:
   http: ^0.13.5
   url_launcher: ^6.1.12
   flutter_launcher_icons: ^0.13.1
-  # google_fonts: ^4.0.4
+  flutter_animate:
 
 
 dev_dependencies:
@@ -50,3 +50,4 @@ flutter:
   uses-material-design: true
   assets:
     - 'assets/snackbar/space_devs_rocket.svg'
+    - 'assets/upgrade.png'
