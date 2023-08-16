@@ -161,12 +161,12 @@ Some useful links:
 
 ## TODO
 - Make the images zoomable
-- Improve DataBox code by creating an abstract class or a superclass and than for each box create a child.
-- Create a file for the theme
-- Change package name to 'ErosM04.link4launches'
+- Create a file for the theme (and change all theme occurences)
 - Add routes
 
 ## Stuff changes for new version
 - Changed updater code
 - Added date to home page tile
 - Fixed bug of TBD which previously started the update process
+- Improved DataBox code by creating an abstract superclass and than for each box created a subclass.
+- Changed package name to 'ErosM04.link4launches'
