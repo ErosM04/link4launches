@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:link4launches/pages/ui_components/snackbar.dart';
+import 'package:link4launches/view/pages/ui_components/snackbar.dart';
 
 class LaunchStatus extends StatelessWidget {
   final String state;

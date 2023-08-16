@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:link4launches/pages/ui_components/snackbar.dart';
+import 'package:link4launches/view/pages/ui_components/snackbar.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
-import 'package:link4launches/updater/custom_dialog.dart';
-import 'package:link4launches/updater/dialog_content.dart';
+import 'package:link4launches/logic/updater/custom_dialog.dart';
+import 'package:link4launches/logic/updater/dialog_content.dart';
 
 /// Can be used to update the app, by downloading the new version in the ``Download`` folder after
 /// the user gave the consent (with a dialog).

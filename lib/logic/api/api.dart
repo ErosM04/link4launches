@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:link4launches/pages/ui_components/snackbar.dart';
+import 'package:link4launches/view/pages/ui_components/snackbar.dart';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 

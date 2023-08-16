@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:link4launches/constant.dart';
-import 'package:link4launches/pages/launch/shimmer.dart';
-import 'package:link4launches/pages/ui_components/brightness.dart';
+import 'package:link4launches/view/pages/launch/shimmer.dart';
+import 'package:link4launches/view/pages/ui_components/brightness.dart';
 
 abstract class DataBox extends StatelessWidget {
   final String? imageLink;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:link4launches/pages/launch/boxes/box.dart';
-import 'package:link4launches/pages/launch/boxes/detail.dart';
+import 'package:link4launches/view/pages/launch/boxes/box.dart';
+import 'package:link4launches/view/pages/launch/boxes/detail.dart';
 
 class RocketDataBox extends DataBox {
   final int? height;

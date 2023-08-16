@@ -170,3 +170,4 @@ Some useful links:
 - Fixed bug of TBD which previously started the update process
 - Improved DataBox code by creating an abstract superclass and than for each box created a subclass.
 - Changed package name to 'ErosM04.link4launches'
+- Fixed text bug in launch page (api --> convertGibberish())

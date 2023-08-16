@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:link4launches/pages/launch/boxes/box.dart';
+import 'package:link4launches/view/pages/launch/boxes/box.dart';
 
 class AgencyDataBox extends DataBox {
   final String countryCode;

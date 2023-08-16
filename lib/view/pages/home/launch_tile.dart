@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:link4launches/constant.dart';
-import 'package:link4launches/pages/ui_components/brightness.dart';
-import 'package:link4launches/pages/ui_components/status.dart';
+import 'package:link4launches/view/pages/ui_components/brightness.dart';
+import 'package:link4launches/view/pages/ui_components/status.dart';
 
 class LaunchTile extends StatelessWidget {
   final Function onPressed;
