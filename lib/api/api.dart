@@ -187,12 +187,9 @@ class LaunchLibrary2API {
     file.writeAsString(content);
   }
 
-  String convertGibberish(String str) {
-    if (str.contains('Ã©')) {
-      str = str.replaceAll('Ã©', 'é');
-    } else if (str.contains(' | Unknown Payload')) {
-      str = str.replaceAll(' | Unknown Payload', '');
-    }
-    return str;
-  }
+  String convertGibberish(String str) => str
+      .replaceAll('Ã©', 'é')
+      .replaceAll(' | Unknown Payload', '')
+      .replaceAll('â', '–')
+      .replaceAll('Î±', 'α');
 }

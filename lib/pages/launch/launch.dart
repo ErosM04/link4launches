@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:link4launches/constant.dart';
 import 'package:link4launches/pages/app_bar.dart';
 import 'package:link4launches/pages/launch/boxes/agency_box.dart';
-import 'package:link4launches/pages/launch/boxes/main_box.dart';
+import 'package:link4launches/pages/launch/boxes/launch_box.dart';
 import 'package:link4launches/pages/launch/boxes/rocket_box.dart';
 import 'package:link4launches/pages/ui_components/brightness.dart';
 import 'package:link4launches/pages/ui_components/status.dart';
