@@ -35,7 +35,7 @@ class LaunchInfoPage extends StatelessWidget {
 
   List<Widget> _buildDataBoxList() => [
         // First container (launch data)
-        MainDataBox(
+        LaunchDataBox(
           imageLink: _readJsonField(['image']),
           title: data['name'],
           status: status,

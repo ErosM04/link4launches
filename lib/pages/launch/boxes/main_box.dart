@@ -3,11 +3,11 @@ import 'package:link4launches/pages/launch/boxes/box.dart';
 import 'package:link4launches/pages/ui_components/status.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
-class MainDataBox extends DataBox {
+class LaunchDataBox extends DataBox {
   final LaunchStatus? status;
   final String? padMapLink;
 
-  const MainDataBox({
+  const LaunchDataBox({
     super.key,
     required super.imageLink,
     required super.title,
