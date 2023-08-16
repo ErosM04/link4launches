@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:link4launches/constant.dart';
 import 'package:link4launches/pages/app_bar.dart';
-import 'package:link4launches/pages/ui_components/box.dart';
+import 'package:link4launches/pages/launch/boxes/agency_box.dart';
+import 'package:link4launches/pages/launch/boxes/main_box.dart';
+import 'package:link4launches/pages/launch/boxes/rocket_box.dart';
 import 'package:link4launches/pages/ui_components/brightness.dart';
 import 'package:link4launches/pages/ui_components/status.dart';
 
@@ -31,82 +33,78 @@ class LaunchInfoPage extends StatelessWidget {
         ),
       ));
 
-  List<DataBox> _buildDataBoxList() {
-    List<DataBox> list = [];
+  List<Widget> _buildDataBoxList() => [
+        // First container (launch data)
+        MainDataBox(
+          imageLink: _readJsonField(['image']),
+          title: data['name'],
+          status: status,
+          subTitle1: _formatDate(_readJsonField(['net']), 0),
+          subTitle2: _formatTime(_readJsonField(['net']), 1),
+          text: _readJsonField(['mission', 'description']),
+          padMapLink: _readJsonField(['pad', 'map_url']),
+        ),
 
-    //First container (launch)
-    if (_readJsonField(['name']).isNotEmpty) {
-      list.add(DataBox(
-        imageLink: _readJsonField(['image']),
-        title: data['name'],
-        status: status,
-        h1: _formatDate(_readJsonField(['net']), 0),
-        h2: _formatTime(_readJsonField(['net']), 1),
-        text: _readJsonField(['mission', 'description']),
-        containsDate: true,
-        padLink: _readJsonField(['pad', 'map_url']),
-      ));
-    }
+        //Second container (agency data)
+        AgencyDataBox(
+          imageLink: _readJsonField(
+              ['rocket', 'configuration', 'url', 'manufacturer', 'logo_url']),
+          title: data['rocket']['configuration']['url']['manufacturer']['name'],
+          subTitle1: _readJsonField(
+              ['rocket', 'configuration', 'url', 'manufacturer', 'type']),
+          countryCode: _readJsonField([
+            'rocket',
+            'configuration',
+            'url',
+            'manufacturer',
+            'country_code'
+          ]),
+          subTitle2: _readJsonField([
+            'rocket',
+            'configuration',
+            'url',
+            'manufacturer',
+            'administrator'
+          ]),
+          text: _readJsonField([
+            'rocket',
+            'configuration',
+            'url',
+            'manufacturer',
+            'description'
+          ]),
+        ),
 
-    //Second container (agency)
-    if (_readJsonField(
-            ['rocket', 'configuration', 'url', 'manufacturer', 'name'])
-        .isNotEmpty) {
-      list.add(DataBox(
-        imageLink: _readJsonField(
-            ['rocket', 'configuration', 'url', 'manufacturer', 'logo_url']),
-        title: data['rocket']['configuration']['url']['manufacturer']['name'],
-        h1: _readJsonField(
-            ['rocket', 'configuration', 'url', 'manufacturer', 'type']),
-        countryCode: _readJsonField(
-            ['rocket', 'configuration', 'url', 'manufacturer', 'country_code']),
-        h2: _readJsonField([
-          'rocket',
-          'configuration',
-          'url',
-          'manufacturer',
-          'administrator'
-        ]),
-        text: _readJsonField(
-            ['rocket', 'configuration', 'url', 'manufacturer', 'description']),
-      ));
-    }
-
-    //Third container (rocket)
-    if (_readJsonField(['rocket', 'configuration', 'url', 'name']).isNotEmpty) {
-      list.add(DataBox(
-        imageLink: (_readJsonField(
-                    ['rocket', 'configuration', 'url', 'image_url']) ==
-                _readJsonField(['image']))
-            ? ''
-            : _readJsonField(['rocket', 'configuration', 'url', 'image_url']),
-        title: data['rocket']['configuration']['url']['name'],
-        h1: (_readJsonField(['rocket', 'configuration', 'url', 'full_name']) ==
-                data['rocket']['configuration']['url']['name'])
-            ? ''
-            : _readJsonField(['rocket', 'configuration', 'url', 'full_name']),
-        height: _convertToInt(
-            _readJsonField(['rocket', 'configuration', 'url', 'length'])),
-        maxStages: _convertToInt(
-            _readJsonField(['rocket', 'configuration', 'url', 'max_stage'])),
-        liftoffThrust: _convertToInt(
-            _readJsonField(['rocket', 'configuration', 'url', 'to_thrust'])),
-        liftoffMass: _convertToInt(
-            _readJsonField(['rocket', 'configuration', 'url', 'launch_mass'])),
-        massToLEO: _convertToInt(
-            _readJsonField(['rocket', 'configuration', 'url', 'leo_capacity'])),
-        massToGTO: _convertToInt(
-            _readJsonField(['rocket', 'configuration', 'url', 'gto_capacity'])),
-        successfulLaunches: _convertToInt(_readJsonField(
-            ['rocket', 'configuration', 'url', 'successful_launches'])),
-        failedLaunches: _convertToInt(_readJsonField(
-            ['rocket', 'configuration', 'url', 'failed_launches'])),
-        text: _readJsonField(['rocket', 'configuration', 'url', 'description']),
-      ));
-    }
-
-    return list;
-  }
+        //Third container (rocket data)
+        RocketDataBox(
+            imageLink:
+                (_readJsonField(['rocket', 'configuration', 'url', 'image_url']) ==
+                        _readJsonField(['image']))
+                    ? ''
+                    : _readJsonField(
+                        ['rocket', 'configuration', 'url', 'image_url']),
+            title: data['rocket']['configuration']['url']['name'],
+            subTitle1:
+                (_readJsonField(['rocket', 'configuration', 'url', 'full_name']) ==
+                        data['rocket']['configuration']['url']['name'])
+                    ? ''
+                    : _readJsonField(
+                        ['rocket', 'configuration', 'url', 'full_name']),
+            height: _convertToInt(
+                _readJsonField(['rocket', 'configuration', 'url', 'length'])),
+            maxStages: _convertToInt(_readJsonField(
+                ['rocket', 'configuration', 'url', 'max_stage'])),
+            liftoffThrust: _convertToInt(_readJsonField(
+                ['rocket', 'configuration', 'url', 'to_thrust'])),
+            liftoffMass: _convertToInt(_readJsonField(
+                ['rocket', 'configuration', 'url', 'launch_mass'])),
+            massToLEO: _convertToInt(
+                _readJsonField(['rocket', 'configuration', 'url', 'leo_capacity'])),
+            massToGTO: _convertToInt(_readJsonField(['rocket', 'configuration', 'url', 'gto_capacity'])),
+            successfulLaunches: _convertToInt(_readJsonField(['rocket', 'configuration', 'url', 'successful_launches'])),
+            failedLaunches: _convertToInt(_readJsonField(['rocket', 'configuration', 'url', 'failed_launches'])),
+            text: _readJsonField(['rocket', 'configuration', 'url', 'description'])),
+      ];
 
   int _convertToInt(String str) {
     try {

@@ -16,15 +16,15 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.5
   loading_animation_widget: ^1.2.0+4
-  path_provider: ^2.0.15
-  shimmer: ^3.0.0
-  cached_network_image: ^3.2.3
+  path_provider:
+  shimmer:
+  cached_network_image:
   flutter_native_splash: ^2.3.1
-  flutter_file_downloader: ^1.1.2
+  flutter_file_downloader:
   flutter_svg: ^2.0.7
   permission_handler: ^10.4.3
   http: ^0.13.5
-  url_launcher: ^6.1.12
+  url_launcher:
   flutter_launcher_icons: ^0.13.1
   flutter_animate:
 
