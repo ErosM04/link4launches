@@ -8,10 +8,10 @@ class ShimmerBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      //Easteregg
       onTap: (() => ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBarMessage(
-                  message: 'Chill out dude', fontSize: 18) //Easteregg
-              .build(context))),
+          const CustomSnackBar(message: 'Chill out dude', fontSize: 18)
+              .build())),
       child: AspectRatio(
         aspectRatio: 16 / 9,
         child: Shimmer.fromColors(

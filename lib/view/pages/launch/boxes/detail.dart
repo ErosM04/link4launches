@@ -40,8 +40,8 @@ class DetailSection extends StatelessWidget {
       padding: const EdgeInsets.all(4.0),
       child: GestureDetector(
         onTap: (() => ScaffoldMessenger.of(context).showSnackBar(
-            SnackBarMessage(message: _getDescription(title), durationInSec: 4)
-                .build(context))),
+            CustomSnackBar(message: _getDescription(title), durationInSec: 4)
+                .build())),
         child: Text(
           '$title: $value$unit',
           textAlign: alignment,

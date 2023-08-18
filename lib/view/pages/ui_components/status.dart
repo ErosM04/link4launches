@@ -25,8 +25,7 @@ class LaunchStatus extends StatelessWidget {
           {double height = 40, double fontSizeReduction = 0}) =>
       GestureDetector(
         onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-            SnackBarMessage(message: _getStatusDescription(state))
-                .build(context)),
+            CustomSnackBar(message: _getStatusDescription(state)).build()),
         child: Stack(
           fit: StackFit.loose,
           alignment: AlignmentDirectional.center,

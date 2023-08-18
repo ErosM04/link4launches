@@ -20,20 +20,24 @@ class L4LHomePage extends StatefulWidget {
 }
 
 class _L4LHomePageState extends State<L4LHomePage> {
-  final LaunchLibrary2API _ll2API = LaunchLibrary2API(
-      link: 'https://ll.thespacedevs.com/2.2.0/launch/upcoming/?format=json');
+  late final LaunchLibrary2API _ll2API;
   final _scrollController = ScrollController();
   final int launchNumber = 14;
   bool showTBD = true;
   late Updater updater;
 
-  _L4LHomePageState() {
-    _ll2API.launch(launchNumber).then((value) => setState(() => _ll2API.data));
-  }
+  _L4LHomePageState() {}
 
   @override
   void initState() {
     super.initState();
+
+    // Creates a api Object and perform a request
+    _ll2API = LaunchLibrary2API(
+      link: 'https://ll.thespacedevs.com/2.2.0/launch/upcoming/?format=json',
+      context: context,
+    );
+    _ll2API.launch(launchNumber).then((value) => setState(() => _ll2API.data));
 
     //Orientation lock in portrait (vertical) mode
     SystemChrome.setPreferredOrientations([
@@ -63,51 +67,42 @@ class _L4LHomePageState extends State<L4LHomePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    _ll2API.context = context;
-    return Scaffold(
-        // backgroundColor: BrightnessDetector.isDarkCol(
-        //     context, DARK_BACKGROUND, LIGHT_BACKGROUND),
-        body: NestedScrollView(
-      headerSliverBuilder: (context, innerBoxIsScrolled) => [
-        L4LAppBar(actions: [
-          IconButton(
-            // onPressed: () => setState(() => showTBD = !showTBD),
-            onPressed: () =>
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: _buildSnackBarContent(),
-              duration: const Duration(seconds: 10),
-            )),
-            icon: Text(
-              'TBD',
-              style: TextStyle(color: showTBD ? Colors.white : Colors.grey),
+  Widget build(BuildContext context) => Scaffold(
+          // backgroundColor: BrightnessDetector.isDarkCol(
+          //     context, DARK_BACKGROUND, LIGHT_BACKGROUND),
+          body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          L4LAppBar(actions: [
+            IconButton(
+              // onPressed: () => setState(() => showTBD = !showTBD),
+              onPressed: () => ScaffoldMessenger.of(context)
+                  .showSnackBar(const CustomSnackBar(message: 'Yo').build()),
+              icon: Text(
+                'TBD',
+                style: TextStyle(color: showTBD ? Colors.white : Colors.grey),
+              ),
             ),
-          ),
-          IconButton(
-              // onPressed: () => {
-              //       setState(() => _ll2API.data = {}),
-              //       _ll2API
-              //           .launch(launchNumber)
-              //           .then((value) => setState(() => _ll2API.data = value))
-              //     },
-              onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBarMessage(message: 'Bella raga sono fattissimo!!')
-                      .build(context)),
-              icon: const Icon(Icons.autorenew)),
-        ]).buildAppBar(),
-      ],
-      body: _ll2API.data.isEmpty
-          ? Center(
-              child: LoadingAnimationWidget.dotsTriangle(
-                  color: Colors.white, size: 50))
-          : ListView.builder(
-              padding: EdgeInsets.zero,
-              controller: _scrollController,
-              itemCount: _ll2API.data['count'],
-              itemBuilder: (context, index) => _buildListItem(index),
-            ),
-    ));
-  }
+            IconButton(
+                onPressed: () => {
+                      setState(() => _ll2API.data = {}),
+                      _ll2API
+                          .launch(launchNumber)
+                          .then((value) => setState(() => _ll2API.data = value))
+                    },
+                icon: const Icon(Icons.autorenew)),
+          ]).buildAppBar(),
+        ],
+        body: _ll2API.data.isEmpty
+            ? Center(
+                child: LoadingAnimationWidget.dotsTriangle(
+                    color: Colors.white, size: 50))
+            : ListView.builder(
+                padding: EdgeInsets.zero,
+                controller: _scrollController,
+                itemCount: _ll2API.data['count'],
+                itemBuilder: (context, index) => _buildListItem(index),
+              ),
+      ));
 
   Widget _buildSnackBarContent() => Row(
         mainAxisAlignment: MainAxisAlignment.center,
