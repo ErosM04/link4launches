@@ -9,7 +9,7 @@ import 'package:link4launches/logic/updater/dialog_content.dart';
 /// Can be used to update the app, by downloading the new version in the ``Download`` folder after
 /// the user gave the consent (with a dialog).
 class Updater {
-  final String actualVersion = '1.6.1';
+  final String actualVersion = '1.6.0';
   final String _latestReleaseLink =
       'https://api.github.com/repos/ErosM04/link4launches/releases/latest';
   final String _latestAPKLink =

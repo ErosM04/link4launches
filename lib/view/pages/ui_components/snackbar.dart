@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:link4launches/constant.dart';
-import 'package:link4launches/view/pages/ui_components/brightness.dart';
 
 class SnackBarMessage {
   final String message;
@@ -17,23 +15,21 @@ class SnackBarMessage {
   });
 
   SnackBar build(BuildContext context) => SnackBar(
-        elevation: 0, // removes shadow
-        behavior: SnackBarBehavior.floating,
-        width: double.infinity,
         duration: (durationInMil == null)
             ? Duration(seconds: durationInSec)
             : Duration(milliseconds: durationInMil!),
-        backgroundColor: Colors.transparent,
         content: Container(
           height: (message.length <= 40) ? 45 : 70,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
-            color: BrightnessDetector.isDarkCol(
-              context,
-              Colors.black,
-              const Color.fromARGB(255, 240, 240, 240),
-            ),
-          ),
+              borderRadius: BorderRadius.circular(18),
+              color:
+                  // BrightnessDetector.isDarkCol(
+                  //   context,
+                  // Colors.black,
+                  Theme.of(context).colorScheme.tertiary
+              // const Color.fromARGB(255, 240, 240, 240),
+              // ),
+              ),
           child: _buildSnackBarContent(context),
         ),
       );
@@ -60,7 +56,8 @@ class SnackBarMessage {
         message,
         textAlign: TextAlign.center,
         style: TextStyle(
-            color: BrightnessDetector.isDarkCol(
-                context, LIGHT_ELEMENT, const Color.fromARGB(255, 47, 48, 49))),
+            // color: BrightnessDetector.isDarkCol(
+            //     context, LIGHT_ELEMENT, const Color.fromARGB(255, 47, 48, 49))
+            ),
       );
 }

@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:link4launches/constant.dart';
 import 'package:link4launches/view/pages/launch/shimmer.dart';
-import 'package:link4launches/view/pages/ui_components/brightness.dart';
 
 abstract class DataBox extends StatelessWidget {
   final String? imageLink;
@@ -23,12 +21,10 @@ abstract class DataBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
-            color: BrightnessDetector.isDarkCol(
-                context, DARK_ELEMENT, LIGHT_ELEMENT),
+            color: Theme.of(context).colorScheme.secondary,
             border: Border.all(
               width: 10,
-              color: BrightnessDetector.isDarkCol(
-                  context, DARK_ELEMENT, LIGHT_ELEMENT),
+              color: Theme.of(context).colorScheme.secondary,
             ),
             borderRadius: const BorderRadius.all(Radius.circular(20.0))),
         alignment: Alignment.topCenter,

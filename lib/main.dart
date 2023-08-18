@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:link4launches/constant.dart';
 import 'package:link4launches/view/pages/home/home.dart';
+import 'package:link4launches/view/theme.dart';
 
 void main() => runApp(const Link4Launches());
 
@@ -9,11 +9,10 @@ class Link4Launches extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-        title: APP_NAME,
-        theme: ThemeData(brightness: Brightness.light),
-        darkTheme: ThemeData(brightness: Brightness.dark),
-        // theme: L4Ltheme,
-        home: const L4LHomePage(title: APP_NAME),
+        title: 'Link4Launches',
+        theme: l4lLightTheme,
+        darkTheme: l4lDarkTheme,
+        home: const L4LHomePage(title: 'Link4Launches'),
         debugShowCheckedModeBanner: false,
       );
 }

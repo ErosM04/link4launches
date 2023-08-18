@@ -163,6 +163,9 @@ Some useful links:
 - Make the images zoomable
 - Create a file for the theme (and change all theme occurences)
 - Add routes
+- Change custom Appbar class in a StatelessWidget 
+- Change custom Snackbar class in a StatelessWidget
+- Change all past releaset0 0... and the new onehas to be 1.0.0
 
 ## Stuff changes for new version
 - Changed updater code

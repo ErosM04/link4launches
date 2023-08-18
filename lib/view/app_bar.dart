@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:link4launches/constant.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class L4LAppBar {
   final String title;
-  final Color color;
   final List<Widget> actions;
   final bool popUpMenu;
   final List<IconData> iconsListPopUp;
@@ -13,8 +11,7 @@ class L4LAppBar {
   final List<String> linksListPopUp;
 
   const L4LAppBar({
-    this.title = APP_NAME,
-    this.color = MAIN_COLOR,
+    this.title = 'Link4Launches',
     this.actions = const [],
     this.popUpMenu = true,
     this.iconsListPopUp = const [
@@ -36,7 +33,6 @@ class L4LAppBar {
 
   SliverAppBar buildAppBar() => SliverAppBar(
         title: Text(title),
-        backgroundColor: color,
         actions: _buildActions(),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(

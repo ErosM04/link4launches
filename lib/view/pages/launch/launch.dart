@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:link4launches/constant.dart';
 import 'package:link4launches/view/app_bar.dart';
 import 'package:link4launches/view/pages/launch/boxes/agency_box.dart';
 import 'package:link4launches/view/pages/launch/boxes/launch_box.dart';
 import 'package:link4launches/view/pages/launch/boxes/rocket_box.dart';
-import 'package:link4launches/view/pages/ui_components/brightness.dart';
 import 'package:link4launches/view/pages/ui_components/status.dart';
 
 class LaunchInfoPage extends StatelessWidget {
@@ -19,9 +17,9 @@ class LaunchInfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      backgroundColor: BrightnessDetector.isDarkCol(
-          context, DARK_BACKGROUND, LIGHT_BACKGROUND),
-      body: NestedScrollView(
+          // backgroundColor: BrightnessDetector.isDarkCol(
+          //     context, DARK_BACKGROUND, LIGHT_BACKGROUND),
+          body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           const L4LAppBar(
             actions: [],

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:link4launches/constant.dart';
-import 'package:link4launches/view/pages/ui_components/brightness.dart';
 import 'package:link4launches/view/pages/ui_components/status.dart';
 
 class LaunchTile extends StatelessWidget {
@@ -25,9 +23,7 @@ class LaunchTile extends StatelessWidget {
         child: (condition)
             ? Container()
             : Card(
-                color: BrightnessDetector.isDarkCol(
-                    context, DARK_ELEMENT, LIGHT_ELEMENT),
-                elevation: BrightnessDetector.isLightNum(context, 5, 0),
+                // elevation: BrightnessDetector.isLightNum(context, 5, 0),
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(18))),
                 margin: const EdgeInsets.fromLTRB(8.0, 7.0, 8.0, 7.0),
@@ -48,7 +44,9 @@ class LaunchTile extends StatelessWidget {
                           Text(
                             smallText,
                             style: TextStyle(
-                                fontSize: 12, color: Colors.grey[400]),
+                              fontSize: 12,
+                              color: Theme.of(context).colorScheme.tertiary,
+                            ),
                           ),
                         ],
                       ),
