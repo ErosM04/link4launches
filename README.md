@@ -163,6 +163,7 @@ Some useful links:
 - Make the lunch page images zoomable
 - Change custom Appbar class in a StatelessWidget 
 - Change all past release from 1... to 0... and the new one has to be 1.0.0
+- Devide api code in different sub class
 
 ## Stuff changes for new version
 - Changed updater code

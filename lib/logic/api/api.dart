@@ -9,9 +9,9 @@ class LaunchLibrary2API {
   Map<String, dynamic> data = {};
   final String backupFile = 'll2data.json';
   final String link;
-  var context;
+  final BuildContext context;
 
-  LaunchLibrary2API({required this.link});
+  LaunchLibrary2API({required this.link, required this.context});
 
   Future<Map<String, dynamic>> launch(int limit) async {
     int statusCode = -1;
@@ -21,8 +21,7 @@ class LaunchLibrary2API {
       var response = await http.get(Uri.parse('$link&limit=$limit'));
 
       if (response.statusCode == 200) {
-        data = json.decode(convertGibberish(
-            response.body.replaceAll("\r", "").replaceAll("\n", "")));
+        data = json.decode(convertGibberish(response.body));
         data['count'] = _getItemCount(); //Sets the right number of launches
         data = await _fetchRocket(data, _getItemCount());
         _writeJsonFile(json.encode(data));
@@ -35,11 +34,9 @@ class LaunchLibrary2API {
     } on Exception catch (_) {}
 
     // Throttled request (15 requests limit per hour exceeded), reads backup file
-    ScaffoldMessenger.of(context).showSnackBar(SnackBarMessage(
-            message:
-                'Error${(statusCode != -1) ? ' $statusCode' : ''} ${(reasonPhrase.isEmpty) ? body.replaceAll('{', '').replaceAll('}', '').replaceAll('"detail":', '').replaceAll('"', '') : ': due to $reasonPhrase'}')
-        .build(context));
-    data = json.decode(await _loadFromFile(context));
+    _callSnackBar(
+        'Error${(statusCode != -1) ? ' $statusCode' : ''} ${(reasonPhrase.isEmpty) ? body.replaceAll('{', '').replaceAll('}', '').replaceAll('"detail":', '').replaceAll('"', '') : ': due to $reasonPhrase'}');
+    data = json.decode(await _loadFromFile());
 
     return data;
   }
@@ -48,7 +45,7 @@ class LaunchLibrary2API {
       Map<String, dynamic> map, int total) async {
     Map<String, dynamic> backup = {};
     try {
-      backup = json.decode(await _loadFromFile(context, showSnackBar: false));
+      backup = json.decode(await _loadFromFile(showSnackBar: false));
     } on Exception catch (_) {}
 
     try {
@@ -75,9 +72,8 @@ class LaunchLibrary2API {
         } else {
           var res = await http.get(Uri.parse(link));
           if (res.statusCode == 200) {
-            map['results'][i]['rocket']['configuration']['url'] = json.decode(
-                convertGibberish(
-                    res.body.replaceAll("\r", "").replaceAll("\n", "")));
+            map['results'][i]['rocket']['configuration']['url'] =
+                json.decode(convertGibberish(res.body));
 
             // Changes the country code format
             String countryCode = await _fetchCountryCode(map['results'][i]
@@ -87,10 +83,8 @@ class LaunchLibrary2API {
             map['results'][i]['rocket']['configuration']['url']['manufacturer']
                 ['country_code'] = countryCode;
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBarMessage(
-                    message:
-                        'Error: ${res.statusCode} ${(res.reasonPhrase!.isEmpty) ? '' : 'due to ${res.reasonPhrase} '}for ${data['results'][i]['rocket']['configuration']['full_name']}')
-                .build(context));
+            _callSnackBar(
+                'Error: ${res.statusCode} ${(res.reasonPhrase!.isEmpty) ? '' : 'due to ${res.reasonPhrase} '}for ${data['results'][i]['rocket']['configuration']['full_name']}');
           }
         }
 
@@ -98,9 +92,7 @@ class LaunchLibrary2API {
         linkList.add(link);
       }
     } on Exception catch (_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBarMessage(message: 'Cannot load launchers data')
-              .build(context));
+      _callSnackBar('Cannot load launchers data');
     }
     return map;
   }
@@ -149,21 +141,16 @@ class LaunchLibrary2API {
     return tot;
   }
 
-  Future<String> _loadFromFile(context, {bool showSnackBar = true}) async {
+  Future<String> _loadFromFile({bool showSnackBar = true}) async {
     try {
       if (await _existsJsonFile()) {
         if (showSnackBar) {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBarMessage(message: 'Data loaded from backup file')
-                  .build(context));
+          _callSnackBar('Data loaded from backup file');
         }
         return await _readJsonFile();
       }
     } on Exception catch (_) {}
-
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBarMessage(message: 'Cannot load backup file')
-            .build(context));
+    _callSnackBar('Cannot load backup file');
     return '';
   }
 
@@ -188,8 +175,13 @@ class LaunchLibrary2API {
   }
 
   String convertGibberish(String str) => str
+      .replaceAll("\r", "")
+      .replaceAll("\n", "")
       .replaceAll('Ã©', 'é')
       .replaceAll(' | Unknown Payload', '')
       .replaceAll('â', '–')
       .replaceAll('Î±', 'α');
+
+  void _callSnackBar(String message) => ScaffoldMessenger.of(context)
+      .showSnackBar(CustomSnackBar(message: message).build());
 }

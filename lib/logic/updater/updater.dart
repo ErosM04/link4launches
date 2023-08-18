@@ -156,9 +156,9 @@ class Updater {
           {required String message,
           int durationInSec = 2,
           int? durationInMil}) =>
-      ScaffoldMessenger.of(context).showSnackBar(SnackBarMessage(
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
               message: message,
               durationInSec: durationInSec,
               durationInMil: durationInMil)
-          .build(context));
+          .build());
 }
