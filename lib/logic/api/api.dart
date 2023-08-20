@@ -4,8 +4,11 @@ import 'package:link4launches/logic/api/backup.dart';
 import 'package:link4launches/view/pages/ui_components/snackbar.dart';
 import 'dart:convert';
 
+/// Class used to manage api request to the Launch Library 2 API and manage the backup json file used to store data regarding launches
+/// to overcome the api limitation. This class also provide smart reuse of data when performing the subrequestes for each launch in
+/// order to perform the smallest amount of request possible.
 class LaunchLibrary2API {
-  Map<String, dynamic> data = {};
+  // Map<String, dynamic> data = {};
   late final BackupJsonManager _backupManager;
   final String link;
   final BuildContext context;
@@ -18,51 +21,70 @@ class LaunchLibrary2API {
     );
   }
 
+  /// Performs a main request to the api (at ``[link]``) to obtain the next ``[limit]`` launches (also may contain latest success, failures or
+  /// in progress launches) as a json. Than for each launch performs another request using the ``[_fetchRocket]`` method.
+  /// Everything is than saved in a backup json file using ``[_backupManager]``. If anything goes wrong a [CustomSnackBar] is called and the
+  /// pre-existing backup file is returned.
   Future<Map<String, dynamic>> launch(int limit) async {
-    int statusCode = -1;
-    String reasonPhrase = '', body = '';
+    int? statusCode;
+    String? reasonPhrase, body;
 
     try {
       var response = await http.get(Uri.parse('$link&limit=$limit'));
 
       if (response.statusCode == 200) {
-        data = json.decode(convertGibberish(response.body));
-        data['count'] = _getItemCount(); //Sets the right number of launches
-        data = await _fetchRocket(data, _getItemCount());
+        var data = json.decode(convertGibberish(response.body));
+        int launchAmount = _getLaunchAmount(data);
+        data['count'] = launchAmount; //Sets the right number of launches
+        data = await _fetchRocket(data, launchAmount);
         _backupManager.writeJsonFile(json.encode(data));
         return data;
       } else {
         statusCode = response.statusCode;
         reasonPhrase = response.reasonPhrase ?? '';
         body = response.body;
+        throw Exception();
       }
-    } on Exception catch (_) {}
+    } on Exception catch (_) {
+      // Throttled request (15 requests limit per hour exceeded), reads backup file
+      _callSnackBar(
+          'Error${(statusCode != null) ? ' $statusCode' : ''} ${((reasonPhrase != null && reasonPhrase.isNotEmpty) && (body != null && body.isNotEmpty)) ? body.replaceAll('{', '').replaceAll('}', '').replaceAll('"detail":', '').replaceAll('"', '') : ': due to $reasonPhrase'}');
+    }
 
-    // Throttled request (15 requests limit per hour exceeded), reads backup file
-    _callSnackBar(
-        'Error${(statusCode != -1) ? ' $statusCode' : ''} ${(reasonPhrase.isEmpty) ? body.replaceAll('{', '').replaceAll('}', '').replaceAll('"detail":', '').replaceAll('"', '') : ': due to $reasonPhrase'}');
-    data = json.decode(await _backupManager.loadFromFile());
-
-    return data;
+    return json.decode(await _backupManager.loadFromFile());
   }
 
   Future<Map<String, dynamic>> _fetchRocket(
       Map<String, dynamic> map, int total) async {
     Map<String, dynamic> backup = {};
     try {
+      // In this case in not necessary to show the SncakBar
       backup = json.decode(
           await _backupManager.loadFromFile(showSuccessSnackBar: false));
-    } on Exception catch (_) {}
+    } on Exception catch (_) {
+      backup = {};
+    }
 
     try {
+      // USed to save the link that has been alredy used in a requesto, to avoid wasting api calls
       List<dynamic> linkList = [];
+
       for (int i = 0; i < total; i++) {
+        // Uses data from backup if the actual rocket configuration is already contained in the backup json file.
+        // Otherwise if the data are not contained, but the fetch was already performed (during the for execution), reuse those data.
+        // If the data are not containd in the backup and this link wasn't already used in an api request, then a new api request is performed.
         var link = map['results'][i]['rocket']['configuration']['url'];
         int pos = _findRecurrence(linkList, link);
-        /*Uses data from backup if this rocket configuration is already contained.
-          Otherwise if the data are not containe but the fetch was already performed, reuse these data.
-          If the data are not present a fetch is performed.
-          Using this if whenever an element is remove, the backup loading won't work, this allows to rocket conf. data*/
+        /*
+          The first if is used to check if the element in the map at pos is equal to element at backup at the same pos. With this method
+          is possible to reuse data from backup. As the if works on 2 elements at the same position (on in map and one in backup)
+          whenever an element is removed (because the launch occured or was just removed), the backup loading won't work because all the
+          elements are going to move of one position, and by doing so is possible refresh launcher configuration data, which otherwise
+          will remain always the same.
+          The else if is used to check whether the request to the api for the launcher configuration was already performed and so we already
+          have those data.
+          The last option (else) occur when the only thing we can do is perform a request to the api (and save the used link in the list).
+        */
         if (backup.isNotEmpty &&
             i < backup['count'] &&
             backup['results'][i]['rocket']['configuration']['id'] ==
@@ -72,29 +94,32 @@ class LaunchLibrary2API {
           map['results'][i]['rocket']['configuration']['url'] =
               backup['results'][i]['rocket']['configuration']['url'];
         } else if (pos != -1) {
-          // If the rocket configuration already exists in the map (previous fetch)
           map['results'][i]['rocket']['configuration']['url'] =
               map['results'][pos]['rocket']['configuration']['url'];
         } else {
           var res = await http.get(Uri.parse(link));
-          if (res.statusCode == 200) {
-            map['results'][i]['rocket']['configuration']['url'] =
-                json.decode(convertGibberish(res.body));
+          try {
+            if (res.statusCode == 200) {
+              map['results'][i]['rocket']['configuration']['url'] =
+                  json.decode(convertGibberish(res.body));
 
-            // Changes the country code format
-            String countryCode = await _fetchCountryCode(map['results'][i]
-                        ['rocket']['configuration']['url']['manufacturer']
-                    ['country_code']
-                .toString());
-            map['results'][i]['rocket']['configuration']['url']['manufacturer']
-                ['country_code'] = countryCode;
-          } else {
+              // Changes the country code format
+              map['results'][i]['rocket']['configuration']['url']
+                      ['manufacturer']['country_code'] =
+                  await _fetchCountryCode(map['results'][i]['rocket']
+                              ['configuration']['url']['manufacturer']
+                          ['country_code']
+                      .toString());
+            } else {
+              throw Exception();
+            }
+          } on Exception catch (_) {
             _callSnackBar(
-                'Error: ${res.statusCode} ${(res.reasonPhrase!.isEmpty) ? '' : 'due to ${res.reasonPhrase} '}for ${data['results'][i]['rocket']['configuration']['full_name']}');
+                'Error: ${res.statusCode} ${(res.reasonPhrase!.isEmpty) ? '' : 'due to ${res.reasonPhrase} '}for ${map['results'][i]['rocket']['configuration']['full_name']}');
           }
         }
 
-        // Add link for _findRecurrence() so as not to execute redundant fetches
+        // Adds a link to the list of all link already used in an api call, in order to avoid performing redundant fetches
         linkList.add(link);
       }
     } on Exception catch (_) {
@@ -121,7 +146,7 @@ class LaunchLibrary2API {
                 ['cca2']
             .toString();
       } else {
-        return '';
+        throw Exception();
       }
     } on Exception catch (_) {
       return '';
@@ -137,7 +162,7 @@ class LaunchLibrary2API {
     return -1;
   }
 
-  int _getItemCount() {
+  int _getLaunchAmount(Map<String, dynamic> data) {
     int tot = 0;
     try {
       for (int i = 0; i < data['count']; i++) {

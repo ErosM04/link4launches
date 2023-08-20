@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:link4launches/logic/api/api.dart';
 import 'package:link4launches/logic/updater/updater.dart';
 import 'package:link4launches/view/app_bar.dart';
 import 'package:link4launches/view/pages/home/launch_tile.dart';
 import 'package:link4launches/view/pages/launch/launch.dart';
-import 'package:link4launches/view/pages/ui_components/snackbar.dart';
 import 'package:link4launches/view/pages/ui_components/status.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -21,12 +19,11 @@ class L4LHomePage extends StatefulWidget {
 
 class _L4LHomePageState extends State<L4LHomePage> {
   late final LaunchLibrary2API _ll2API;
+  Map<String, dynamic> data = {};
   final _scrollController = ScrollController();
-  final int launchNumber = 14;
+  final int launchAmount = 14;
   bool showTBD = true;
   late Updater updater;
-
-  _L4LHomePageState() {}
 
   @override
   void initState() {
@@ -37,7 +34,7 @@ class _L4LHomePageState extends State<L4LHomePage> {
       link: 'https://ll.thespacedevs.com/2.2.0/launch/upcoming/?format=json',
       context: context,
     );
-    _ll2API.launch(launchNumber).then((value) => setState(() => _ll2API.data));
+    _ll2API.launch(launchAmount).then((value) => setState(() => data = value));
 
     //Orientation lock in portrait (vertical) mode
     SystemChrome.setPreferredOrientations([
@@ -56,11 +53,11 @@ class _L4LHomePageState extends State<L4LHomePage> {
     );
   }
 
-  void _goToInfo(int index, LaunchStatus status) {
-    if (_ll2API.data.isNotEmpty) {
+  void _goToLaunchInfo(int index, LaunchStatus status) {
+    if (data.isNotEmpty) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => LaunchInfoPage(
-                data: _ll2API.data['results'][index],
+                data: data['results'][index],
                 status: status,
               )));
     }
@@ -68,78 +65,55 @@ class _L4LHomePageState extends State<L4LHomePage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-          // backgroundColor: BrightnessDetector.isDarkCol(
-          //     context, DARK_BACKGROUND, LIGHT_BACKGROUND),
           body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           L4LAppBar(actions: [
+            // Hides the TBD launches
             IconButton(
-              // onPressed: () => setState(() => showTBD = !showTBD),
-              onPressed: () => ScaffoldMessenger.of(context)
-                  .showSnackBar(const CustomSnackBar(message: 'Yo').build()),
+              onPressed: () => setState(() => showTBD = !showTBD),
               icon: Text(
                 'TBD',
                 style: TextStyle(color: showTBD ? Colors.white : Colors.grey),
               ),
             ),
+            // Refresh data by performing a new request to the api
             IconButton(
                 onPressed: () => {
-                      setState(() => _ll2API.data = {}),
+                      setState(() => data = {}),
                       _ll2API
-                          .launch(launchNumber)
-                          .then((value) => setState(() => _ll2API.data = value))
+                          .launch(launchAmount)
+                          .then((value) => setState(() => data = value))
                     },
                 icon: const Icon(Icons.autorenew)),
           ]).buildAppBar(),
         ],
-        body: _ll2API.data.isEmpty
+        body: data.isEmpty
             ? Center(
                 child: LoadingAnimationWidget.dotsTriangle(
                     color: Colors.white, size: 50))
             : ListView.builder(
                 padding: EdgeInsets.zero,
                 controller: _scrollController,
-                itemCount: _ll2API.data['count'],
+                itemCount: data['count'],
                 itemBuilder: (context, index) => _buildListItem(index),
               ),
       ));
 
-  Widget _buildSnackBarContent() => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 8, right: 1),
-            child: SvgPicture.asset(
-              'assets/snackbar/space_devs_rocket.svg',
-              height: 35,
-              width: 35,
-            ),
-          ),
-          const Expanded(
-            child: Text(
-              'Bella raga sono fattissimo!! Bella raga sono fattissimo!!',
-              textAlign: TextAlign.center,
-            ),
-          ),
-          const SizedBox(width: 3),
-        ],
-      );
-
   Widget _buildListItem(int index) {
     final LaunchStatus status =
-        LaunchStatus(state: _ll2API.data['results'][index]['status']['abbrev']);
+        LaunchStatus(state: data['results'][index]['status']['abbrev']);
 
     return LaunchTile(
-      onPressed: () => _goToInfo(index, status),
-      condition: (_ll2API.data['results'][index]['status']['abbrev'] == 'TBD' &&
-          !showTBD),
-      title: _ll2API.data['results'][index]['name'],
-      smallText: _cleanDate(_ll2API.data['results'][index]['net'].toString()),
+      onPressed: () => _goToLaunchInfo(index, status),
+      condition:
+          (data['results'][index]['status']['abbrev'] == 'TBD' && !showTBD),
+      title: data['results'][index]['name'],
+      smallText: _clearDate(data['results'][index]['net'].toString()),
       status: status,
     );
   }
 
-  String _cleanDate(String str) => str
+  String _clearDate(String str) => str
       .split('T')[0]
       .split('-')
       .reversed
