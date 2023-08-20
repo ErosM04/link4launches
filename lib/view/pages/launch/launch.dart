@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:link4launches/view/app_bar.dart';
-import 'package:link4launches/view/pages/launch/boxes/agency_box.dart';
-import 'package:link4launches/view/pages/launch/boxes/launch_box.dart';
-import 'package:link4launches/view/pages/launch/boxes/rocket_box.dart';
+import 'package:link4launches/view/pages/launch/components/boxes/agency_box.dart';
+import 'package:link4launches/view/pages/launch/components/boxes/launch_box.dart';
+import 'package:link4launches/view/pages/launch/components/boxes/rocket_box.dart';
 import 'package:link4launches/view/pages/ui_components/status.dart';
 
 class LaunchInfoPage extends StatelessWidget {

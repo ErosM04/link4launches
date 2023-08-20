@@ -160,17 +160,18 @@ Some useful links:
 
 
 ## TODO
-- Make the lunch page images zoomable
-- Change custom Appbar class in a StatelessWidget 
 - Change all past release from 1... to 0... and the new one has to be 1.0.0
 - Devide api code in different sub class
+- Write documentation for code
+- Modify readme
 
 ## Stuff changes for new version
 - Changed updater code
 - Added date to home page tile
 - Fixed bug of TBD which previously started the update process
 - Improved DataBox code by creating an abstract superclass and than for each box created a subclass.
-- Changed package name to 'ErosM04.link4launches'
+- (**Feature**) Changed package name to 'ErosM04.link4launches'
 - Fixed text bug in launch page (api --> convertGibberish())
 - Created a file for the theme (and changed all theme occurences)
 - Modified CustomSnackBar class
+- (**Feature**) Lunch page images are now zoomable

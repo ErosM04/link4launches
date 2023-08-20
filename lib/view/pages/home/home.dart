@@ -49,11 +49,11 @@ class _L4LHomePageState extends State<L4LHomePage> {
     // The 2 seconds delay is to avoid errors (trust me).
     // Probably because without the delay, the push of the consent dialog would
     // be performed before the completion of the initState()
-    // updater = Updater(context);
-    // Future.delayed(
-    //   const Duration(seconds: 2),
-    //   () => updater.updateToNewVersion(),
-    // );
+    updater = Updater(context);
+    Future.delayed(
+      const Duration(seconds: 2),
+      () => updater.updateToNewVersion(),
+    );
   }
 
   void _goToInfo(int index, LaunchStatus status) {

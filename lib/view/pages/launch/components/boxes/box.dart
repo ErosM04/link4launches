@@ -1,6 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:link4launches/view/pages/launch/shimmer.dart';
+import 'package:link4launches/view/pages/launch/components/box_image.dart';
 
 abstract class DataBox extends StatelessWidget {
   final String? imageLink;
@@ -45,17 +44,7 @@ abstract class DataBox extends StatelessWidget {
         if (isSafe(text)) buildTextItem(text!, fontSize: 16),
       ];
 
-  Widget buildImageItem(String link) => Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15.0),
-        child: CachedNetworkImage(
-          fadeOutDuration: const Duration(milliseconds: 400),
-          imageUrl: link,
-          placeholder: (context, url) => const Center(child: ShimmerBox()),
-          errorWidget: (context, error, stackTrace) => Container(),
-        ),
-      ));
+  Widget buildImageItem(String link) => InteractiveImage(link);
 
   Widget buildTextItem(
     String str, {
