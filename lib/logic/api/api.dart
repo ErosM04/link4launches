@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:link4launches/logic/api/backup.dart';
-import 'package:link4launches/view/pages/ui_components/snackbar.dart';
+import 'package:link4launches/view/pages/components/snackbar.dart';
 import 'dart:convert';
 
 /// Class used to manage api request to the Launch Library 2 API and manage the backup json file used to store data regarding launches

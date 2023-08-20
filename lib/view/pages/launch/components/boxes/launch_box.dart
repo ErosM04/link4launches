@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/box.dart';
-import 'package:link4launches/view/pages/ui_components/status.dart';
+import 'package:link4launches/view/pages/components/status.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
 class LaunchDataBox extends DataBox {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:link4launches/view/pages/ui_components/snackbar.dart';
+import 'package:link4launches/view/pages/components/snackbar.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ShimmerBox extends StatelessWidget {

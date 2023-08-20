@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:link4launches/view/pages/ui_components/status.dart';
+import 'package:link4launches/view/pages/components/status.dart';
 
 class LaunchTile extends StatelessWidget {
   final Function onPressed;
