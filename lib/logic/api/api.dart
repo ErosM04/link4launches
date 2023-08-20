@@ -1,17 +1,22 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:link4launches/logic/api/backup.dart';
 import 'package:link4launches/view/pages/ui_components/snackbar.dart';
 import 'dart:convert';
-import 'package:path_provider/path_provider.dart';
 
 class LaunchLibrary2API {
   Map<String, dynamic> data = {};
-  final String backupFile = 'll2data.json';
+  late final BackupJsonManager _backupManager;
   final String link;
   final BuildContext context;
 
-  LaunchLibrary2API({required this.link, required this.context});
+  LaunchLibrary2API({required this.link, required this.context}) {
+    _backupManager = BackupJsonManager(
+      backupFile: 'll2data.json',
+      onFileLoadSuccess: () => _callSnackBar('Data loaded from backup file'),
+      onFileLoadError: () => _callSnackBar('Cannot load backup file'),
+    );
+  }
 
   Future<Map<String, dynamic>> launch(int limit) async {
     int statusCode = -1;
@@ -24,7 +29,7 @@ class LaunchLibrary2API {
         data = json.decode(convertGibberish(response.body));
         data['count'] = _getItemCount(); //Sets the right number of launches
         data = await _fetchRocket(data, _getItemCount());
-        _writeJsonFile(json.encode(data));
+        _backupManager.writeJsonFile(json.encode(data));
         return data;
       } else {
         statusCode = response.statusCode;
@@ -36,7 +41,7 @@ class LaunchLibrary2API {
     // Throttled request (15 requests limit per hour exceeded), reads backup file
     _callSnackBar(
         'Error${(statusCode != -1) ? ' $statusCode' : ''} ${(reasonPhrase.isEmpty) ? body.replaceAll('{', '').replaceAll('}', '').replaceAll('"detail":', '').replaceAll('"', '') : ': due to $reasonPhrase'}');
-    data = json.decode(await _loadFromFile());
+    data = json.decode(await _backupManager.loadFromFile());
 
     return data;
   }
@@ -45,7 +50,8 @@ class LaunchLibrary2API {
       Map<String, dynamic> map, int total) async {
     Map<String, dynamic> backup = {};
     try {
-      backup = json.decode(await _loadFromFile(showSnackBar: false));
+      backup = json.decode(
+          await _backupManager.loadFromFile(showSuccessSnackBar: false));
     } on Exception catch (_) {}
 
     try {
@@ -139,39 +145,6 @@ class LaunchLibrary2API {
       }
     } on Error catch (_) {}
     return tot;
-  }
-
-  Future<String> _loadFromFile({bool showSnackBar = true}) async {
-    try {
-      if (await _existsJsonFile()) {
-        if (showSnackBar) {
-          _callSnackBar('Data loaded from backup file');
-        }
-        return await _readJsonFile();
-      }
-    } on Exception catch (_) {}
-    _callSnackBar('Cannot load backup file');
-    return '';
-  }
-
-  Future<File> _getJsonFile() async {
-    final Directory dir = await getApplicationDocumentsDirectory();
-    return File('${dir.path}/$backupFile');
-  }
-
-  Future<bool> _existsJsonFile() async {
-    final Directory dir = await getApplicationDocumentsDirectory();
-    return (await File('${dir.path}/$backupFile').exists()) ? true : false;
-  }
-
-  Future<String> _readJsonFile() async {
-    final File file = await _getJsonFile();
-    return file.readAsString();
-  }
-
-  void _writeJsonFile(String content) async {
-    final File file = await _getJsonFile();
-    file.writeAsString(content);
   }
 
   String convertGibberish(String str) => str
