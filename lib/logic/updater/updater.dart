@@ -18,62 +18,37 @@ class Updater {
 
   const Updater(this.context);
 
-  /// Uses ``[_getLatestVersionJson]`` to get the latest version and if it is different from the actual version, asks for update consent
-  /// to the user. When asking for consent uses ``[_getLatestVersionJson]`` again to get info about the latest changes and insert them
-  /// into the dialog using [DialogContent].
+  /// Uses ``[_getLatestVersionData]`` to get a [Map] containing the latest version and the latest changes. If the latest version is different
+  /// from the actual version, asks for update consent to the user using [_invokeDialog] to invoke a [CustomDialog].
   Future updateToNewVersion() async {
-    String latestVersion =
-        (await _getLatestVersionJson('tag_name')).replaceAll('v', '');
+    var data = await _getLatestVersionData();
+    if (data.isEmpty) return;
 
-    if (latestVersion != actualVersion && latestVersion.isNotEmpty) {
+    if (data['version'].toString() != actualVersion) {
       _invokeDialog(
-        latestVersion: latestVersion,
+        latestVersion: data['version'].toString(),
         content: DialogContent(
-            latestVersion: latestVersion,
-            changes: await _getLatestVersionJson('body')),
+          latestVersion: data['version'].toString(),
+          changes: data['body'].toString(),
+        ),
       );
     }
   }
 
-//   Future updateToNewVersion() async {
-//     String latestVersion = '1.6.2';
-
-//     if (latestVersion != actualVersion && latestVersion.isNotEmpty) {
-//       _invokeDialog(
-//         latestVersion: latestVersion,
-//         content: DialogContent(latestVersion: latestVersion, changes: """
-// ## link4launches v1.5.0
-
-// ### Features
-// - Changed app name and name displayed in appbar from ``link4launches`` to ``Link4Launches``
-// - Introduced the ``Update`` functionality which, every time the app starts, verifies if the actual version is behind the latest release and than proceeds to download the update (apk file), more info in the readme
-// - Added ``Storage access`` permission request to allow the app to download the update file
-// - Set default duration of the ``Snackbars`` to 3 seconds
-
-// ### Changes
-// - Modified updater code
-// - Introduced a new grapich for updater which is super cool dude!
-// - Modfied images code in order to zoom in
-// - bla bla bla
-
-// ### Bug fixes
-// - fixed bug regarding ``FAILURE`` status color, which was read as undefined value and colored blue instead of red
-// - modified error message (displayed with a ``Snackbar``) for the api
-// - modified caching animation duration
-// """),
-//       );
-//     }
-//   }
-
   /// Performs a request to the Github API to obtain a json about the latest release data.
   /// If anything goes wrong an [Exception] is thrown and an error message [SnackBar] is called.
-  /// #### Parameters
-  /// - ``String [key]`` : is the key used to get the corressponding value from the json ``{['key'] => value}``.
-  ///
   /// #### Returns
-  /// ``Future<String>`` : the value corresponding to ``[key]`` in the json.
-  Future<String> _getLatestVersionJson(String key) async {
-    int statusCode = -1;
+  /// ``Future<Map<String, String>>`` : a map containing both the latest version and the changes.
+  ///
+  /// E.g.:
+  /// ```
+  /// {
+  ///   'version' : '1.0.0',
+  ///   'description' : '...'
+  /// }
+  /// ```
+  Future<Map<String, String>> _getLatestVersionData() async {
+    int? statusCode;
 
     try {
       var response = await http.get(Uri.parse(_latestReleaseLink));
@@ -81,23 +56,25 @@ class Updater {
 
       if (statusCode == 200) {
         var data = json.decode(response.body);
-        return data[key].toString();
+        return {
+          'version': data['tag_name'].toString().replaceAll('v', ''),
+          'description': data['body'].toString(),
+        };
       } else {
         throw Exception();
       }
     } on Exception catch (_) {
       _callSnackBar(
           message:
-              'Errore $statusCode durante la ricerca di una nuova versione');
+              'Errore ${statusCode ?? ''} durante la ricerca di una nuova versione');
+      return {};
     }
-
-    return '';
   }
 
-  /// Uses ``[showGeneralDialog]`` to show an [AlertDialog] over the screen.
+  /// Uses ``[showGeneralDialog]`` to show a [CustomDialog] over the screen using both a fade and a slide animation.
   /// #### Parameters
-  /// - ``String [latestVersion]`` : the latest version available of the app.
-  /// - ``DialogContent [context]`` : the content to insert under the title in the [AlertDialog].
+  /// - ``String [latestVersion]`` : the latest version available for the app.
+  /// - ``DialogContent [context]`` : the content to insert below the title in the [CustomDialog].
   void _invokeDialog({
     required String latestVersion,
     required DialogContent content,

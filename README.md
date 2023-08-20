@@ -161,11 +161,10 @@ Some useful links:
 
 ## TODO
 - Change all past release from 1... to 0... and the new one has to be 1.0.0
-- Devide api code in different sub class
 - Write documentation for code
-- Modify readme
+- Modify readme (also add index)
 
-## Stuff changes for new version
+## Stuff which has changes for new version
 - Changed updater code
 - Added date to home page tile
 - Fixed bug of TBD which previously started the update process
@@ -175,3 +174,5 @@ Some useful links:
 - Created a file for the theme (and changed all theme occurences)
 - Modified CustomSnackBar class
 - (**Feature**) Lunch page images are now zoomable
+- Devided api code in different sub class
+- Reduced by 50% the amount of request for the update data
