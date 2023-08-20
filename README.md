@@ -1,8 +1,10 @@
-# link4launches
-Rocket launches app inspired to [Link4Universe](https://www.adrianfartade.it), I mean, it's not rocket science🚀
+# Link4Launches
+This mobile📱 app can be used to access information about upcoming rocket🚀 launches or latest launches performed by many different companies and agencies like **SpaceX**, **Rocket Lab**, **NASA**, **ESA**...
+
+The app idea and style are both inspired to the YouTube channel [link4universe](https://www.youtube.com/@link4universe):star: managed by [Adrian Fartade](https://www.adrianfartade.it). 
 
 <div align='center'>
-<img src='./readme_images/link4launches.png'>
+    <img src='./readme_images/link4launches.png'>
 </div>
 
 
@@ -37,15 +39,15 @@ Here is the link: https://github.com/ErosM04/link4launches/releases/latest/downl
 
 Example of the different stages of the update process:
 <div align='center'>
-<img src='./readme_images/new_version_message_dark.jpg' width='200'>
-<img src='./readme_images/progress_message_dark.jpg' width='200'>
-<img src='./readme_images/download_completed_message_dark.jpg' width='200'>
+    <img src='./readme_images/new_version_message_dark.jpg' width='200'>
+    <img src='./readme_images/progress_message_dark.jpg' width='200'>
+    <img src='./readme_images/download_completed_message_dark.jpg' width='200'>
 </div>
 
 <div align='center'>
-<img src='./readme_images/new_version_message_light.jpg' width='200'>
-<img src='./readme_images/progress_message_light.jpg' width='200'>
-<img src='./readme_images/download_completed_message_light.jpg' width='200'>
+    <img src='./readme_images/new_version_message_light.jpg' width='200'>
+    <img src='./readme_images/progress_message_light.jpg' width='200'>
+    <img src='./readme_images/download_completed_message_light.jpg' width='200'>
 </div>
 
 Thanks to the Android buil-in funtions, when building an apk file is possible to specify the version, so the new apk file is going to be recognized as an update.
@@ -59,8 +61,8 @@ If the app hasn't been updated (despite downloading the update), even if the dow
 The main page of the app is the following:
 
 <div align='center'>
-<img src='./readme_images/main_page_dark.jpg' width='200'>
-<img src='./readme_images/main_page_light.jpg' width='200' style="padding-left:50">
+    <img src='./readme_images/main_page_dark.jpg' width='200'>
+    <img src='./readme_images/main_page_light.jpg' width='200' style="padding-left:50">
 </div>
 
 The list is made by the latest launches (like successful or failed launches [not in the image]) followed by all the upcoming launches order by launch date. The page can be scrolled to access the other launches, for a total number of 14. Every tile of the list contains both the name of the launch and his status that can be:
@@ -76,8 +78,8 @@ The list is made by the latest launches (like successful or failed launches [not
 By clicking on the status icon is possible to show a ``Snackbar`` that will describe the state:
 
 <div align='center'>
-<img src='./readme_images/status_snackbar_dark.jpg' width='200'>
-<img src='./readme_images/status_snackbar_light.jpg' width='200'>
+    <img src='./readme_images/status_snackbar_dark.jpg' width='200'>
+    <img src='./readme_images/status_snackbar_light.jpg' width='200'>
 </div>
 
 #### Appbar
@@ -85,8 +87,8 @@ The appbar contains the name of the app followed by 3 buttons:
 - TBD: used to hide the To Be Defined result, as often there are many TBD launches which are less important than the others, as they still have to be defined.
 
 <div align='center'>
-<img src='./readme_images/main_page_noTBD_dark.jpg' width='200'>
-<img src='./readme_images/main_page_noTBD_light.jpg' width='200'>
+    <img src='./readme_images/main_page_noTBD_dark.jpg' width='200'>
+    <img src='./readme_images/main_page_noTBD_light.jpg' width='200'>
 </div>
 
 - Recharge: used to send a request to the api and refresh data;
@@ -96,8 +98,8 @@ The appbar contains the name of the app followed by 3 buttons:
     - The Github project of the app.
 
 <div align='center'>
-<img src='./readme_images/dropdown_menu_dark.jpg ' width='200'>
-<img src='./readme_images/dropdown_menu_light.jpg ' width='200'>
+    <img src='./readme_images/dropdown_menu_dark.jpg ' width='200'>
+    <img src='./readme_images/dropdown_menu_light.jpg ' width='200'>
 </div>
 
 ### Launch page
@@ -106,8 +108,8 @@ By clicking on a element the info page (launch page) is open and different conta
     - an image of the rocket or the payload, with a shimmering loading animation;
 
     <div align='center'>
-    <img src='./readme_images/shimmering_loading_dark.jpg' width='200'>
-    <img src='./readme_images/shimmering_loading_light.jpg' width='200'>
+        <img src='./readme_images/shimmering_loading_dark.jpg' width='200'>
+        <img src='./readme_images/shimmering_loading_light.jpg' width='200'>
     </div>
 
     - the full name of the launch;
@@ -139,16 +141,16 @@ By clicking on a element the info page (launch page) is open and different conta
     - the description of the rocket.
 
 <div align='center'>
-<img src='./readme_images/launch_page_dark.jpg' width='200'>
-<img src='./readme_images/launch_page_light.jpg' width='200'>
+    <img src='./readme_images/launch_page_dark.jpg' width='200'>
+    <img src='./readme_images/launch_page_light.jpg' width='200'>
 </div>
 
 #### Details
 By clicking on a specific detail is possible to show a ``Snackbar`` containing the description:
 
 <div align='center'>
-<img src='./readme_images/detail_snackbar_dark.jpg' width='200'>
-<img src='./readme_images/detail_snackbar_light.jpg' width='200'>
+    <img src='./readme_images/detail_snackbar_dark.jpg' width='200'>
+    <img src='./readme_images/detail_snackbar_light.jpg' width='200'>
 </div>
 
 ## Useful Links:
