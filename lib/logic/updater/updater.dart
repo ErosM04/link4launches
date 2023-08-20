@@ -29,7 +29,7 @@ class Updater {
         latestVersion: data['version'].toString(),
         content: DialogContent(
           latestVersion: data['version'].toString(),
-          changes: data['body'].toString(),
+          changes: data['description'].toString(),
         ),
       );
     }
