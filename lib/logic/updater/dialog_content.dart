@@ -118,6 +118,7 @@ class DialogContent extends StatelessWidget {
 
   /// Graphically build the content for the [AlertDialog] using a Column and adding all the elemnts that are not null.
   /// To check if an element is null and not empty ``[_safeBuild]`` method is used.
+  ///
   /// #### Parameters
   /// - ``String [mainText]`` : the text on the top ``'Vuoi scaricale la versione vx.x.x'``
   /// - ``String? [subTitle1]`` : the first subtitle

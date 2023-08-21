@@ -44,6 +44,7 @@ class Updater {
 
   /// Performs a request to the Github API to obtain a json about the latest release data.
   /// If anything goes wrong an [Exception] is thrown and an error message [CustomSnackBar] is called.
+  ///
   /// #### Returns
   /// ``Future<Map<String, String>>`` : a map containing both the latest version and the changes.
   ///
@@ -79,6 +80,7 @@ class Updater {
   }
 
   /// Uses ``[showGeneralDialog]`` to show a [CustomDialog] over the screen using both a fade and a slide animation.
+  ///
   /// #### Parameters
   /// - ``String [latestVersion]`` : the latest version available for the app.
   /// - ``DialogContent [content]`` : the content to insert below the title in the [CustomDialog].
