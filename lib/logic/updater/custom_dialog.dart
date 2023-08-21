@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
+/// Class used to create a custom [Dialog].
 class CustomDialog extends StatelessWidget {
+  /// The path (of the assets) where thw icon image is stored
   final String iconPath;
+
+  /// The title of the dialog.
   final String title;
+
+  /// The content of the dialog.
   final Widget child;
+
+  /// The text to display inside the deny button
   final String denyButtonText;
+
+  /// The text to display inside the confirm button
   final String confirmButtonText;
+
+  /// The function to execute after the deny button is pressed
   final Function denyButtonAction;
+
+  /// The function to execute after the confirm button is pressed
   final Function confirmButtonAction;
 
   const CustomDialog({

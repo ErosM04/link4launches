@@ -6,20 +6,27 @@ import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:link4launches/logic/updater/custom_dialog.dart';
 import 'package:link4launches/logic/updater/dialog_content.dart';
 
-/// Can be used to update the app, by downloading the new version in the ``Download`` folder after
-/// the user gave the consent (with a dialog).
+/// Class used to update the app to the latest version, by looking for new releases in GitHub and downloading the new version in the
+/// ``Download`` folder after the user gave the consent (with a [Dialog]).
 class Updater {
+  /// The actual version of the app (has to be change every release).
   final String actualVersion = '1.6.0';
+
+  /// Link to the GitHub api to get the json containg the latest release data.
   final String _latestReleaseLink =
       'https://api.github.com/repos/ErosM04/link4launches/releases/latest';
+
+  /// Link to the apk file of the latest app version in the latest GitHub release.
   final String _latestAPKLink =
       'https://github.com/ErosM04/link4launches/releases/latest/download/link4launches.apk';
+
+  /// Context used to call a [CustomSnackBar].
   final BuildContext context;
 
   const Updater(this.context);
 
-  /// Uses ``[_getLatestVersionData]`` to get a [Map] containing the latest version and the latest changes. If the latest version is different
-  /// from the actual version, asks for update consent to the user using [_invokeDialog] to invoke a [CustomDialog].
+  /// Uses ``[_getLatestVersionData]`` to get a [Map] containing the latest version id and the latest changes. If the latest version is
+  /// different from the actual version, asks for update consent to the user using [_invokeDialog] to invoke a [CustomDialog].
   Future updateToNewVersion() async {
     var data = await _getLatestVersionData();
     if (data.isEmpty) return;
@@ -36,7 +43,7 @@ class Updater {
   }
 
   /// Performs a request to the Github API to obtain a json about the latest release data.
-  /// If anything goes wrong an [Exception] is thrown and an error message [SnackBar] is called.
+  /// If anything goes wrong an [Exception] is thrown and an error message [CustomSnackBar] is called.
   /// #### Returns
   /// ``Future<Map<String, String>>`` : a map containing both the latest version and the changes.
   ///
@@ -74,7 +81,7 @@ class Updater {
   /// Uses ``[showGeneralDialog]`` to show a [CustomDialog] over the screen using both a fade and a slide animation.
   /// #### Parameters
   /// - ``String [latestVersion]`` : the latest version available for the app.
-  /// - ``DialogContent [context]`` : the content to insert below the title in the [CustomDialog].
+  /// - ``DialogContent [content]`` : the content to insert below the title in the [CustomDialog].
   void _invokeDialog({
     required String latestVersion,
     required DialogContent content,
@@ -108,9 +115,9 @@ class Updater {
                     ))),
       );
 
-  /// Infroms the user that the download started with a [SnackBar] and uses the ``[FileDownloader]`` object to downlaod the apk.
-  /// A [SnackBar] is shown at the end of the download to inform the user that the app has been downloaded and saved
-  /// in the ``Downloads`` folder. In case of error an error message [SnackBar] is shown. To show the snackbar
+  /// Infroms the user that the download started with a [CustomSnackBar] and uses the ``[FileDownloader]`` object to downlaod the apk.
+  /// A [CustomSnackBar] is shown at the end of the download to inform the user that the app has been downloaded and saved
+  /// in the ``Downloads`` folder. In case of error an error message [CustomSnackBar] is shown. To show the [CustomSnackBar]
   /// ``[_callSnackBar]`` method is used.
   Future<void> _downloadUpdate(String latestVersion) async {
     _callSnackBar(
@@ -128,7 +135,7 @@ class Updater {
     );
   }
 
-  /// Function used to simplify the invocation and the creation of a ``[SnackBar]``.
+  /// Function used to simplify the invocation of a ``[CustomSnackBar]``.
   void _callSnackBar(
           {required String message,
           int durationInSec = 2,

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// Class used to create the widgets to insert into the a [Dialog]. The content is the latest changes in the GitHub release.
 class DialogContent extends StatelessWidget {
+  /// The latest available version of the app.
   final String latestVersion;
+
+  /// The string containg the body of the release.
   final String? changes;
 
   const DialogContent({
@@ -11,14 +15,14 @@ class DialogContent extends StatelessWidget {
     this.changes,
   });
 
+  /// Reads the changes and extracts different types of data (than calls [buildContent]):
+  /// - Features
+  /// - Changes
+  /// - Bug fixes
+  /// Each element has it's own list of information (max 3 rows).
+  /// Apart from these, it also creates a title and a link to the release.
   @override
   Widget build(BuildContext context) {
-    // Reads the changes and extracts different types of data:
-    // - Features
-    // - Changes
-    // - Bug fixes
-    // Each element has it's own list of information. Apart from these, it also creates a title and a link to the release.
-
     String? title1;
     String? title2;
     String? title3;
@@ -75,16 +79,19 @@ class DialogContent extends StatelessWidget {
   }
 
   /// Takes a list of strings where each string is a description of a change and returns the complete list version.
-  /// If the single row is too long (over 54), is clamped at the end and '...' are added.
+  /// If the single row is too long (over 60), is clamped at the end and '...' are added.
+  /// If there are more than 3 rows, only 4 rows are displayed and the 4th is will be '. . .'
   /// E.g.:
   /// ```
-  /// rows = ['### Funzionalità', 'Aggiunto un bottone', 'Ora puoi ascoltare gli audio, bla bla bla bla']
+  /// rows = ['### Features', 'Added this cool thing', 'Now you can do that', 'Very long long long long string', 'bla bla bla bla']
   /// ```
   /// Result:
   /// ```
   /// """
-  /// - Aggiunto un bottone
-  /// - Ora puoi ascoltare gli audio, bla bla...
+  /// - AAdded this cool thing
+  /// - Now you can do that
+  /// - Very long long long lon...
+  /// - . . .
   /// """
   /// ```
   ///
@@ -219,7 +226,7 @@ class DialogContent extends StatelessWidget {
                   fontSize: fontSize),
             );
 
-  /// Returns the clickable link to the latest GitHub release. To build the text uses ``[_buildText]``.
+  /// Returns a clickable [Text] containg a link to the latest GitHub release. To build the [Text] uses ``[_buildText]``.
   Widget _buildLink(String? text) => GestureDetector(
         onTap: () => launchUrl(Uri.parse(
             'https://github.com/ErosM04/link4launches/releases/latest')),
