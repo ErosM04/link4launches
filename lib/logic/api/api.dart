@@ -4,16 +4,23 @@ import 'package:link4launches/logic/api/backup.dart';
 import 'package:link4launches/view/pages/components/snackbar.dart';
 import 'dart:convert';
 
-/// Class used to manage api request to the Launch Library 2 API and manage the backup json file used to store data regarding launches
-/// to overcome the api limitation. This class also provide smart reuse of data when performing the subrequestes for each launch in
-/// order to perform the smallest amount of request possible.
+/// Class used to manage api requests to the Launch Library 2 API which also manages the backup json file used to store data regarding launches
+/// to overcome the api limitation. This class also provide smart reuse of data when performing the subrequestes for each launch in order to
+/// perform the smallest amount of request possible.
 class LaunchLibrary2API {
-  // Map<String, dynamic> data = {};
+  /// The backup file manager.
   late final BackupJsonManager _backupManager;
+
+  /// The link to use in order to perform the api request for the launches.
   final String link;
+
+  /// The app cotext used to call the [CustomSnackBar].
   final BuildContext context;
 
-  LaunchLibrary2API({required this.link, required this.context}) {
+  LaunchLibrary2API({
+    required this.link,
+    required this.context,
+  }) {
     _backupManager = BackupJsonManager(
       backupFile: 'll2data.json',
       onFileLoadSuccess: () => _callSnackBar('Data loaded from backup file'),
@@ -22,9 +29,16 @@ class LaunchLibrary2API {
   }
 
   /// Performs a main request to the api (at ``[link]``) to obtain the next ``[limit]`` launches (also may contain latest success, failures or
-  /// in progress launches) as a json. Than for each launch performs another request using the ``[_fetchRocket]`` method.
+  /// in progress launches) as a json. Than for each launch performs another request using the ``[_fetchAllRocketData]`` method to obtain
+  /// information about the launcher.
   /// Everything is than saved in a backup json file using ``[_backupManager]``. If anything goes wrong a [CustomSnackBar] is called and the
   /// pre-existing backup file is returned.
+  ///
+  /// #### Parameters
+  /// - ``int [limit]`` : the amount of launch requested in the main request (for every launch than a 2nd request is performed in [_fetchAllRocketData]).
+  ///
+  /// #### Returns
+  /// ``Future<Map<String, dynamic>>`` : the map containing all the data of each launch. The list of launches is stored at the voice ``map['result']``.
   Future<Map<String, dynamic>> launch(int limit) async {
     int? statusCode;
     String? reasonPhrase, body;
@@ -36,7 +50,7 @@ class LaunchLibrary2API {
         var data = json.decode(convertGibberish(response.body));
         int launchAmount = _getLaunchAmount(data);
         data['count'] = launchAmount; //Sets the right number of launches
-        data = await _fetchRocket(data, launchAmount);
+        data = await _fetchAllRocketData(data, launchAmount);
         _backupManager.writeJsonFile(json.encode(data));
         return data;
       } else {
@@ -51,16 +65,29 @@ class LaunchLibrary2API {
           'Error${(statusCode != null) ? ' $statusCode' : ''} ${((reasonPhrase != null && reasonPhrase.isNotEmpty) && (body != null && body.isNotEmpty)) ? body.replaceAll('{', '').replaceAll('}', '').replaceAll('"detail":', '').replaceAll('"', '') : ': due to $reasonPhrase'}');
     }
 
-    return json.decode(await _backupManager.loadFromFile());
+    return json.decode(await _backupManager.loadStringFromFile());
   }
 
-  Future<Map<String, dynamic>> _fetchRocket(
-      Map<String, dynamic> map, int total) async {
+  /// Use a for to perform requests for each launch contained in ``[map]``, while ``[totalLaunches]`` is the amount of launches in the map.
+  /// The fetch to the api is used to retrive data regarding the configuration, compreeding both launcher and company/agency.
+  ///
+  /// To be more precise this method doesn't perform a request for each launch, but, as the api has limited request, tries to reuse
+  /// data from backup json file or previusly fetched data (during for execution).
+  ///
+  /// #### Parameters
+  /// - ``Map<String, dynamic> [map]`` : the map with all the launches, the configuration link for the api request has to be located at
+  /// ``map['results'][i]['rocket']['configuration']['url']``;
+  /// - ``int [totalLaunches]`` : the amount of launches contained in the map at the voice ``map['results']``.
+  ///
+  /// #### Returns
+  /// ``Future<Map<String, dynamic>>`` : the fina map containing with every launch also containing conf. data.
+  Future<Map<String, dynamic>> _fetchAllRocketData(
+      Map<String, dynamic> map, int totalLaunches) async {
     Map<String, dynamic> backup = {};
     try {
       // In this case in not necessary to show the SncakBar
       backup = json.decode(
-          await _backupManager.loadFromFile(showSuccessSnackBar: false));
+          await _backupManager.loadStringFromFile(showSuccessSnackBar: false));
     } on Exception catch (_) {
       backup = {};
     }
@@ -69,7 +96,7 @@ class LaunchLibrary2API {
       // USed to save the link that has been alredy used in a requesto, to avoid wasting api calls
       List<dynamic> linkList = [];
 
-      for (int i = 0; i < total; i++) {
+      for (int i = 0; i < totalLaunches; i++) {
         // Uses data from backup if the actual rocket configuration is already contained in the backup json file.
         // Otherwise if the data are not contained, but the fetch was already performed (during the for execution), reuse those data.
         // If the data are not containd in the backup and this link wasn't already used in an api request, then a new api request is performed.
@@ -128,13 +155,13 @@ class LaunchLibrary2API {
     return map;
   }
 
-  /// Takes the cca3 country code (of the main api) and then use https://restcountries.com api to convert it to the cca2 format.
+  /// Takes the cca3 country code (from the main api) and then use https://restcountries.com api to convert it to the cca2 format.
   ///
   /// #### Parameters
-  /// - **``String``** : the cca3 country code, e.g. ``USA`` (United States of America).
+  /// - ``String [countryCode]`` : the cca3 country code, e.g. ``USA`` (United States of America).
   ///
   /// #### Returns
-  /// **``async String``** : the cca2 country code.
+  /// ``Future<String>`` : the cca2 country code, e.g. ``'USA'`` --> ``'US'``.
   Future<String> _fetchCountryCode(String countryCode) async {
     try {
       var response = await http
@@ -153,15 +180,30 @@ class LaunchLibrary2API {
     }
   }
 
-  int _findRecurrence(List<dynamic> list, link) {
+  /// Checks if ``[element]`` is contained inside ``[list]``, and returns the position. -1 is returned if ``[element]`` isn't contained.
+  ///
+  /// #### Parameters
+  /// - ``List [list]`` : the list of elements;
+  /// - ``[element]`` : the specific element in the list to look for.
+  ///
+  /// #### Returns
+  /// ``int`` : either the position of ``[element]`` in the list, or ``-1`` if there isn't any occurrence.
+  int _findRecurrence(List list, element) {
     for (int i = 0; i < list.length; i++) {
-      if (list[i] == (link)) {
+      if (list[i] == (element)) {
         return i;
       }
     }
     return -1;
   }
 
+  /// Returns the amount of elements contained in ``[data]``.
+  ///
+  /// #### Parameters
+  /// - ``Map<String, dynamic> [data]`` : the map with the list at ``data['results]``.
+  ///
+  /// #### Returns
+  /// ``int`` : the amount of elements in the list.
   int _getLaunchAmount(Map<String, dynamic> data) {
     int tot = 0;
     try {
@@ -172,6 +214,13 @@ class LaunchLibrary2API {
     return tot;
   }
 
+  /// Retuns ``[str]`` but removing all unwanted characters.
+  ///
+  /// #### Parameters
+  /// - ``String [str]`` : the string with the unwanted characters.
+  ///
+  /// #### Returns
+  /// ``String`` : the string without the unwanted characters.
   String convertGibberish(String str) => str
       .replaceAll("\r", "")
       .replaceAll("\n", "")
@@ -180,6 +229,10 @@ class LaunchLibrary2API {
       .replaceAll('â', '–')
       .replaceAll('Î±', 'α');
 
+  /// A simplyfied method to invoke the [CustomSnackBar] using [context].
+  ///
+  /// #### Parameters
+  /// - ``String [message]`` : the textual message to show in the SnackBar.
   void _callSnackBar(String message) => ScaffoldMessenger.of(context)
       .showSnackBar(CustomSnackBar(message: message).build());
 }
