@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:link4launches/view/pages/app_bar.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/agency_box.dart';
+import 'package:link4launches/view/pages/launch/components/boxes/box.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/launch_box.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/rocket_box.dart';
 import 'package:link4launches/view/pages/components/status.dart';
 
+/// Is the second page of the app, that depends on the launch it is releated to.
+/// This page is used to display different [DataBox] containg informations about the launchm the agency/company an the rocket.
 class LaunchInfoPage extends StatelessWidget {
+  /// The map containg the data of that specific launch.
   final Map<String, dynamic> data;
+
+  /// The Widget used to create the small status icon.
   final LaunchStatus status;
 
   const LaunchInfoPage({
@@ -17,8 +23,6 @@ class LaunchInfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-          // backgroundColor: BrightnessDetector.isDarkCol(
-          //     context, DARK_BACKGROUND, LIGHT_BACKGROUND),
           body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           const L4LAppBar(
@@ -31,14 +35,17 @@ class LaunchInfoPage extends StatelessWidget {
         ),
       ));
 
+  /// Uses the information contained in [data] to build the 3 different containers:
+  /// ``[LaunchDataBox]``, ``[AgencyDataBox]`` and ``[RocketDataBox]``.
+  /// To avoid exception with un-existing json fields, the values are read with ``[_readJsonField]``.
   List<Widget> _buildDataBoxList() => [
         // First container (launch data)
         LaunchDataBox(
           imageLink: _readJsonField(['image']),
           title: data['name'],
           status: status,
-          subTitle1: _formatDate(_readJsonField(['net']), 0),
-          subTitle2: _formatTime(_readJsonField(['net']), 1),
+          subTitle1: _extractDate(_readJsonField(['net'])),
+          subTitle2: _extractTime(_readJsonField(['net'])),
           text: _readJsonField(['mission', 'description']),
           padMapLink: _readJsonField(['pad', 'map_url']),
         ),
@@ -104,26 +111,30 @@ class LaunchInfoPage extends StatelessWidget {
             text: _readJsonField(['rocket', 'configuration', 'url', 'description'])),
       ];
 
+  /// Takes a [String] and converts it into an [int].
+  /// If the string contains ``'.'`` then only the part from the start to the dot is saved.
+  /// If anything goes wrong ``-1`` is returned.
   int _convertToInt(String str) {
     try {
       if (str.contains('.')) {
         str = str.substring(0, str.indexOf('.'));
       }
 
-      return (str == '') ? -1 : int.parse(str);
+      return (str.isEmpty) ? -1 : int.parse(str);
     } on FormatException catch (_) {
       return -1;
     }
   }
 
-  /// Thakes a list of keys and then checks if the value corresponding with the sequence of keys
-  /// (in the data Map) exists and returns it as a string. The list can't have more than 5 elements.
+  /// Thakes a list of keys and then checks if the value corresponding with the sequence of keys (in the data Map) exists and
+  /// returns it as a string. The list can't have more than 5 elements.
   ///
   /// #### Parameters:
-  /// - **``list``** : a list of String, where wach string is a key of the json Map, e.g. ``['rocket', 'configuration', 'url', 'description']``
+  /// - ``List<String> [list]`` : a list of String, where wach string is a key of the json Map, e.g.
+  /// ``['rocket', 'configuration', 'url', 'description']``. The max length of the list is ``5``.
   ///
   /// ### Returns
-  /// The value corresponding to the keys position as a String, e.g. ``data['rocket']['configuration']['url']['description']``
+  /// ``String`` : The value corresponding to the keys position as a String, e.g. ``data['rocket']['configuration']['url']['description']``
   /// In case of error an Exception is thrown and a empty String is returned.
   String _readJsonField(List<String> list) {
     try {
@@ -159,8 +170,9 @@ class LaunchInfoPage extends StatelessWidget {
     }
   }
 
-  String _formatDate(String str, int index) {
-    List<String> list = str.replaceAll('Z', '').split('T')[index].split('-');
+  /// Formats a [String] containg the json date from ``'2023-08-24T06:47:59Z'`` to ``'24-08-2023'``.
+  String _extractDate(String str) {
+    List<String> list = str.replaceAll('Z', '').split('T')[0].split('-');
     str = '';
 
     for (int i = list.length - 1; i >= 0; i--) {
@@ -174,8 +186,9 @@ class LaunchInfoPage extends StatelessWidget {
     return str;
   }
 
-  String _formatTime(String str, int index) {
-    List<String> list = str.replaceAll('Z', '').split('T')[index].split(':');
+  /// Formats a [String] containg the json date from ``'2023-08-24T06:47:59Z'`` to ``'06 : 47'``.
+  String _extractTime(String str) {
+    List<String> list = str.replaceAll('Z', '').split('T')[1].split(':');
     return '${list[0]} : ${list[1]}';
   }
 }

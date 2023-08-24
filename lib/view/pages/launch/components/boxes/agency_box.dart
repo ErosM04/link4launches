@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:link4launches/view/pages/launch/components/box_image.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/box.dart';
 
+/// Box Widget that creates an usable version of [DataBox] for the company/agency data.
 class AgencyDataBox extends DataBox {
+  /// The cc2a country code of the company/agency, like ``US`` or ``IT``.
+  /// Doesn't need to be upper or lower case.
   final String countryCode;
 
   const AgencyDataBox({
@@ -16,8 +20,8 @@ class AgencyDataBox extends DataBox {
   });
 
   @override
-  List<Widget> buildItemList(BuildContext context) => [
-        if (isSafe(imageLink)) buildImageItem(imageLink!),
+  List<Widget> buildItemList() => [
+        if (isSafe(imageLink)) InteractiveImage(imageLink!),
         buildTextItem(title, fontWeight: FontWeight.bold),
         if (isSafe(subTitle1) && isSafe(imageLink))
           _buildTextWithCountryFlag(text: subTitle1!, imageLink: imageLink!)
@@ -27,6 +31,12 @@ class AgencyDataBox extends DataBox {
         if (isSafe(text)) buildTextItem(text!, fontSize: 16),
       ];
 
+  /// Creates a [Row] containing the type of the company/agency (like ``Goverantive`` or ``Commercial``) on the left and the
+  /// country flag on the right using the [Flagpedia](https://flagpedia.net) api. E.g. ``https://flagcdn.com/us.svg``.
+  ///
+  /// #### Parameters
+  /// - ``String [text]`` :
+  /// - ``String [imageLink]`` :
   Widget _buildTextWithCountryFlag({
     required String text,
     required String imageLink,

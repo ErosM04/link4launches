@@ -8,6 +8,7 @@ import 'package:link4launches/view/pages/launch/launch.dart';
 import 'package:link4launches/view/pages/components/status.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
+/// The home page of the app. Uses [LaunchLibrary2API] to fetch the data and [Updater] to look for the latest version.
 class L4LHomePage extends StatefulWidget {
   final String title;
 
@@ -53,6 +54,11 @@ class _L4LHomePageState extends State<L4LHomePage> {
     );
   }
 
+  /// Redirects to the launch page for the specific launch. Only if [data] is not empty.
+  ///
+  /// #### Parameters
+  /// - ``int [index]`` : the position of the launch in the list inside ``data[results]``.
+  /// - ``LaunchStatus [status]`` : the status widget to use in the launch page.
   void _goToLaunchInfo(int index, LaunchStatus status) {
     if (data.isNotEmpty) {
       Navigator.of(context).push(MaterialPageRoute(
@@ -99,6 +105,10 @@ class _L4LHomePageState extends State<L4LHomePage> {
               ),
       ));
 
+  /// Builds the single ``[LaunchTile]`` of the list.
+  ///
+  /// #### Parameters
+  /// - ``int [index]`` : the position of the launch in the list inside ``data[results]``.
   Widget _buildListItem(int index) {
     final LaunchStatus status =
         LaunchStatus(state: data['results'][index]['status']['abbrev']);
@@ -113,6 +123,13 @@ class _L4LHomePageState extends State<L4LHomePage> {
     );
   }
 
+  /// Removes all the unwanted characters from the date of the json and reverse it.
+  ///
+  /// #### Parameters
+  /// - ``String [str]`` : the [String] containg the date if the json.
+  ///
+  /// #### Returns
+  /// ``String`` : the reversed string without the unwanted characters and in the correct format.
   String _clearDate(String str) => str
       .split('T')[0]
       .split('-')

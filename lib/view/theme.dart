@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Dark theme for Link4Launches app.
 ThemeData l4lDarkTheme = ThemeData(
   brightness: Brightness.dark,
   colorScheme: const ColorScheme.dark(
@@ -30,6 +31,7 @@ ThemeData l4lDarkTheme = ThemeData(
   ),
 );
 
+/// Light theme for Link4Launches app.
 ThemeData l4lLightTheme = ThemeData(
   brightness: Brightness.light,
   colorScheme: const ColorScheme.light(

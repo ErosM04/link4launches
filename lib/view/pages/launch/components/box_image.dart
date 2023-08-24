@@ -2,7 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:link4launches/view/pages/launch/shimmer.dart';
 
+/// Image that can be zoomed in with pinch that comes with animated automatic reverse (after being zoomed goes back to original
+/// size of its own).
 class InteractiveImage extends StatefulWidget {
+  /// Web link of the image.
   final String imageLink;
 
   const InteractiveImage(this.imageLink, {super.key});
@@ -13,8 +16,13 @@ class InteractiveImage extends StatefulWidget {
 
 class _InteractiveImageState extends State<InteractiveImage>
     with SingleTickerProviderStateMixin {
+  /// Zoom controller
   late TransformationController _transformationController;
+
+  /// Animation controller
   late AnimationController _animationController;
+
+  /// Animation.
   Animation<Matrix4>? _animation;
 
   @override
@@ -47,12 +55,13 @@ class _InteractiveImageState extends State<InteractiveImage>
                 fadeOutDuration: const Duration(milliseconds: 400),
                 imageUrl: widget.imageLink,
                 placeholder: (context, url) =>
-                    const Center(child: ShimmerBox()),
+                    const Center(child: ShimmerEffect()),
                 errorWidget: (context, error, stackTrace) => Container(),
               ),
             )),
       );
 
+  /// Automatically zooms out the image to its original size, after 400ms delay.
   void _resetAnimation() async => Future.delayed(
         const Duration(milliseconds: 400),
         () {

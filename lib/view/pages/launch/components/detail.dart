@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:link4launches/view/pages/components/snackbar.dart';
 
+/// Creates a small section containg details about a rocket condifuration.
+/// Uses 2 by 2 cofiguration like this:
+/// ```
+/// ----------------------------------------
+/// detail1 : value          detail2 : value
+/// detail3 : value          detail4 : value
+/// detail5 : value          detail6 : value
+/// ...
+/// ----------------------------------------
+/// ```
 class DetailSection extends StatelessWidget {
+  /// The list of detail's values.
   final List<int> valuesList;
 
   const DetailSection({super.key, required this.valuesList});
@@ -15,6 +26,10 @@ class DetailSection extends StatelessWidget {
         ],
       );
 
+  /// Creates the column with all the children
+  ///
+  /// #### Parameters
+  /// - ``BuildContext [context]`` : the app context for ``[_buildRow]``.
   List<Widget> _buildColumnChildren(BuildContext context) {
     List<Widget> list = [];
 
@@ -25,15 +40,28 @@ class DetailSection extends StatelessWidget {
     return list;
   }
 
+  /// Creates the row containg one detail at the start and one at the end.
+  ///
+  /// #### Parameters
+  /// - ``int [index]`` : the position in the list of the first detail.
+  /// - ``BuildContext [context]`` : the app context for ``[_buildDetail]``.
   Widget _buildRow(int index, BuildContext context) => Row(children: [
         _buildDetail(index, TextAlign.left, context),
         _buildDetail(index + 1, TextAlign.right, context)
       ]);
 
+  /// Creates the single detail text with the name (using ``[_getName]``), the value (using ``[valuesList]`` and ``[index]``)
+  /// and the unit (using ``[_getUnit]``). Every detail is a clickable text that displayed a [CustomSnackBar] containg the
+  /// description of that value (using ``[_getDescription]``).
+  ///
+  /// #### Parameters
+  /// - ``int [index]`` : the position in the of the detail.
+  /// - ``TextAlign [alignment]`` : the alignment of the text
+  /// - ``BuildContext [context]`` : the app context to invoke the ``[CustomSnackBar]``.
   Widget _buildDetail(int index, TextAlign alignment, BuildContext context) {
-    String title = _getTitle(index);
+    String title = _getName(index);
     String value = _formatNumber(valuesList[index]);
-    String unit = _getUnits(title);
+    String unit = _getUnit(title);
 
     return Expanded(
         child: Padding(
@@ -51,7 +79,8 @@ class DetailSection extends StatelessWidget {
     ));
   }
 
-  String _getTitle(int pos) {
+  /// Takes a position in ``[valuesList]`` and returns the corresponding name of the detail.
+  String _getName(int pos) {
     switch (pos) {
       case 0:
         return 'Height';
@@ -74,9 +103,11 @@ class DetailSection extends StatelessWidget {
     }
   }
 
+  /// Takes a number and if it's equal to ``-1`` returns a ``'---'`` otherwise returns the number as a [String].
   String _formatNumber(int value) => (value == -1) ? '---' : value.toString();
 
-  String _getUnits(String str) {
+  /// Takes a position in ``[valuesList]`` and returns the corresponding name of the detail.
+  String _getUnit(String str) {
     if (str.contains('Height')) {
       return 'm';
     } else if (str.contains('Liftoff Thrust')) {
@@ -90,6 +121,7 @@ class DetailSection extends StatelessWidget {
     }
   }
 
+  /// Takes a position in ``[valuesList]`` and returns the corresponding name of the detail.
   String _getDescription(String str) {
     switch (str) {
       case 'Height':

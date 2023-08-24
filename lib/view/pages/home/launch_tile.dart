@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:link4launches/view/pages/components/status.dart';
 
+/// [StatelessWidget] used to create the tile of a single launch in the home page.
 class LaunchTile extends StatelessWidget {
+  /// The function to execute when the tile is pressed.
   final Function onPressed;
+
+  /// The condition that allows the tile to be hidden.
   final bool condition;
+
+  /// The title of the tile.
   final String title;
+
+  /// The smaller text below the title (used for the date).
   final String smallText;
+
+  /// The [Widget] used to create the staus icon at the right.
   final LaunchStatus status;
 
   const LaunchTile({
@@ -23,7 +33,6 @@ class LaunchTile extends StatelessWidget {
         child: (condition)
             ? Container()
             : Card(
-                // elevation: BrightnessDetector.isLightNum(context, 5, 0),
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(18))),
                 margin: const EdgeInsets.fromLTRB(8.0, 7.0, 8.0, 7.0),

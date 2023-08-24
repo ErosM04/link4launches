@@ -2,14 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// Custom class used to create a customized [AppBar].
 class L4LAppBar {
+  /// The title of the appbar.
   final String title;
+
+  /// The action of the appbar. Ususally MenuButtons
   final List<Widget> actions;
+
+  /// Whether show the pre-defined pop-up menu.
   final bool popUpMenu;
+
+  /// The list of Icons to show in the pop up menu
   final List<IconData> iconsListPopUp;
+
+  /// The list of texts to show in the pop up menu
   final List<String> titlesListPopUp;
+
+  /// The list of link to use in the pop up menu
   final List<String> linksListPopUp;
 
+  /// Custom [AppBar].
   const L4LAppBar({
     this.title = 'Link4Launches',
     this.actions = const [],
@@ -31,6 +44,7 @@ class L4LAppBar {
     ],
   });
 
+  /// Allows to build the [SliverAppBar] widget to use.
   SliverAppBar buildAppBar() => SliverAppBar(
         title: Text(title),
         actions: _buildActions(),
@@ -41,6 +55,7 @@ class L4LAppBar {
         ),
       );
 
+  /// Creates all the clickable icons on the right side of the appbar.
   List<Widget> _buildActions() {
     var list = List<Widget>.from(actions, growable: true);
 
@@ -51,6 +66,7 @@ class L4LAppBar {
     return list;
   }
 
+  /// Creates the pop-up menu
   PopupMenuButton _getPopUpMenuButton() {
     List<PopupMenuItem> list = [];
     for (int i = 0; i < titlesListPopUp.length; i++) {
@@ -65,6 +81,8 @@ class L4LAppBar {
     );
   }
 
+  /// Creates the single tile of the pop-up menu.
+  /// ``PAY ATTENTION!! Uses a deprecated System API``
   PopupMenuItem _getPopUpMenuTile(int index) => PopupMenuItem(
         value: index,
         child: Row(
