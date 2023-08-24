@@ -1,5 +1,5 @@
 # Link4Launches
-    This mobile app📱 can be used to access information about upcoming rocket launches🚀 or latest launches performed by many different companies and agencies like **SpaceX**, **Rocket Lab**, **NASA**, **ESA**...
+This mobile app📱 can be used to access information about upcoming rocket launches🚀 or latest launches performed by many different companies and agencies like **SpaceX**, **Rocket Lab**, **NASA**, **ESA**...
 
 The app idea and style are both inspired to the YouTube channel [link4universe](https://www.youtube.com/@link4universe):star: managed by [Adrian Fartade](https://www.adrianfartade.it). 
 
