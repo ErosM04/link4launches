@@ -1,5 +1,5 @@
 # Link4Launches
-This mobile📱 app can be used to access information about upcoming rocket🚀 launches or latest launches performed by many different companies and agencies like **SpaceX**, **Rocket Lab**, **NASA**, **ESA**...
+    This mobile app📱 can be used to access information about upcoming rocket launches🚀 or latest launches performed by many different companies and agencies like **SpaceX**, **Rocket Lab**, **NASA**, **ESA**...
 
 The app idea and style are both inspired to the YouTube channel [link4universe](https://www.youtube.com/@link4universe):star: managed by [Adrian Fartade](https://www.adrianfartade.it). 
 
@@ -164,7 +164,10 @@ Some useful links:
 ## TODO
 - Change all past release from 1... to 0... and the new one has to be 1.0.0
 - Write documentation for code
-- Modify readme (also add index)
+- Modify readme (also add index) and create a 2nd more specific readme.
+- Separate ``LaunchStatus`` widget in 2 different widget, one for the big and one for the small version.
+- Fix deprecated system api for pop-up menu's icons color in app_bar.dart.
+- Improve custom AppBar code in app_bar.dart.
 
 ## Stuff which has changes for new version
 - Changed updater code
