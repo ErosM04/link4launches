@@ -7,15 +7,6 @@ The app idea and style are both inspired to the YouTube channel [link4universe](
     <img src='./readme_images/link4launches.png'>
 </div>
 
-### Index
-
-1. [Download and Installation](###)
-2. [Idea](#idea)
-3. [API](#api)
-4. [Interface]()
-5. [Auto update]()
-6. [More info]()
-
 
 ## Idea
 This project is inspired to the YouTube Channel [Link4Universe](https://www.youtube.com/@link4universe) which videos are about astronomy, rockets, launches, satellites, space exploration and many more... managed by [Adrian Fartade](https://www.adrianfartade.it/#chi-sono).
@@ -24,7 +15,6 @@ This project is inspired to the YouTube Channel [Link4Universe](https://www.yout
 The icon is inspired to the Telegram channel [L4U Space News](https://t.me/L4USpaceNews).
 
 <img src='./readme_images/app-icon-nobackground.png' width='100'>
-
 
 
 ## API
@@ -36,6 +26,7 @@ The request vary based on many parameters, such as limit or the status (Ready To
 - The request used for upcoming launches list is the following, note that it also contains data about the latest performed launches: https://ll.thespacedevs.com/2.2.0/launch/upcoming/?format=json&limit=14
 - The default request allows to get a 10 elements list: https://ll.thespacedevs.com/2.2.0/launch/upcoming/?format=json
 - And this is the full link with all the parameters: [Full link](https://ll.thespacedevs.com/2.2.0/launch/upcoming/?agency_launch_attempt_count=&agency_launch_attempt_count__gt=&agency_launch_attempt_count__gte=&agency_launch_attempt_count__lt=&agency_launch_attempt_count__lte=&agency_launch_attempt_count_year=&agency_launch_attempt_count_year__gt=&agency_launch_attempt_count_year__gte=&agency_launch_attempt_count_year__lt=&agency_launch_attempt_count_year__lte=&format=json&location_launch_attempt_count=&location_launch_attempt_count__gt=&location_launch_attempt_count__gte=&location_launch_attempt_count__lt=&location_launch_attempt_count__lte=&location_launch_attempt_count_year=&location_launch_attempt_count_year__gt=&location_launch_attempt_count_year__gte=&location_launch_attempt_count_year__lt=&location_launch_attempt_count_year__lte=&mission__orbit__name=&mission__orbit__name__icontains=&name=&orbital_launch_attempt_count=&orbital_launch_attempt_count__gt=&orbital_launch_attempt_count__gte=&orbital_launch_attempt_count__lt=&orbital_launch_attempt_count__lte=&orbital_launch_attempt_count_year=&orbital_launch_attempt_count_year__gt=&orbital_launch_attempt_count_year__gte=&orbital_launch_attempt_count_year__lt=&orbital_launch_attempt_count_year__lte=&pad_launch_attempt_count=&pad_launch_attempt_count__gt=&pad_launch_attempt_count__gte=&pad_launch_attempt_count__lt=&pad_launch_attempt_count__lte=&pad_launch_attempt_count_year=&pad_launch_attempt_count_year__gt=&pad_launch_attempt_count_year__gte=&pad_launch_attempt_count_year__lt=&pad_launch_attempt_count_year__lte=&r_spacex_api_id=&rocket__configuration__full_name=&rocket__configuration__full_name__icontains=&rocket__configuration__id=&rocket__configuration__manufacturer__name=&rocket__configuration__manufacturer__name__icontains=&rocket__configuration__name=&rocket__spacecraftflight__spacecraft__id=&rocket__spacecraftflight__spacecraft__name=&rocket__spacecraftflight__spacecraft__name__icontains=&slug=&status=1)
+
 
 ## Self updating
 Every time the app is loaded a request to the Github API is performed, at the following link: https://api.github.com/repos/ErosM04/link4launches/releases/latest
@@ -172,6 +163,7 @@ Some useful links:
 
 ## TODO
 - Change all past release from 1... to 0... and the new one has to be 1.0.0
+- Write documentation for code
 - Modify readme (also add index) and create a 2nd more specific readme.
 - Separate ``LaunchStatus`` widget in 2 different widget, one for the big and one for the small version.
 - Fix deprecated system api for pop-up menu's icons color in app_bar.dart.
@@ -189,4 +181,3 @@ Some useful links:
 - (**Feature**) Lunch page images are now zoomable
 - Devided api code in different sub class
 - Reduced by 50% the amount of request for the update data
-- Wrote documentation for code
