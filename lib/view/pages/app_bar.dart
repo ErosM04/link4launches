@@ -82,23 +82,26 @@ class L4LAppBar {
   }
 
   /// Creates the single tile of the pop-up menu.
-  /// ``PAY ATTENTION!! Uses a deprecated System API``
   PopupMenuItem _getPopUpMenuTile(int index) => PopupMenuItem(
         value: index,
         child: Row(
           children: [
             Icon(
               iconsListPopUp[index],
-              color: SchedulerBinding.instance.window.platformBrightness ==
-                      Brightness.dark
-                  ? Colors.white
-                  : const Color.fromARGB(255, 57, 58, 59),
+              color: _isLightMode() ? Colors.black : null,
             ),
-            const SizedBox(
-              width: 10,
-            ),
+            const SizedBox(width: 10),
             Text(titlesListPopUp[index]),
           ],
         ),
       );
+
+  /// Can be used to know if the device is in dark or light mode, this is used because for the light theme an appbar color icon is specified,
+  /// but this has to change when considering the pop-up menu. Only in light mode!
+  ///
+  /// #### Returns
+  /// ``bool`` : true if the device is in light mode.
+  bool _isLightMode() =>
+      SchedulerBinding.instance.platformDispatcher.platformBrightness ==
+      Brightness.light;
 }

@@ -14,6 +14,7 @@ ThemeData l4lDarkTheme = ThemeData(
   appBarTheme: const AppBarTheme(
     color: Color.fromARGB(255, 3, 101, 140),
     elevation: 0,
+    iconTheme: IconThemeData(color: Colors.white),
   ),
   scaffoldBackgroundColor: const Color.fromARGB(255, 30, 30, 30),
   cardTheme: const CardTheme(color: Color.fromARGB(255, 57, 58, 59)),
