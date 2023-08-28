@@ -166,7 +166,6 @@ Some useful links:
 - Write documentation for code
 - Modify readme (also add index) and create a 2nd more specific readme.
 - Separate ``LaunchStatus`` widget in 2 different widget, one for the big and one for the small version.
-- Fix deprecated system api for pop-up menu's icons color in app_bar.dart.
 - Improve custom AppBar code in app_bar.dart.
 
 ## Stuff which has changes for new version
