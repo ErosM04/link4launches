@@ -227,7 +227,8 @@ class LaunchLibrary2API {
       .replaceAll('Ã©', 'é')
       .replaceAll(' | Unknown Payload', '')
       .replaceAll('â', '–')
-      .replaceAll('Î±', 'α');
+      .replaceAll('Î±', 'α')
+      .replaceAll('â', '\'');
 
   /// A simplyfied method to invoke the [CustomSnackBar] using [context].
   ///
