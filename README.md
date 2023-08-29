@@ -42,7 +42,7 @@ Also using the Appbar buttons is possible to hide **TBD** launches, reload the d
 
 <div align='center'>
     <img src='./readme_images/home page/home_page_dark.jpg' width='200'>
-    <img src='./readme_images/home page/home_page_light.jpg' width='200' style="margin-left:50">
+    <img src='./readme_images/home page/home_page_light.jpg' width='200'>
 </div>
 
 ### Launch page
@@ -55,15 +55,15 @@ In this page there are 3 different information containers:
 
 <div align='center'>
     <img src='./readme_images/launch page/launch_page_1_dark.jpg' width='200'>
-    <img src='./readme_images/launch page/launch_page_1_light.jpg' width='200' style="padding-left:50">
+    <img src='./readme_images/launch page/launch_page_1_light.jpg' width='200'>
 </div>
 <div align='center'>
     <img src='./readme_images/launch page/launch_page_2_dark.jpg' width='200'>
-    <img src='./readme_images/launch page/launch_page_2_light.jpg' width='200' style="padding-left:50">
+    <img src='./readme_images/launch page/launch_page_2_light.jpg' width='200'>
 </div>
 <div align='center'>
     <img src='./readme_images/launch page/launch_page_3_dark.jpg' width='200'>
-    <img src='./readme_images/launch page/launch_page_3_light.jpg' width='200' style="padding-left:50">
+    <img src='./readme_images/launch page/launch_page_3_light.jpg' width='200'>
 </div>
 
 
@@ -75,7 +75,7 @@ If the user gives his/her consent the download starts and the file ``link4launch
 
 <div align='center'>
     <img src='./readme_images/home page/updater/update_banner_dark.jpg' width='200'>
-    <img src='./readme_images/home page/updater/update_banner_light.jpg' width='200' style="padding-left:50">
+    <img src='./readme_images/home page/updater/update_banner_light.jpg' width='200'>
 </div>
 
 
