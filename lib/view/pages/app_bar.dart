@@ -77,6 +77,8 @@ class L4LAppBar {
       itemBuilder: (context) => list,
       offset: const Offset(0, 60),
       elevation: 2,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(18))),
       onSelected: (value) => launchUrl(Uri.parse(linksListPopUp[value])),
     );
   }
