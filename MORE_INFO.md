@@ -207,3 +207,4 @@ This is the full 3th container:
 ## TODO
 - Separate ``LaunchStatus`` widget in 2 different widget, one for the big and one for the small version.
 - Improve custom AppBar code in app_bar.dart.
+- Configure Updater to support links.
