@@ -38,7 +38,7 @@ The home page contains an appbar with different function and a list of launches 
 
 Every tile has a title (the name of the launch), the date on which the launch will take place and the status icon (like **GO**, **TBC**, **TBD**...), that can be clicked to obtain the description of the status.
 
-Also using the Appbar buttons is possible to hide **TBD** launches, reload the data and open the pop-up menu. For more info go to [MORE_INFO.md](MORE_INFO.md).
+Also using the Appbar buttons is possible to hide **TBD** launches, reload the data and open the drop-down menu. For more info go to [MORE_INFO.md](MORE_INFO.md).
 
 <div align='center'>
     <img src='./readme_images/home page/home_page_dark.jpg' width='200'>
