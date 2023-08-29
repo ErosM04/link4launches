@@ -68,7 +68,7 @@ Example of the different stages of the update process:
 
 Thanks to the Android buil-in functions, when building an apk file is possible to specify the version, so the new apk file is going to be automatically recognized as an update by Android.
 
-If the app hasn't been updated (despite having downloaded the update), even if the download ``Snackbars`` on the bottom of the screen appears, a new download won't be really performed if the update file in the ``Download`` folder is still there.
+If the app hasn't been updated (despite having downloaded the update), even if the download ``Snackbar`` on the bottom of the screen appears, a new download won't be really performed if the update file in the ``Download`` folder is still there.
 
 
 ## Interface and Functions
