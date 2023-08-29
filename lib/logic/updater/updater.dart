@@ -10,7 +10,7 @@ import 'package:link4launches/logic/updater/dialog_content.dart';
 /// ``Download`` folder after the user gave the consent (with a [Dialog]).
 class Updater {
   /// The actual version of the app (has to be change every release).
-  final String actualVersion = '1.6.0';
+  final String actualVersion = '1.0.0';
 
   /// Link to the GitHub api to get the json containg the latest release data.
   final String _latestReleaseLink =
