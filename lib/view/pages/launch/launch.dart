@@ -140,27 +140,35 @@ class LaunchInfoPage extends StatelessWidget {
     try {
       if (list.isEmpty) {
         return '';
-      } else if (list.length == 1 && list[0].isNotEmpty) {
-        return data[list[0]].toString();
-      } else if (list.length == 2 && list[0].isNotEmpty && list[1].isNotEmpty) {
+      } else if (list.length == 1 &&
+          list[0].isNotEmpty &&
+          data[list[0]] != null) {
+        return data[list[0]];
+      } else if (list.length == 2 &&
+          list[0].isNotEmpty &&
+          list[1].isNotEmpty &&
+          data[list[0]][list[1]] != null) {
         return data[list[0]][list[1]].toString();
       } else if (list.length == 3 &&
           list[0].isNotEmpty &&
           list[1].isNotEmpty &&
-          list[2].isNotEmpty) {
+          list[2].isNotEmpty &&
+          data[list[0]][list[1]][list[2]] != null) {
         return data[list[0]][list[1]][list[2]].toString();
       } else if (list.length == 4 &&
           list[0].isNotEmpty &&
           list[1].isNotEmpty &&
           list[2].isNotEmpty &&
-          list[3].isNotEmpty) {
+          list[3].isNotEmpty &&
+          data[list[0]][list[1]][list[2]][list[3]] != null) {
         return data[list[0]][list[1]][list[2]][list[3]].toString();
       } else if (list.length == 5 &&
           list[0].isNotEmpty &&
           list[1].isNotEmpty &&
           list[2].isNotEmpty &&
           list[3].isNotEmpty &&
-          list[4].isNotEmpty) {
+          list[4].isNotEmpty &&
+          data[list[0]][list[1]][list[2]][list[3]][list[4]] != null) {
         return data[list[0]][list[1]][list[2]][list[3]][list[4]].toString();
       } else {
         return '';

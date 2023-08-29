@@ -208,5 +208,5 @@ This is the full 3th container:
 - [ ] Separate ``LaunchStatus`` widget in 2 different widget, one for the big and one for the small version.
 - [ ] Improve custom AppBar code in app_bar.dart.
 - [ ] Configure Updater to support links.
-- [ ] Fix bug in_readJsonField that reads a null value and returns 'null' as a String.
+- [x] Fix bug in_readJsonField that reads a null value and returns 'null' as a String.
 - [x] Correct text error in api at convertGibberish.
