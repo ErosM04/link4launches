@@ -4,7 +4,7 @@ import 'package:link4launches/view/theme.dart';
 
 void main() => runApp(const Link4Launches());
 
-/// This mobile app📱 can be used to access information about upcoming rocket launches🚀 or latest launches
+/// This mobile app📱 can be used to obtain information about upcoming rocket launches🚀 or latest launches
 /// performed by many different companies and agencies like **SpaceX**, **Rocket Lab**, **NASA**, **ESA**...
 class Link4Launches extends StatelessWidget {
   const Link4Launches({super.key});

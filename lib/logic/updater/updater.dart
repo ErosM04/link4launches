@@ -10,14 +10,14 @@ import 'package:link4launches/logic/updater/dialog_content.dart';
 /// ``Download`` folder after the user gave the consent (with a [Dialog]).
 class Updater {
   /// The actual version of the app (has to be change every release).
-  final String actualVersion = '1.0.0';
+  final String actualVersion = '0.0.0';
 
   /// Link to the GitHub api to get the json containg the latest release data.
   final String _latestReleaseLink =
       'https://api.github.com/repos/ErosM04/link4launches/releases/latest';
 
   /// Link to the apk file of the latest app version in the latest GitHub release.
-  final String _latestAPKLink =
+  final String _latestApkLink =
       'https://github.com/ErosM04/link4launches/releases/latest/download/link4launches.apk';
 
   /// Context used to call a [CustomSnackBar].
@@ -29,9 +29,8 @@ class Updater {
   /// different from the actual version, asks for update consent to the user using [_invokeDialog] to invoke a [CustomDialog].
   Future updateToNewVersion() async {
     var data = await _getLatestVersionData();
-    if (data.isEmpty) return;
 
-    if (data['version'].toString() != actualVersion) {
+    if (data.isNotEmpty && (data['version'].toString() != actualVersion)) {
       _invokeDialog(
         latestVersion: data['version'].toString(),
         content: DialogContent(
@@ -126,7 +125,7 @@ class Updater {
         message: 'Download of Link4Launches v$latestVersion has started');
 
     FileDownloader.downloadFile(
-      url: _latestAPKLink.trim(),
+      url: _latestApkLink.trim(),
       onDownloadCompleted: (path) => _callSnackBar(
           message:
               'Version $latestVersion downloaded at ${path.split('/')[4]}/${path.split('/').last}',

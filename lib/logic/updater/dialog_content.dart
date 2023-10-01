@@ -37,6 +37,7 @@ class DialogContent extends StatelessWidget {
           .replaceAll('\r', '')
           .replaceAll('\n', '')
           .replaceAll('``', '');
+      formattedChanges = removeLinks(formattedChanges);
 
       if (formattedChanges.contains('###') &&
           (formattedChanges.contains('Features') ||
@@ -76,6 +77,37 @@ class DialogContent extends StatelessWidget {
       linkText: linkText,
       link: link,
     );
+  }
+
+  /// Removes GitHub links (``[Name](link)``) parentesis and name, leaving only the link.
+  ///
+  /// E.g. ``[Site](https://hhh.culo)`` --> ``https://hhh.culo``
+  ///
+  /// #### Parameters
+  /// - ``String [changes]`` : the string containing the text with the GitHub links format.
+  ///
+  /// #### Returns
+  /// ``String`` : the input text with the normal links.
+  ///
+  /// ``ATTENTION!!`` This code breakes the app if there are ``[`` and ``]`` characters which are not used for links,
+  /// but for other pourposes.
+  String removeLinks(String changes) {
+    while (true) {
+      int startSquare = changes.indexOf('[');
+      int endSquare = changes.indexOf(']');
+
+      if (startSquare == -1) {
+        break;
+      } else if ((changes[endSquare + 1] == '(') &&
+          changes.substring(startSquare + 1).contains(')')) {
+        int startRound = endSquare + 1;
+        int endRound = changes.substring(startRound).indexOf(')') + startRound;
+        changes =
+            '${changes.substring(0, startSquare)}${changes.substring((startRound + 1), endRound)}${changes.substring((endRound + 1))}';
+      }
+    }
+
+    return changes;
   }
 
   /// Takes a list of strings where each string is a description of a change and returns the complete list version.
