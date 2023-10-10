@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:link4launches/logic/api/backup.dart';
@@ -47,9 +48,10 @@ class LaunchLibrary2API {
       var response = await http.get(Uri.parse('$link&limit=$limit'));
 
       if (response.statusCode == 200) {
-        var data = json.decode(convertGibberish(response.body));
+        var data = safeDecoding(response.bodyBytes);
         int launchAmount = _getLaunchAmount(data);
-        data['count'] = launchAmount; //Sets the right number of launches
+        data['count'] =
+            launchAmount; // Sets the right number of launches (the default json value is wrong )
         data = await _fetchAllRocketData(data, launchAmount);
         _backupManager.writeJsonFile(json.encode(data));
         return data;
@@ -128,7 +130,7 @@ class LaunchLibrary2API {
           try {
             if (res.statusCode == 200) {
               map['results'][i]['rocket']['configuration']['url'] =
-                  json.decode(convertGibberish(res.body));
+                  safeDecoding(res.bodyBytes);
 
               // Changes the country code format
               map['results'][i]['rocket']['configuration']['url']
@@ -214,21 +216,15 @@ class LaunchLibrary2API {
     return tot;
   }
 
-  /// Retuns ``[str]`` but removing all unwanted characters.
+  /// Reads the byteCode of a http resonse, converts it into an utf8 string and than decodes the JSON in a [Map].
   ///
   /// #### Parameters
-  /// - ``String [str]`` : the string with the unwanted characters.
+  /// - ``Uint8List [input]`` : The byteCode of a http resonse.
   ///
   /// #### Returns
-  /// ``String`` : the string without the unwanted characters.
-  String convertGibberish(String str) => str
-      .replaceAll("\r", "")
-      .replaceAll("\n", "")
-      .replaceAll('Ã©', 'é')
-      .replaceAll(' | Unknown Payload', '')
-      .replaceAll('â', '–')
-      .replaceAll('Î±', 'α')
-      .replaceAll('â', '\'');
+  /// ``Map<String, dynamic>`` : the JSON content converted into a Map.
+  Map<String, dynamic> safeDecoding(Uint8List input) =>
+      json.decode(utf8.decode(input).replaceAll(' | Unknown Payload', ''));
 
   /// A simplyfied method to invoke the [CustomSnackBar] using [context].
   ///
