@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:link4launches/view/pages/app_bar.dart';
+import 'package:link4launches/view/pages/components/status.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/agency_box.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/box.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/launch_box.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/rocket_box.dart';
-import 'package:link4launches/view/pages/components/status.dart';
 
 /// Is the second page of the app, that depends on the launch it is releated to.
 /// This page is used to display different [DataBox] containg informations about the launchm the agency/company an the rocket.
@@ -12,8 +12,8 @@ class LaunchInfoPage extends StatelessWidget {
   /// The map containg the data of that specific launch.
   final Map<String, dynamic> data;
 
-  /// The Widget used to create the small status icon.
-  final LaunchStatus status;
+  /// The [Widget] used to create the status icon.
+  final LaunchState status;
 
   const LaunchInfoPage({
     super.key,
@@ -129,7 +129,7 @@ class LaunchInfoPage extends StatelessWidget {
   /// Thakes a list of keys and then checks if the value corresponding with the sequence of keys (in the data Map) exists and
   /// returns it as a string. The list can't have more than 5 elements.
   ///
-  /// #### Parameters:
+  /// #### Parameters
   /// - ``List<String> [list]`` : a list of String, where wach string is a key of the json Map, e.g.
   /// ``['rocket', 'configuration', 'url', 'description']``. The max length of the list is ``5``.
   ///

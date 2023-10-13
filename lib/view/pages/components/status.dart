@@ -1,35 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:link4launches/view/pages/components/snackbar.dart';
 
-/// Class used to manage the [Widget] of the launch status ('To Be Defined', 'Ready To Go'...). Can create both a small and a
-/// big version of the status icon, respectively for the home page and for the launch page.
-class LaunchStatus extends StatelessWidget {
-  /// The text that identify the status (like 'GO').
+/// Creates a customizable [Widget] that represent the launch state showed in the launch page ('TBD', 'GO', 'TBC', ...).
+class LaunchState extends StatelessWidget {
+  /// The text that identifies the status (like 'GO').
   final String state;
 
-  /// The font size for the status text.
-  final double fontSize;
+  const LaunchState({super.key, required this.state});
 
-  const LaunchStatus({super.key, required this.state, this.fontSize = 25});
-
-  /// Uses [_buildStatusWidget] to create the big status version for the launch page
   @override
-  Widget build(BuildContext context) => _buildStatusWidget(
-        context,
-        state.toUpperCase(),
-        _getStatusBoxWidth(state.length),
-      );
+  Widget build(BuildContext context) => buildStatusWidget(context);
 
-  /// Creates the big status version for the launch page
+  /// Overridable method that uses ``[widgetBuilder]`` to create a custom icon of the state.
+  /// In this case a standard version of the state is created.
   ///
   /// #### Parameters
-  /// - ``BuildContext [context]`` : the context used to invoke the [CustomSnackBar]
-  /// - ``String state`` : the text describing the state
-  /// - ``double width`` : the width of the state [Widget]
-  /// - ``double height`` : the height of the state [Widget]
-  /// - ``double fontSizeReduction `` : whether reduce or no the font size (for small version)
-  Widget _buildStatusWidget(BuildContext context, String state, double width,
-          {double height = 40, double fontSizeReduction = 0}) =>
+  /// - ``BuildContext [context]`` : the app context for [widgetBuilder] to call the [CustomSnackBar].
+  ///
+  /// #### Returns:
+  /// - ``Widget`` : the status widget created by [widgetBuilder].
+  Widget buildStatusWidget(BuildContext context) => widgetBuilder(
+        context,
+        state.toUpperCase(),
+        getStatusBoxWidth(state.length),
+      );
+
+  /// Creates a customizable [Widget] that represent the launch state.
+  ///
+  /// #### Parameters
+  /// - ``BuildContext [context]`` : the context used to invoke the [CustomSnackBar];
+  /// - ``String [state]`` : the text describing the state;
+  /// - ``double [width]`` : the width of the state [Widget];
+  /// - ``double [height]`` : the height of the state [Widget];
+  /// - ``double [fontSize] `` : the font size of the text contained in the [Widget].
+  Widget widgetBuilder(BuildContext context, String state, double width,
+          {double height = 40, double fontSize = 25}) =>
       GestureDetector(
         onTap: () => ScaffoldMessenger.of(context).showSnackBar(
             CustomSnackBar(message: _getStatusDescription(state)).build()),
@@ -47,7 +52,7 @@ class LaunchStatus extends StatelessWidget {
               state,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: fontSize - fontSizeReduction,
+                fontSize: fontSize,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
@@ -56,35 +61,15 @@ class LaunchStatus extends StatelessWidget {
         ),
       );
 
-  /// Used to create the small version of the status [Widget].
+  /// Returns the width of the status [Widget] based on the length of the status name (like 'GO').
   ///
   /// #### Parameters
-  /// - ``BuildContext context`` : the app context to invoke the [CustomSnackBar].
-  Widget buildSmallStatusBedge(BuildContext context) => _buildStatusWidget(
-      context,
-      _resizeStatusName(state),
-      _getSmallStatusBoxWidth(_resizeStatusName(state).length),
-      height: 28,
-      fontSizeReduction: 6);
-
-  /// Returns a smaller version of the status name.
-  ///
-  /// #### Parameters
-  /// - ``String [state]`` : the text of the status.
+  /// - ``int [length]`` : the length of the name. E.g. 'TBD', 'GO', 'SUCCESS'.
   ///
   /// #### Returns
-  /// - ``String`` : the reduced text of the status. Usually a substring of 4 letters, except for 'IN FLIGHT' and 'PARTIAL FAILURE'.
-  String _resizeStatusName(String state) {
-    state = state.toUpperCase();
-
-    if (state.contains('IN FLIGHT')) {
-      return 'FLIG';
-    } else if (state.contains('PARTIAL FAILURE')) {
-      return 'PTFL';
-    } else {
-      return (state.length > 4) ? state.substring(0, 4) : state;
-    }
-  }
+  /// ``double`` : the width of the status [Widget].
+  double getStatusBoxWidth(int length) =>
+      (length < 5) ? (length * ((length < 3) ? 26 : 23)) : length * 18;
 
   /// Based on the state text returns its description.
   ///
@@ -144,12 +129,4 @@ class LaunchStatus extends StatelessWidget {
       return Colors.blue;
     }
   }
-
-  /// Returns the width of the status [Widget] based on the length of the text status for the big version.
-  double _getStatusBoxWidth(int length) =>
-      (length < 5) ? (length * ((length < 3) ? 26 : 23)) : length * 18;
-
-  /// Returns the width of the status [Widget] based on the length of the text status for the small version.
-  double _getSmallStatusBoxWidth(int length) =>
-      (length < 3) ? length * 20 : length * 16;
 }

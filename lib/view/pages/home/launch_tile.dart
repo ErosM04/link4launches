@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:link4launches/view/pages/components/status.dart';
+import 'package:link4launches/view/pages/components/small_status.dart';
 
 /// [StatelessWidget] used to create the tile of a single launch in the home page.
 class LaunchTile extends StatelessWidget {
@@ -16,7 +16,7 @@ class LaunchTile extends StatelessWidget {
   final String smallText;
 
   /// The [Widget] used to create the staus icon at the right.
-  final LaunchStatus status;
+  final SmallLaunchStatus status;
 
   const LaunchTile({
     super.key,
@@ -62,7 +62,7 @@ class LaunchTile extends StatelessWidget {
                     )),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8, 8, 12, 8),
-                      child: status.buildSmallStatusBedge(context),
+                      child: status,
                     )
                   ],
                 )),

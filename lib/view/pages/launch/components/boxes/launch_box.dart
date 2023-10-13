@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:link4launches/view/pages/components/status.dart';
 import 'package:link4launches/view/pages/launch/components/box_image.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/box.dart';
-import 'package:link4launches/view/pages/components/status.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
 /// Box Widget that creates an usable version of [DataBox] for the launch data.
 class LaunchDataBox extends DataBox {
-  /// The object used to create a small status widget.
-  final LaunchStatus? status;
+  /// The object used to create the status [Widget].
+  final LaunchState? status;
 
   /// the Google Maps link to the location of the pad. Where the launch will be performed.
   final String? padMapLink;

@@ -3,13 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:link4launches/logic/api/api.dart';
 import 'package:link4launches/logic/updater/updater.dart';
 import 'package:link4launches/view/pages/app_bar.dart';
+import 'package:link4launches/view/pages/components/status.dart';
+import 'package:link4launches/view/pages/components/small_status.dart';
 import 'package:link4launches/view/pages/home/launch_tile.dart';
 import 'package:link4launches/view/pages/launch/launch.dart';
-import 'package:link4launches/view/pages/components/status.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 /// The home page of the app. Uses [LaunchLibrary2API] to fetch the data and [Updater] to look for the latest version.
 class L4LHomePage extends StatefulWidget {
+  /// The name of the launch, composed by the name of the launcher and the name of the payload, separated by '|'.
+  /// E.g. ``Falcon 9 Block 5 | Starlink Group 6-22``.
   final String title;
 
   const L4LHomePage({super.key, required this.title});
@@ -57,9 +60,9 @@ class _L4LHomePageState extends State<L4LHomePage> {
   /// Redirects to the launch page for the specific launch. Only if [data] is not empty.
   ///
   /// #### Parameters
-  /// - ``int [index]`` : the position of the launch in the list inside ``data[results]``.
-  /// - ``LaunchStatus [status]`` : the status widget to use in the launch page.
-  void _goToLaunchInfo(int index, LaunchStatus status) {
+  /// - ``int [index]`` : the position of the launch in the list inside ``data['results']``.
+  /// - ``LaunchStatus [status]`` : the status small [widget] to use in the launch page.
+  void _goToLaunchInfo(int index, LaunchState status) {
     if (data.isNotEmpty) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => LaunchInfoPage(
@@ -108,20 +111,17 @@ class _L4LHomePageState extends State<L4LHomePage> {
   /// Builds the single ``[LaunchTile]`` of the list.
   ///
   /// #### Parameters
-  /// - ``int [index]`` : the position of the launch in the list inside ``data[results]``.
-  Widget _buildListItem(int index) {
-    final LaunchStatus status =
-        LaunchStatus(state: data['results'][index]['status']['abbrev']);
-
-    return LaunchTile(
-      onPressed: () => _goToLaunchInfo(index, status),
-      condition:
-          (data['results'][index]['status']['abbrev'] == 'TBD' && !showTBD),
-      title: data['results'][index]['name'],
-      smallText: _clearDate(data['results'][index]['net'].toString()),
-      status: status,
-    );
-  }
+  /// - ``int [index]`` : the position of the launch in the list inside ``data['results']``.
+  Widget _buildListItem(int index) => LaunchTile(
+        onPressed: () => _goToLaunchInfo(index,
+            LaunchState(state: data['results'][index]['status']['abbrev'])),
+        condition:
+            (data['results'][index]['status']['abbrev'] == 'TBD' && !showTBD),
+        title: data['results'][index]['name'],
+        smallText: _clearDate(data['results'][index]['net'].toString()),
+        status: SmallLaunchStatus(
+            state: data['results'][index]['status']['abbrev']),
+      );
 
   /// Removes all the unwanted characters from the date of the json and reverse it.
   ///

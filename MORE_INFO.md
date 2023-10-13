@@ -205,10 +205,11 @@ This is the full 3th container:
 </div>
 
 ## TODO
-- [ ] Separate ``LaunchStatus`` widget in 2 different widget, one for the big and one for the small version.
+- [x] Separate ``LaunchStatus`` widget in 2 different widget, one for the big and one for the smaller version (+ modified doc and added missing).
 - [ ] Improve custom AppBar code in app_bar.dart.
 - [x] Configure ``Updater`` to support links.
 - [x] Fix bug in_readJsonField that reads a null value and returns 'null' as a String.
 - [x] ~~Correct text error in api at convertGibberish~~ Method removed.
 - [x] Round drop-down menu corners
 - [x] Convert json in order not to have fucked up text
+- [ ] Stop showing empty launch descrictions which only contain '?' (like every fk chinese rocket) 
