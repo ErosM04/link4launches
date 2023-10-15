@@ -52,10 +52,11 @@ class DialogContent extends StatelessWidget {
           if (element.contains('Features') && element.contains('-')) {
             title1 = 'Features';
             // Uses sublist() to remove the fisr element which is the title ('Features')
-            text1 = _composeRows(element.split('-').sublist(1));
+            // To split '- ' is used, beacuse '-' would also include words like 'drop-down' or 'ahead-of-time'.
+            text1 = _composeRows(element.split('- ').sublist(1));
           } else if (element.contains('Changes')) {
             title2 = 'Changes';
-            text2 = _composeRows(element.split('-').sublist(1));
+            text2 = _composeRows(element.split('- ').sublist(1));
           } else if (element.contains('Bug fixes')) {
             title3 = 'Bug fixes';
             text3 += '- Various bug fixes';
