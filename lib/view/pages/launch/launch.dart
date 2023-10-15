@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:link4launches/view/pages/app_bar.dart';
 import 'package:link4launches/view/pages/components/status.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/agency_box.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/box.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/launch_box.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/rocket_box.dart';
+import 'package:link4launches/view/pages/appbar.dart';
 
 /// Is the second page of the app, that depends on the launch it is releated to.
 /// This page is used to display different [DataBox] containg informations about the launchm the agency/company an the rocket.
@@ -15,20 +15,20 @@ class LaunchInfoPage extends StatelessWidget {
   /// The [Widget] used to create the status icon.
   final LaunchState status;
 
+  /// Custom [SliverAppBar].
+  final L4LAppBar appBar;
+
   const LaunchInfoPage({
     super.key,
     required this.data,
     required this.status,
+    required this.appBar,
   });
 
   @override
   Widget build(BuildContext context) => Scaffold(
           body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          const L4LAppBar(
-            actions: [],
-          ).buildAppBar(),
-        ],
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [appBar],
         body: ListView(
           padding: EdgeInsets.zero,
           children: _buildDataBoxList(),

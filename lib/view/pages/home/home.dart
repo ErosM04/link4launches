@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:link4launches/logic/api/api.dart';
 import 'package:link4launches/logic/updater/updater.dart';
-import 'package:link4launches/view/pages/app_bar.dart';
 import 'package:link4launches/view/pages/components/status.dart';
 import 'package:link4launches/view/pages/components/small_status.dart';
 import 'package:link4launches/view/pages/home/launch_tile.dart';
 import 'package:link4launches/view/pages/launch/launch.dart';
+import 'package:link4launches/view/pages/appbar.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 /// The home page of the app. Uses [LaunchLibrary2API] to fetch the data and [Updater] to look for the latest version.
@@ -22,12 +22,24 @@ class L4LHomePage extends StatefulWidget {
 }
 
 class _L4LHomePageState extends State<L4LHomePage> {
+  /// Object used to manage api interactions.
   late final LaunchLibrary2API _ll2API;
+
+  /// Map used to save api retrived data.
   Map<String, dynamic> data = {};
-  final _scrollController = ScrollController();
+
+  /// Amount of upcoming launches to requesto to the api.
   final int launchAmount = 14;
+
+  /// Whether to show the launches which state is TBD (To Be Defined).
+  /// This varaible is managed by an [IconButton] contained in the [L4LAppBar].
   bool showTBD = true;
+
+  /// Object used to manage the update of the app.
   late Updater updater;
+
+  /// Reusable appbar for launch pages.
+  final L4LAppBar launchAppBar = const L4LAppBar();
 
   @override
   void initState() {
@@ -68,6 +80,7 @@ class _L4LHomePageState extends State<L4LHomePage> {
           builder: (context) => LaunchInfoPage(
                 data: data['results'][index],
                 status: status,
+                appBar: launchAppBar,
               )));
     }
   }
@@ -94,7 +107,7 @@ class _L4LHomePageState extends State<L4LHomePage> {
                           .then((value) => setState(() => data = value))
                     },
                 icon: const Icon(Icons.autorenew)),
-          ]).buildAppBar(),
+          ]),
         ],
         body: data.isEmpty
             ? Center(
@@ -102,7 +115,7 @@ class _L4LHomePageState extends State<L4LHomePage> {
                     color: Colors.white, size: 50))
             : ListView.builder(
                 padding: EdgeInsets.zero,
-                controller: _scrollController,
+                controller: ScrollController(),
                 itemCount: data['count'],
                 itemBuilder: (context, index) => _buildListItem(index),
               ),
