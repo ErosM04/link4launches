@@ -6,11 +6,11 @@ import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:link4launches/logic/updater/custom_dialog.dart';
 import 'package:link4launches/logic/updater/dialog_content.dart';
 
-/// Class used to update the app to the latest version, by looking for new releases in GitHub and downloading the new version in the
+/// Class used to update the app to the latest version. Works by looking for new releases in GitHub and downloading the new version in the
 /// ``Download`` folder after the user gave the consent (with a [Dialog]).
 class Updater {
   /// The actual version of the app (has to be change every release).
-  final String actualVersion = '0.0.0';
+  final String actualVersion = '1.1.0';
 
   /// Link to the GitHub api to get the json containg the latest release data.
   final String _latestReleaseLink =
