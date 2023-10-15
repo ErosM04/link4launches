@@ -206,7 +206,7 @@ This is the full 3th container:
 
 ## TODO
 - [x] Separate ``LaunchStatus`` widget in 2 different widget, one for the big and one for the smaller version (+ modified doc and added missing);
-- [ ] Improve custom AppBar code in app_bar.dart;
+- [x] Improve custom AppBar code in app_bar.dart (make it a proper widget);
 - [x] Configure ``Updater`` to support links;
 - [x] Fix bug in_readJsonField that reads a null value and returns 'null' as a String;
 - [x] ~~Correct text error in api at convertGibberish~~ Method removed;

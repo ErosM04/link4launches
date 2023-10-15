@@ -2,31 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-/// Custom class used to create a customized [AppBar].
-class L4LAppBar {
+/// Custom class used to create a customized [SliverAppBar].
+class L4LAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// The title of the appbar.
   final String title;
 
-  /// The action of the appbar. Ususally MenuButtons
+  /// The list of buttons of the appbar, usually [IconButton] widgets.
   final List<Widget> actions;
 
-  /// Whether show the pre-defined pop-up menu.
-  final bool popUpMenu;
+  /// Whether to show the pop-up menu.
+  final bool showPopupMenu;
 
-  /// The list of Icons to show in the pop up menu
+  /// The list of Icons to show in the pop-up menu (it ontains predefined elements).
   final List<IconData> iconsListPopUp;
 
-  /// The list of texts to show in the pop up menu
+  /// The list of texts to show in the pop-up menu (it ontains predefined elements).
   final List<String> titlesListPopUp;
 
-  /// The list of link to use in the pop up menu
+  /// The list of link to use in the pop-up menu (it ontains predefined elements).
   final List<String> linksListPopUp;
 
-  /// Custom [AppBar].
   const L4LAppBar({
+    super.key,
     this.title = 'Link4Launches',
     this.actions = const [],
-    this.popUpMenu = true,
+    this.showPopupMenu = true,
     this.iconsListPopUp = const [
       Icons.rocket,
       Icons.link,
@@ -44,8 +44,8 @@ class L4LAppBar {
     ],
   });
 
-  /// Allows to build the [SliverAppBar] widget to use.
-  SliverAppBar buildAppBar() => SliverAppBar(
+  @override
+  Widget build(BuildContext context) => SliverAppBar(
         title: Text(title),
         actions: _buildActions(),
         shape: const RoundedRectangleBorder(
@@ -55,33 +55,31 @@ class L4LAppBar {
         ),
       );
 
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
   /// Creates all the clickable icons on the right side of the appbar.
+  /// If ``[showPopupMenu]`` is false, the pop-up menu is non shown.
   List<Widget> _buildActions() {
-    var list = List<Widget>.from(actions, growable: true);
-
-    if (popUpMenu) {
-      list.add(_getPopUpMenuButton());
+    if (showPopupMenu) {
+      return List<Widget>.from(
+        [...actions, _getPopUpMenuButton()],
+        growable: true,
+      );
     }
-
-    return list;
+    return List<Widget>.from(actions);
   }
 
-  /// Creates the pop-up menu
-  PopupMenuButton _getPopUpMenuButton() {
-    List<PopupMenuItem> list = [];
-    for (int i = 0; i < titlesListPopUp.length; i++) {
-      list.add(_getPopUpMenuTile(i));
-    }
-
-    return PopupMenuButton(
-      itemBuilder: (context) => list,
-      offset: const Offset(0, 60),
-      elevation: 2,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(18))),
-      onSelected: (value) => launchUrl(Uri.parse(linksListPopUp[value])),
-    );
-  }
+  /// Creates the pop-up menu button.
+  PopupMenuButton _getPopUpMenuButton() => PopupMenuButton(
+        itemBuilder: (context) => List<PopupMenuItem>.generate(
+            titlesListPopUp.length, (index) => _getPopUpMenuTile(index)),
+        offset: const Offset(0, 60),
+        elevation: 2,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(18))),
+        onSelected: (value) => launchUrl(Uri.parse(linksListPopUp[value])),
+      );
 
   /// Creates the single tile of the pop-up menu.
   PopupMenuItem _getPopUpMenuTile(int index) => PopupMenuItem(
