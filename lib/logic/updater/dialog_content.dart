@@ -175,46 +175,38 @@ class DialogContent extends StatelessWidget {
       String? text3,
       String? linkText,
       String? link}) {
-    // The column has to be constant in order to add the elements to the children list
-    Column column = Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [],
-    );
+    List<Widget> children = [];
 
     // Version title
-    column.children.add(_buildText(mainText, fontSize: 16.5));
-    column.children.add(const SizedBox(height: 10));
-    column.children.add(const Divider(
+    children.add(_buildText(mainText, fontSize: 16.5));
+    children.add(const SizedBox(height: 10));
+    children.add(const Divider(
       height: 1,
       thickness: 2,
     ));
-    column.children.add(const SizedBox(height: 10));
+    children.add(const SizedBox(height: 10));
 
     // Functionalities
-    column.children
-        .add(_safeBuild(subTitle1, _buildText(subTitle1, isBold: true)));
-    column.children.add(_safeBuild(subTitle1, const SizedBox(height: 4)));
-    column.children.add(_safeBuild(text1, _buildText(text1)));
-    column.children.add(_safeBuild(text1, const SizedBox(height: 10)));
+    children.add(_safeBuild(subTitle1, _buildText(subTitle1, isBold: true)));
+    children.add(_safeBuild(subTitle1, const SizedBox(height: 4)));
+    children.add(_safeBuild(text1, _buildText(text1)));
+    children.add(_safeBuild(text1, const SizedBox(height: 10)));
 
     // Changes
-    column.children
-        .add(_safeBuild(subTitle2, _buildText(subTitle2, isBold: true)));
-    column.children.add(_safeBuild(subTitle2, const SizedBox(height: 4)));
-    column.children.add(_safeBuild(text2, _buildText(text2)));
-    column.children.add(_safeBuild(text2, const SizedBox(height: 10)));
+    children.add(_safeBuild(subTitle2, _buildText(subTitle2, isBold: true)));
+    children.add(_safeBuild(subTitle2, const SizedBox(height: 4)));
+    children.add(_safeBuild(text2, _buildText(text2)));
+    children.add(_safeBuild(text2, const SizedBox(height: 10)));
 
     // Bug fixies
-    column.children
-        .add(_safeBuild(subTitle3, _buildText(subTitle3, isBold: true)));
-    column.children.add(_safeBuild(subTitle3, const SizedBox(height: 4)));
-    column.children.add(_safeBuild(text3, _buildText(text3)));
-    column.children.add(_safeBuild(text3, const SizedBox(height: 10)));
-    column.children.add(const SizedBox(height: 7));
+    children.add(_safeBuild(subTitle3, _buildText(subTitle3, isBold: true)));
+    children.add(_safeBuild(subTitle3, const SizedBox(height: 4)));
+    children.add(_safeBuild(text3, _buildText(text3)));
+    children.add(_safeBuild(text3, const SizedBox(height: 10)));
+    children.add(const SizedBox(height: 7));
 
     // Link
-    column.children.add(_safeBuild(
+    children.add(_safeBuild(
         link,
         Row(children: [
           _buildText(linkText),
@@ -222,13 +214,17 @@ class DialogContent extends StatelessWidget {
           _buildLink(link),
         ])));
 
-    column.children.add(const SizedBox(height: 10));
-    column.children.add(const Divider(
+    children.add(const SizedBox(height: 10));
+    children.add(const Divider(
       height: 1,
       thickness: 2,
     ));
 
-    return column;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: children,
+    );
   }
 
   /// Allows to securely build ``[widget]`` only if the ``[str]`` is not null and not empty.
