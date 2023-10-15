@@ -78,11 +78,16 @@ abstract class DataBox extends StatelessWidget {
       );
 
   /// Can be used to check whether a value is usable, meaning that it's neither null nor false.
+  /// The method checks if the first character of the string is '?', because when in the api data
+  /// there are missing informations (like no description for the mission [maybe because is chinese])
+  /// we don't want to show just a '?' as description, it's better to mark it as 'unsafe' text and
+  /// don't show it.
   ///
   /// #### Parameters
   /// - ``String? [str]`` : the string to check.
   ///
   /// #### Returns
   /// - ``bool`` : true if the string isn't both null and empty.
-  bool isSafe(String? str) => (str != null && str.isNotEmpty) ? true : false;
+  bool isSafe(String? str) =>
+      (str != null && (str.isNotEmpty && str[0] != '?')) ? true : false;
 }
