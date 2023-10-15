@@ -18,12 +18,12 @@ dependencies:
   loading_animation_widget:
   path_provider:
   shimmer:
-  cached_network_image: ^3.2.3
+  cached_network_image:
   flutter_native_splash:
   flutter_file_downloader:
   flutter_svg:
   permission_handler:
-  http: ^0.13.5
+  http:
   url_launcher:
   flutter_launcher_icons:
   flutter_animate:
