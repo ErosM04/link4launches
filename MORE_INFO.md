@@ -205,3 +205,4 @@ This is the full 3th container:
 </div>
 
 ## TODO
+- [ ] Add beta release support to the ``Updater`` (with custom dialog). 
