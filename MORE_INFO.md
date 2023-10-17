@@ -207,4 +207,5 @@ This is the full 3th container:
 ## TODO
 - [ ] Add beta release support to the ``Updater`` (with custom dialog);
 - [ ] In the download completed SnackBar, improve string split (instead of split[4] do last-1);
-- [ ] After downloading the update file (in the cache, not Download folder), use open_filex or file_picker packages to run the APK directly from the app.
+- [ ] After downloading the update file (in the cache, not Download folder), use open_filex or file_picker packages to run the APK directly from the app;
+- [x] Sperated ``Updater``'s widgets from logic to view folder. 
