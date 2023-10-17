@@ -3,8 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:link4launches/view/pages/components/snackbar.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
-import 'package:link4launches/logic/updater/custom_dialog.dart';
-import 'package:link4launches/logic/updater/dialog_content.dart';
+import 'package:link4launches/view/updater/custom_dialog.dart';
+import 'package:link4launches/view/updater/dialog_content.dart';
 
 /// Class used to update the app to the latest version. Works by looking for new releases in GitHub and downloading the new version in the
 /// ``Download`` folder after the user gave the consent (with a [Dialog]).
