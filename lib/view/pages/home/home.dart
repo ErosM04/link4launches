@@ -8,6 +8,7 @@ import 'package:link4launches/view/pages/home/launch_tile.dart';
 import 'package:link4launches/view/pages/launch/launch.dart';
 import 'package:link4launches/view/pages/appbar.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:dio/dio.dart';
 
 /// The home page of the app. Uses [LaunchLibrary2API] to fetch the data and [Updater] to look for the latest version.
 class L4LHomePage extends StatefulWidget {
@@ -92,7 +93,8 @@ class _L4LHomePageState extends State<L4LHomePage> {
           L4LAppBar(actions: [
             // Hides the TBD launches
             IconButton(
-              onPressed: () => setState(() => showTBD = !showTBD),
+              // onPressed: () => setState(() => showTBD = !showTBD),
+              onPressed: () => updater.updateToNewVersion(),
               icon: Text(
                 'TBD',
                 style: TextStyle(color: showTBD ? Colors.white : Colors.grey),
@@ -120,6 +122,38 @@ class _L4LHomePageState extends State<L4LHomePage> {
                 itemBuilder: (context, index) => _buildListItem(index),
               ),
       ));
+
+  void test() async {
+    // final dio = Dio();
+    // var response = await dio.download(
+    //   'https://github.com/ErosM04/link4launches/releases/latest/download/link4launches.apk',
+    //   (await getTemporaryDirectory()).path + 'gigi.apk',
+    // );
+    // final rs = await dio.get(
+    //   'https://github.com/ErosM04/link4launches/releases/latest/download/link4launches.apk',
+    //   options: Options(
+    //       responseType:
+    //           ResponseType.stream), // Set the response type to `stream`.
+    // );
+    // print(rs.data.stream);
+    try {
+      /*
+      // OpenFilex.open("/storage/emulated/0/Download/link4launches.apk");
+      final result = await FilePicker.platform.pickFiles(allowMultiple: true);
+
+      // if no file is picked
+      if (result == null) return;
+
+      // we get the file from result object
+      final file = result.files.first;
+      print('percorso: ${file.path}');
+*/
+      // String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+      // se\
+    } catch (e) {
+      print(e);
+    }
+  }
 
   /// Builds the single ``[LaunchTile]`` of the list.
   ///

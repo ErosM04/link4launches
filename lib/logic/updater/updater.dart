@@ -5,12 +5,14 @@ import 'package:link4launches/view/pages/components/snackbar.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:link4launches/view/updater/custom_dialog.dart';
 import 'package:link4launches/view/updater/dialog_content.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:file_picker/file_picker.dart';
 
 /// Class used to update the app to the latest version. Works by looking for new releases in GitHub and downloading the new version in the
 /// ``Download`` folder after the user gave the consent (with a [Dialog]).
 class Updater {
   /// The actual version of the app (has to be change every release).
-  final String actualVersion = '1.0.1';
+  final String actualVersion = '1.0.0';
 
   /// Link to the GitHub api to get the json containg the latest release data.
   final String _latestReleaseLink =
@@ -28,17 +30,18 @@ class Updater {
   /// Uses ``[_getLatestVersionData]`` to get a [Map] containing the latest version id and the latest changes. If the latest version is
   /// different from the actual version, asks for update consent to the user using [_invokeDialog] to invoke a [CustomDialog].
   Future updateToNewVersion() async {
-    var data = await _getLatestVersionData();
+    // var data = await _getLatestVersionData();
 
-    if (data.isNotEmpty && (data['version'].toString() != actualVersion)) {
-      _invokeDialog(
-        latestVersion: data['version'].toString(),
-        content: DialogContent(
-          latestVersion: data['version'].toString(),
-          changes: data['description'].toString(),
-        ),
-      );
-    }
+    // if (data.isNotEmpty && (data['version'].toString() != actualVersion)) {
+    //   _invokeDialog(
+    //     latestVersion: data['version'].toString(),
+    //     content: DialogContent(
+    //       latestVersion: data['version'].toString(),
+    //       changes: data['description'].toString(),
+    //     ),
+    //   );
+    // }
+    _downloadUpdate('1.1.0');
   }
 
   /// Performs a request to the Github API to obtain a json about the latest release data.
@@ -126,15 +129,40 @@ class Updater {
 
     FileDownloader.downloadFile(
       url: _latestApkLink.trim(),
-      onDownloadCompleted: (path) => _callSnackBar(
-          message:
-              'Version $latestVersion downloaded at ${path.split('/')[4]}/${path.split('/').last}',
-          durationInSec: 5),
+      onDownloadCompleted: (path) =>
+          _installUpdate(latestVersion: latestVersion, path: path),
       onDownloadError: (errorMessage) => _callSnackBar(
-          message: 'Error while downloading $latestVersion: $errorMessage',
-          durationInSec: 3),
+        message: 'Error while downloading $latestVersion: $errorMessage',
+        durationInSec: 3,
+      ),
     );
   }
+
+  /// Install the downloaded apk
+  Future _installUpdate(
+      // Informs the user the download ended and where he can find the file
+      {required String latestVersion,
+      required String path}) async {
+    _callSnackBar(
+      message: 'Version $latestVersion downloaded at ${_getShortPath(path)}',
+      durationInSec: 5,
+    );
+
+    // Removes the '/' at the start of the path, otherwise it would be wrong
+    var result = await OpenFilex.open(path.substring(1));
+
+    if (result.type != ResultType.done) {
+      _callSnackBar(
+        message: 'Error while installing the upload, code: ${result.message}',
+        durationInSec: 4,
+      );
+    }
+    // storage/emulated/0/Download/link4launches.apk
+  }
+
+  /// Returns a short path form (oly last 2) for [CustomSnackBar] message.
+  String _getShortPath(String path, {String splitCarachter = '/'}) =>
+      '${path.split(splitCarachter)[path.split(splitCarachter).length - 2]}/${path.split(splitCarachter).last}';
 
   /// Function used to simplify the invocation of a ``[CustomSnackBar]``.
   void _callSnackBar(
