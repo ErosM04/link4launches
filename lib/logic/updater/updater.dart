@@ -140,7 +140,7 @@ class Updater {
 
   /// Install the downloaded apk
   Future _installUpdate(
-      // Informs the user the download ended and where he can find the file
+      // Informs the user that the download ended and where he can find the file.
       {required String latestVersion,
       required String path}) async {
     _callSnackBar(

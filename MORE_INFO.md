@@ -209,5 +209,6 @@ This is the full 3th container:
 - [x] In the download completed SnackBar, improve string split (instead of split[4] do last-1);
 - [x] After downloading the update file, use open_filex package to run the APK directly from the app;
 - [ ] Use file_picker package manually pick-up the apk update if open_filex crashes;
-- [ ] Implement dio package for both api and download.
+- [ ] Try removing the downloaded update file before or after installation;
+- [ ] Implement dio package for both api and download;
 - [x] Sperated ``Updater``'s widgets from logic to view folder. 
