@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -168,11 +170,29 @@ class Updater {
         durationInSec: 6,
       );
     }
-    // storage/emulated/0/Download/link4launches.apk
+    _manuallySelectAndInstallUpdate();
   }
+  // storage/emulated/0/Download/link4launches.apk
 
-  /// Method to install the apk by manualli picking it, if it [_installUpdate] didn't work.
-  // Future _manuallyInstallUpdate() async {}
+  /// Method used to manually install the apk by picking it, if [_installUpdate] didn't work.
+  Future _manuallySelectAndInstallUpdate() async {
+    try {
+      FilePickerResult? pickResult = await FilePicker.platform.pickFiles();
+
+      if (pickResult != null && pickResult.files.single.path != null) {
+        File file = File(pickResult.files.single.path!);
+        var installResult = await OpenFilex.open(file.path);
+        if (ResultType.fileNotFound != ResultType.done) {
+          throw Exception();
+        }
+      } else {
+        throw Exception();
+      }
+    } catch (e) {
+      _callSnackBar(
+          message: 'Error occurred while manually installing the file :(');
+    }
+  }
 
   /// Returns a short path form (only last 2) for [CustomSnackBar] message.
   // String _getShortPath(String path,
