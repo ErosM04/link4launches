@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Class used to create the widgets to insert into the a [Dialog]. The content is the latest changes in the GitHub release.
-class DialogContent extends StatelessWidget {
+class UpdaterDialogContent extends StatelessWidget {
   /// The latest available version of the app.
   final String latestVersion;
 
   /// The string containg the body of the release.
   final String? changes;
 
-  const DialogContent({
+  const UpdaterDialogContent({
     super.key,
     required this.latestVersion,
     this.changes,

@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:link4launches/view/pages/components/snackbar.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:link4launches/view/updater/custom_dialog.dart';
-import 'package:link4launches/view/updater/dialog_content.dart';
+import 'package:link4launches/view/updater/updater_dialog_content.dart';
 
 /// Class used to update the app to the latest version. Works by looking for new releases in GitHub and downloading the new version in the
 /// ``Download`` folder after the user gave the consent (with a [Dialog]).
@@ -87,7 +87,7 @@ class Updater {
   /// - ``DialogContent [content]`` : the content to insert below the title in the [CustomDialog].
   void _invokeDialog({
     required String latestVersion,
-    required DialogContent content,
+    required UpdaterDialogContent content,
   }) =>
       showGeneralDialog(
         context: context,
@@ -102,18 +102,14 @@ class Updater {
                     opacity:
                         Tween<double>(begin: 0.5, end: 1).animate(animation),
                     child: CustomDialog(
-                      iconPath: 'assets/upgrade.png',
+                      image: Image.asset(
+                        'assets/dialog/upgrade.png',
+                        scale: 9,
+                        color: const Color.fromARGB(255, 1, 202, 98),
+                      ),
                       title: 'New version available',
-                      denyButtonText: 'No',
-                      confirmButtonText: 'Yes',
-                      denyButtonAction: () {
-                        _callSnackBar(message: ':(');
-                        Navigator.pop(context);
-                      },
-                      confirmButtonAction: () {
-                        _downloadUpdate(latestVersion);
-                        Navigator.pop(context);
-                      },
+                      denyButtonAction: () => _callSnackBar(message: ':('),
+                      confirmButtonAction: () => _downloadUpdate(latestVersion),
                       child: content,
                     ))),
       );

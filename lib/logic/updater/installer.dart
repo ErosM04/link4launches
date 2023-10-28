@@ -1,9 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:link4launches/logic/updater/updater.dart';
 import 'package:link4launches/view/pages/components/snackbar.dart';
+import 'package:link4launches/view/updater/custom_dialog.dart';
+import 'package:link4launches/view/updater/installer_dialog_content.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:file_picker/file_picker.dart';
 
+/// This class is used in combination with [Updater] in order to install the downloaded apk file.
 class Installer {
   final BuildContext context;
 
@@ -22,26 +26,47 @@ class Installer {
     Future.delayed(
         const Duration(seconds: 5),
         () => OpenFilex.open((path.startsWith('/')) ? path.substring(1) : path)
-                .then((result) {
-              if (result.type != ResultType.done) {
-                _callSnackBar(
-                  message:
-                      'Error while installing the upload, code: ${result.message}',
-                  durationInSec: 4,
-                );
-                _callSnackBar(
-                  message:
-                      'To solve manually install apk file at: ${_getShortPath(path)}',
-                  durationInSec: 6,
-                );
-                Future.delayed(
-                  const Duration(seconds: 10),
-                  () => _manuallySelectAndInstallUpdate(),
-                );
-              }
-            }));
+                .then(
+              (result) => (result.type != ResultType.done)
+                  ? _invokeDialog(
+                      errorType: result.message,
+                      shortPath: _getShortPath(path),
+                    )
+                  : null,
+            ));
   }
   // storage/emulated/0/Download/link4launches.apk
+
+  /// Fa le cose
+  _invokeDialog({required String errorType, required String shortPath}) =>
+      showGeneralDialog(
+        context: context,
+        pageBuilder: (context, animation, secondaryAnimation) => Container(),
+        transitionDuration: const Duration(milliseconds: 180),
+        transitionBuilder: (context, animation, secondaryAnimation, child) =>
+            SlideTransition(
+                position: Tween<Offset>(
+                        begin: const Offset(0.0, 0.5), end: Offset.zero)
+                    .animate(animation),
+                child: FadeTransition(
+                  opacity: Tween<double>(begin: 0.5, end: 1).animate(animation),
+                  child: CustomDialog(
+                    image: Image.asset(
+                      'assets/dialog/error.png',
+                      scale: 9,
+                      color: Colors.red,
+                    ),
+                    title: 'Error while installing the upload',
+                    denyButtonAction: () => _callSnackBar(message: ':('),
+                    confirmButtonAction: () =>
+                        _manuallySelectAndInstallUpdate(),
+                    child: InstallerDialogContent(
+                      errorType: errorType,
+                      path: shortPath,
+                    ),
+                  ),
+                )),
+      );
 
   /// Method used to manually install the apk by picking it, if [installUpdate] didn't work. Uses [FilePicker].
   Future _manuallySelectAndInstallUpdate() async {
@@ -59,7 +84,7 @@ class Installer {
       }
     } catch (e) {
       _callSnackBar(
-          message: 'Error occurred while manually installing the file :(');
+          message: 'An error occurred while manually installing the update :(');
     }
   }
 

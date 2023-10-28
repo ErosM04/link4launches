@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:link4launches/logic/api/api.dart';
+import 'package:link4launches/logic/updater/installer.dart';
 import 'package:link4launches/logic/updater/updater.dart';
 import 'package:link4launches/view/pages/components/status.dart';
 import 'package:link4launches/view/pages/components/small_status.dart';
@@ -93,7 +94,11 @@ class _L4LHomePageState extends State<L4LHomePage> {
             // Hides the TBD launches
             IconButton(
               // onPressed: () => setState(() => showTBD = !showTBD),
-              onPressed: () => updater.updateToNewVersion(),
+              // onPressed: () => updater.updateToNewVersion(),
+              onPressed: () => Installer(context)
+                ..installUpdate(
+                    latestVersion: '1.1.0',
+                    path: 'storage/emulated/0/Download/link4launches.apk'),
               icon: Text(
                 'TBD',
                 style: TextStyle(color: showTBD ? Colors.white : Colors.grey),
