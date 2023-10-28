@@ -53,4 +53,5 @@ flutter:
   uses-material-design: true
   assets:
     - 'assets/snackbar/space_devs_rocket.svg'
-    - 'assets/upgrade.png'
+    - 'assets/dialog/upgrade.png'
+    - 'assets/dialog/error.png'
