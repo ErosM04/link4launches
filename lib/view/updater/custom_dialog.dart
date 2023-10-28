@@ -4,12 +4,13 @@ import 'package:flutter_animate/flutter_animate.dart';
 /// Class used to create a custom [Dialog].
 class CustomDialog extends StatelessWidget {
   /// The path (of the assets) where thw icon image is stored
-  final String iconPath;
+  final Image image;
 
   /// The title of the dialog.
   final String title;
 
-  /// The content of the dialog.
+  /// The widget representing the content of the dialog.
+  /// This goes between the title (on top) and the action buttons (on bottom).
   final Widget child;
 
   /// The text to display inside the deny button
@@ -24,15 +25,20 @@ class CustomDialog extends StatelessWidget {
   /// The function to execute after the confirm button is pressed
   final Function confirmButtonAction;
 
+  /// If true then after either ``[denyButtonAction]`` or ``[confirmButtonAction]`` are executed,
+  /// ``Navigator.pop(context);`` is called and the dialog is dismissed.
+  final bool popAtActionEnd;
+
   const CustomDialog({
     super.key,
-    required this.iconPath,
+    required this.image,
     required this.title,
     required this.child,
-    required this.denyButtonText,
-    required this.confirmButtonText,
+    this.denyButtonText = 'No',
+    this.confirmButtonText = 'Yes',
     required this.denyButtonAction,
     required this.confirmButtonAction,
+    this.popAtActionEnd = true,
   });
 
   @override
@@ -51,11 +57,7 @@ class CustomDialog extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      iconPath,
-                      scale: 9,
-                      color: const Color.fromARGB(255, 1, 202, 98),
-                    )
+                    image
                         .animate()
                         .rotate(
                           delay: const Duration(milliseconds: 200),
@@ -95,10 +97,16 @@ class CustomDialog extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton(
-                      onPressed: () => denyButtonAction(),
+                      onPressed: () {
+                        denyButtonAction();
+                        Navigator.pop(context);
+                      },
                       child: Text(denyButtonText)),
                   ElevatedButton(
-                      onPressed: () => confirmButtonAction(),
+                      onPressed: () {
+                        confirmButtonAction();
+                        Navigator.pop(context);
+                      },
                       child: Text(confirmButtonText)),
                 ],
               ),
