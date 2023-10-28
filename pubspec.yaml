@@ -29,7 +29,6 @@ dependencies:
   flutter_animate:
   change_app_package_name:
   open_filex:
-  dio:
   file_picker:
 
 

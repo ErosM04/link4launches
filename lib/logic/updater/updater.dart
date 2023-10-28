@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -9,7 +8,6 @@ import 'package:link4launches/view/updater/custom_dialog.dart';
 import 'package:link4launches/view/updater/dialog_content.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:path_provider/path_provider.dart';
 
 /// Class used to update the app to the latest version. Works by looking for new releases in GitHub and downloading the new version in the
 /// ``Download`` folder after the user gave the consent (with a [Dialog]).
@@ -130,18 +128,15 @@ class Updater {
     _callSnackBar(
         message: 'Download of Link4Launches v$latestVersion has started');
 
-    // FileDownloader.downloadFile(
-    //   url: _latestApkLink.trim(),
-    //   onDownloadCompleted: (path) =>
-    //       _installUpdate(latestVersion: latestVersion, path: path),
-    //   onDownloadError: (errorMessage) => _callSnackBar(
-    //     message: 'Error while downloading $latestVersion: $errorMessage',
-    //     durationInSec: 3,
-    //   ),
-    // );
-    _installUpdate(
-        latestVersion: latestVersion,
-        path: '/storage/emulated/0/Download/link4launches.apk');
+    FileDownloader.downloadFile(
+      url: _latestApkLink.trim(),
+      onDownloadCompleted: (path) =>
+          _installUpdate(latestVersion: latestVersion, path: path),
+      onDownloadError: (errorMessage) => _callSnackBar(
+        message: 'Error while downloading $latestVersion: $errorMessage',
+        durationInSec: 3,
+      ),
+    );
   }
 
   /// Install the downloaded apk
@@ -154,27 +149,31 @@ class Updater {
     );
 
     // Removes the '/' at the start of the path, otherwise it would be wrong
-    // var result =
-    //     await OpenFilex.open((path.startsWith('/')) ? path.substring(1) : path);
-
-    // if (result.type != ResultType.done) {
-    if (ResultType.fileNotFound != ResultType.done) {
-      _callSnackBar(
-        // message: 'Error while installing the upload, code: ${result.message}',
-        message: 'Error while installing the upload, code: File not found',
-        durationInSec: 4,
-      );
-      _callSnackBar(
-        message:
-            'To solve manually install apk file at: ${_getShortPath(path)}',
-        durationInSec: 6,
-      );
-    }
-    _manuallySelectAndInstallUpdate();
+    Future.delayed(
+        const Duration(seconds: 5),
+        () => OpenFilex.open((path.startsWith('/')) ? path.substring(1) : path)
+                .then((result) {
+              if (result.type != ResultType.done) {
+                _callSnackBar(
+                  message:
+                      'Error while installing the upload, code: ${result.message}',
+                  durationInSec: 4,
+                );
+                _callSnackBar(
+                  message:
+                      'To solve manually install apk file at: ${_getShortPath(path)}',
+                  durationInSec: 6,
+                );
+                Future.delayed(
+                  const Duration(seconds: 10),
+                  () => _manuallySelectAndInstallUpdate(),
+                );
+              }
+            }));
   }
   // storage/emulated/0/Download/link4launches.apk
 
-  /// Method used to manually install the apk by picking it, if [_installUpdate] didn't work.
+  /// Method used to manually install the apk by picking it, if [_installUpdate] didn't work. Uses [FilePicker].
   Future _manuallySelectAndInstallUpdate() async {
     try {
       FilePickerResult? pickResult = await FilePicker.platform.pickFiles();
@@ -182,7 +181,7 @@ class Updater {
       if (pickResult != null && pickResult.files.single.path != null) {
         File file = File(pickResult.files.single.path!);
         var installResult = await OpenFilex.open(file.path);
-        if (ResultType.fileNotFound != ResultType.done) {
+        if (installResult.type != ResultType.done) {
           throw Exception();
         }
       } else {
@@ -195,16 +194,6 @@ class Updater {
   }
 
   /// Returns a short path form (only last 2) for [CustomSnackBar] message.
-  // String _getShortPath(String path,
-  //     {int elements = 2, String splitCarachter = '/'}) {
-  //   String result = '';
-  //   List<String> splittedStr = path.split(splitCarachter);
-  //   for (var i = 1; i < elements + 1; i++) {
-  //     result = splittedStr[splittedStr.length - i] + result;
-  //     if (i + 1 < elements) result += '/';
-  //   }
-  //   return result;
-  // }
   String _getShortPath(String path, {String splitCarachter = '/'}) =>
       '${path.split(splitCarachter)[path.split(splitCarachter).length - 2]}/${path.split(splitCarachter).last}';
 
