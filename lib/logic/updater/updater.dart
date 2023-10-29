@@ -21,7 +21,7 @@ class Updater {
   final String _latestApkLink =
       'https://github.com/ErosM04/link4launches/releases/latest/download/link4launches.apk';
 
-  /// Context used to call the [CustomSnackBar].
+  /// Context used to call both the [CustomSnackBar] and the [CustomDialog].
   final BuildContext context;
 
   const Updater(this.context);
@@ -81,6 +81,7 @@ class Updater {
   }
 
   /// Uses ``[showGeneralDialog]`` to show a [CustomDialog] over the screen using both a fade and a slide animation.
+  /// This [Dialog] informs the user that a new version is avaible.
   ///
   /// #### Parameters
   /// - ``String [latestVersion]`` : the latest version available for the app.
@@ -115,10 +116,13 @@ class Updater {
       );
 
   /// Infroms the user that the download started with a [CustomSnackBar] and uses the ``[FileDownloader]`` object to downlaod the apk.
-  /// A [CustomSnackBar] is shown at the end of the download to inform the user that the app has been downloaded and saved
-  /// in the ``Downloads`` folder. In case of error an error message [CustomSnackBar] is shown. To show the [CustomSnackBar]
-  /// ``[_callSnackBar]`` method is used.
-  /// Then if the download completed successfully the file is installed using [Installer] object.
+  /// If the download completed successfully a [CustomSnackBar] is shown to inform the user that the app file (.apk) has been downloaded
+  /// and saved in the ``Downloads`` folder. Then the file is installed using the ``[Installer]`` object.
+  /// Otherwise whether the download failed, a [CustomSnackBar] with an error message is shown.
+  /// To show the [CustomSnackBar] ``[_callSnackBar]`` method is used.
+  ///
+  /// In order for the [Installer] to be able to properly open the path, the '/' character at the start of the path is removed.
+  /// E.g. ``/storage/emulated/0/Download/link4launches.apk`` --> ``storage/emulated/0/Download/link4launches.apk``
   Future<void> _downloadUpdate(String latestVersion) async {
     _callSnackBar(
         message: 'Download of Link4Launches v$latestVersion has started');
@@ -134,7 +138,7 @@ class Updater {
         Future.delayed(
           const Duration(seconds: 5),
           () => Installer(context)
-            ..installUpdate(latestVersion: latestVersion, path: path),
+            ..installUpdate((path.startsWith('/')) ? path.substring(1) : path),
         );
       },
       onDownloadError: (errorMessage) => _callSnackBar(
@@ -145,6 +149,7 @@ class Updater {
   }
 
   /// Returns a short path format (only last 2 positions). Used for [CustomSnackBar] message.
+  /// E.g.: ``storage/emulated/0/Download/link4launches.apk`` --> ``Download/link4launches.apk``
   String _getShortPath(String path, {String splitCarachter = '/'}) =>
       '${path.split(splitCarachter)[path.split(splitCarachter).length - 2]}/${path.split(splitCarachter).last}';
 

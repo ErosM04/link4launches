@@ -7,18 +7,20 @@ import 'package:link4launches/view/updater/installer_dialog_content.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:file_picker/file_picker.dart';
 
-/// This class is used in combination with [Updater] in order to install the downloaded apk file.
+/// This class is used by the [Updater] class in order to install the downloaded apk file.
 class Installer {
+  /// Context used to call both the [CustomSnackBar] and the [CustomDialog].
   final BuildContext context;
 
   const Installer(this.context);
 
-  /// Install the downloaded apk
-  /// Removes the '/' at the start of the path, otherwise it would be wrong
-  /// E.g. ``storage/emulated/0/Download/link4launches.apk``
-  Future installUpdate(
-      {required String latestVersion, required String path}) async {
-    OpenFilex.open((path.startsWith('/')) ? path.substring(1) : path).then(
+  /// Installs the downloaded ``.apk`` file (which is the app update) located at ``[path]``.
+  /// To open and execute the file ``[OpenFilex]`` is used.
+  ///
+  /// #### Parameters:
+  /// - ``String [path]`` : the absolute path of the file (file included), e.g. ``storage/emulated/0/Download/link4launches.apk``
+  Future<void> installUpdate(String path) async {
+    OpenFilex.open(path).then(
       (result) => (result.type != ResultType.done)
           ? _invokeDialog(
               errorType: result.message,
@@ -28,8 +30,14 @@ class Installer {
     );
   }
 
-  /// Fa le cose
-  _invokeDialog({required String errorType, required String shortPath}) =>
+  /// Uses ``[showGeneralDialog]`` to show a [CustomDialog] over the screen using both a fade and a slide animation.
+  /// This [Dialog] informs the user that something went wrong while installing the downloaded update file, so he
+  /// will be redirected to the file manager to manualy select it.
+  ///
+  /// #### Parameters
+  /// - ``String [errorType]`` : the error message.
+  /// - ``DialogContent [shortPath]`` : the short version of the path.
+  void _invokeDialog({required String errorType, required String shortPath}) =>
       showGeneralDialog(
         context: context,
         pageBuilder: (context, animation, secondaryAnimation) => Container(),
@@ -47,7 +55,7 @@ class Installer {
                       scale: 9,
                       color: Colors.red,
                     ),
-                    title: 'Error while installing the upload',
+                    title: 'Error while installing the update',
                     denyButtonAction: () => _callSnackBar(message: ':('),
                     confirmButtonAction: () =>
                         _manuallySelectAndInstallUpdate(),
@@ -59,8 +67,10 @@ class Installer {
                 )),
       );
 
-  /// Method used to manually install the apk by picking it, if [installUpdate] didn't work. Uses [FilePicker].
-  Future _manuallySelectAndInstallUpdate() async {
+  /// Method used to manually install the apk by letting the user select it from the file manager, if [installUpdate] didn't work.
+  /// To access the file uses [FilePicker].
+  /// If something goes wrong while opening the file a [CustomSnackBar] with an error message is shown.
+  Future<void> _manuallySelectAndInstallUpdate() async {
     try {
       FilePickerResult? pickResult = await FilePicker.platform.pickFiles();
 
