@@ -206,9 +206,10 @@ This is the full 3th container:
 
 ## TODO
 - [ ] Add beta release support to the ``Updater`` (with custom dialog);
-- [x] In the download completed SnackBar, improve string split (instead of split[4] do last-1);
-- [x] After downloading the update file, use open_filex package to run the APK directly from the app;
-- [ ] Use file_picker package to manually pick-up the apk update if open_filex crashes (! USE A DIALOG);
-- [ ] Try removing the downloaded update file before or after installation;
-- [ ] Implement dio package for both api and download;
+- [x] In the download completed SnackBar, improve string split method;
+- [x] After downloading the update file, use ``open_filex`` package to run the APK directly from the app;
+- [x] Use ``file_picker`` package to manually pick-up the apk update if ``open_filex`` crashes (use a dialog);
 - [x] Sperated ``Updater``'s widgets from logic to view folder.
+- [x] Moved installation code from ``Updater`` to ``Installer``. 
+- [x] ~~Implement ``dio`` package for both api and download~~;
+- [x] Use ``flutter_animate`` package to animate the launch list in home page.
