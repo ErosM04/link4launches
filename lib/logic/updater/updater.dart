@@ -8,9 +8,9 @@ import 'package:link4launches/view/updater/custom_dialog.dart';
 import 'package:link4launches/view/updater/updater_dialog_content.dart';
 
 /// Class used to update the app to the latest version. Works by looking for new releases in GitHub and downloading the new version in the
-/// ``Download`` folder after the user gave the consent (with a [Dialog]).
+/// ``Download`` folder after the user gave the consent (with a [CustomDialog]).
 class Updater {
-  /// The actual version of the app (has to be change every release).
+  /// The actual version of the app (``!!! has to be change every release !!!``).
   final String actualVersion = '1.0.0';
 
   /// Link to the GitHub api to get the json containg the latest release data.
@@ -118,20 +118,35 @@ class Updater {
   /// A [CustomSnackBar] is shown at the end of the download to inform the user that the app has been downloaded and saved
   /// in the ``Downloads`` folder. In case of error an error message [CustomSnackBar] is shown. To show the [CustomSnackBar]
   /// ``[_callSnackBar]`` method is used.
+  /// Then if the download completed successfully the file is installed using [Installer] object.
   Future<void> _downloadUpdate(String latestVersion) async {
     _callSnackBar(
         message: 'Download of Link4Launches v$latestVersion has started');
 
     FileDownloader.downloadFile(
       url: _latestApkLink.trim(),
-      onDownloadCompleted: (path) => Installer(context)
-        ..installUpdate(latestVersion: latestVersion, path: path),
+      onDownloadCompleted: (path) {
+        _callSnackBar(
+          message:
+              'Version $latestVersion downloaded at ${_getShortPath(path)}',
+          durationInSec: 5,
+        );
+        Future.delayed(
+          const Duration(seconds: 5),
+          () => Installer(context)
+            ..installUpdate(latestVersion: latestVersion, path: path),
+        );
+      },
       onDownloadError: (errorMessage) => _callSnackBar(
         message: 'Error while downloading $latestVersion: $errorMessage',
         durationInSec: 3,
       ),
     );
   }
+
+  /// Returns a short path format (only last 2 positions). Used for [CustomSnackBar] message.
+  String _getShortPath(String path, {String splitCarachter = '/'}) =>
+      '${path.split(splitCarachter)[path.split(splitCarachter).length - 2]}/${path.split(splitCarachter).last}';
 
   /// Function used to simplify the invocation of a ``[CustomSnackBar]``.
   void _callSnackBar(

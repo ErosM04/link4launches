@@ -14,28 +14,19 @@ class Installer {
   const Installer(this.context);
 
   /// Install the downloaded apk
+  /// Removes the '/' at the start of the path, otherwise it would be wrong
+  /// E.g. ``storage/emulated/0/Download/link4launches.apk``
   Future installUpdate(
       {required String latestVersion, required String path}) async {
-    // Informs the user that the download ended and where he can find the file.
-    _callSnackBar(
-      message: 'Version $latestVersion downloaded at ${_getShortPath(path)}',
-      durationInSec: 5,
+    OpenFilex.open((path.startsWith('/')) ? path.substring(1) : path).then(
+      (result) => (result.type != ResultType.done)
+          ? _invokeDialog(
+              errorType: result.message,
+              shortPath: _getShortPath(path),
+            )
+          : null,
     );
-
-    // Removes the '/' at the start of the path, otherwise it would be wrong
-    Future.delayed(
-        const Duration(seconds: 5),
-        () => OpenFilex.open((path.startsWith('/')) ? path.substring(1) : path)
-                .then(
-              (result) => (result.type != ResultType.done)
-                  ? _invokeDialog(
-                      errorType: result.message,
-                      shortPath: _getShortPath(path),
-                    )
-                  : null,
-            ));
   }
-  // storage/emulated/0/Download/link4launches.apk
 
   /// Fa le cose
   _invokeDialog({required String errorType, required String shortPath}) =>
@@ -88,7 +79,7 @@ class Installer {
     }
   }
 
-  /// Returns a short path form (only last 2) for [CustomSnackBar] message.
+  /// Returns a short path format (only last 2 positions). Used for [CustomSnackBar] message.
   String _getShortPath(String path, {String splitCarachter = '/'}) =>
       '${path.split(splitCarachter)[path.split(splitCarachter).length - 2]}/${path.split(splitCarachter).last}';
 
