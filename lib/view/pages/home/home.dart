@@ -97,8 +97,7 @@ class _L4LHomePageState extends State<L4LHomePage> {
               // onPressed: () => updater.updateToNewVersion(),
               onPressed: () => Installer(context)
                 ..installUpdate(
-                    latestVersion: '1.1.0',
-                    path: 'storage/emulated/0/Download/link4launches.apk'),
+                    'storage/emulated/0/Download/link4launches.apk'),
               icon: Text(
                 'TBD',
                 style: TextStyle(color: showTBD ? Colors.white : Colors.grey),

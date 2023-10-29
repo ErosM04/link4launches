@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+/// [Widget] used to create the content to insert into a [Dialog]. The content is the latest changes in the GitHub release.
 class InstallerDialogContent extends StatelessWidget {
+  /// The error message (e.g. ``'File not found'``).
   final String errorType;
+
+  /// The absolute path of the file (file included).
   final String path;
 
   const InstallerDialogContent({
@@ -32,7 +36,12 @@ class InstallerDialogContent extends StatelessWidget {
         ],
       );
 
-  buildCustomText({required String text, Color? color}) => Text(
+  /// Builds a custom [Text] widget with a custom color.
+  ///
+  /// #### Parametrs:
+  /// - ``String [text]`` : the string to use as text.
+  /// - ``Color? [color]`` : the color of the text.
+  Text buildCustomText({required String text, Color? color}) => Text(
         text,
         style: TextStyle(color: color),
       );

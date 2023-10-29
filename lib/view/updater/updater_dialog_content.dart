@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-/// Class used to create the widgets to insert into the a [Dialog]. The content is the latest changes in the GitHub release.
+/// [Widget] used to create the content to insert into a [Dialog]. The content is the latest changes in the GitHub release.
 class UpdaterDialogContent extends StatelessWidget {
   /// The latest available version of the app.
   final String latestVersion;
@@ -51,7 +51,7 @@ class UpdaterDialogContent extends StatelessWidget {
         for (var element in arr) {
           if (element.contains('Features') && element.contains('-')) {
             title1 = 'Features';
-            // Uses sublist() to remove the fisr element which is the title ('Features')
+            // Uses sublist() to remove the first element which is the title ('Features')
             // To split '- ' is used, beacuse '-' would also include words like 'drop-down' or 'ahead-of-time'.
             text1 = _composeRows(element.split('- ').sublist(1));
           } else if (element.contains('Changes')) {
