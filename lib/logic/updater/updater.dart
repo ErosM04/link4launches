@@ -47,7 +47,7 @@ class Updater {
             ),
             denyButtonAction: () => _callSnackBar(message: ':('),
             confirmButtonAction: () =>
-                _downloadUpdate(data['version'].toString()));
+                _downloadUpdate(data['version'].toString())).invokeDialog();
       } else {
         // It's a normal update
         UpdateDialogBuilder(
@@ -58,7 +58,7 @@ class Updater {
             ),
             denyButtonAction: () => _callSnackBar(message: ':('),
             confirmButtonAction: () =>
-                _downloadUpdate(data['version'].toString()));
+                _downloadUpdate(data['version'].toString())).invokeDialog();
       }
     }
     // _downloadUpdate('1.1.0');

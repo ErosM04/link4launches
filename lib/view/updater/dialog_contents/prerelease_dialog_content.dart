@@ -49,7 +49,7 @@ class PrereleaseDialogContent extends UpdateDialogContent {
       'Pay attention as this is a prerelease version and may be unstable!',
       color: Colors.yellow,
     ));
-    children.add(const SizedBox(height: 7));
+    children.add(const SizedBox(height: 10));
 
     // Functionalities
     children
