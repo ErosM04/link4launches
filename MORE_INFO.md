@@ -214,3 +214,4 @@ This is the full 3th container:
 - [x] Moved installation code from ``Updater`` to ``Installer``. 
 - [x] ~~Implement ``dio`` package for both api and download~~;
 - [x] ~~Use ``flutter_animate`` package to animate the launch list in home page~~.
+- [x] Create a class hierachy for both dialog builders and dialog contents. 

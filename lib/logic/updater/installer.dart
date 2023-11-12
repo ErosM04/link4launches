@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:link4launches/logic/updater/updater.dart';
 import 'package:link4launches/view/pages/components/snackbar.dart';
 import 'package:link4launches/view/updater/custom_dialog.dart';
-import 'package:link4launches/view/updater/dialog_builder.dart';
+import 'package:link4launches/view/updater/dialog_builders/dialog_builder.dart';
+import 'package:link4launches/view/updater/dialog_builders/error_dialog_builder.dart';
+import 'package:link4launches/view/updater/dialog_contents/error_dialog_content.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -23,12 +25,13 @@ class Installer {
   Future<void> installUpdate(String path) async {
     OpenFilex.open(path).then(
       (result) => (result.type != ResultType.done)
-          ? DialogBuilder(context).invokeInstallationErrorDialog(
-              errorType: result.message,
-              shortPath: _getShortPath(path),
-              denyButtonAction: () => _callSnackBar(message: ':('),
-              confirmButtonAction: () => _manuallySelectAndInstallUpdate(),
-            )
+          ? ErrorDialogBuilder(
+                  context: context,
+                  content: ErrorDialogContent(
+                      errorType: result.message, path: _getShortPath(path)),
+                  denyButtonAction: () => _callSnackBar(message: ':('),
+                  confirmButtonAction: () => _manuallySelectAndInstallUpdate())
+              .invokeDialog()
           : null,
     );
   }

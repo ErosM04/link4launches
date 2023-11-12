@@ -1,3 +1,4 @@
+// ignore_for_file: use_build_context_synchronously
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -5,8 +6,10 @@ import 'package:link4launches/logic/updater/installer.dart';
 import 'package:link4launches/view/pages/components/snackbar.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:link4launches/view/updater/custom_dialog.dart';
-import 'package:link4launches/view/updater/dialog_builder.dart';
-import 'package:link4launches/view/updater/updater_dialog_content.dart';
+import 'package:link4launches/view/updater/dialog_builders/prerelease_dialog_builder.dart';
+import 'package:link4launches/view/updater/dialog_builders/update_dialog_builder.dart';
+import 'package:link4launches/view/updater/dialog_contents/prerelease_dialog_content.dart';
+import 'package:link4launches/view/updater/dialog_contents/update_dialog_content.dart';
 
 /// Class used to update the app to the latest version. Works by looking for new releases in GitHub and downloading the new version in the
 /// ``Download`` folder after the user gave the consent (with a [CustomDialog]).
@@ -35,29 +38,27 @@ class Updater {
     if (data.isNotEmpty &&
         (data['version'].toString() != actualVersion && !data['draft'])) {
       if (data['prerelease']) {
-        // It's a prerelease
-        DialogBuilder(context).invokePrereleaseUpdateDialog(
-          latestVersion: data['version'].toString(),
-          content: UpdaterDialogContent(
-            latestVersion: data['version'].toString(),
-            changes: data['description'].toString(),
-          ),
-          denyButtonAction: () => _callSnackBar(message: ':('),
-          confirmButtonAction: () =>
-              _downloadUpdate(data['version'].toString()),
-        );
+        // It's a prerelease update
+        PrereleaseDialogBuilder(
+            context: context,
+            content: PrereleaseDialogContent(
+              latestVersion: data['version'].toString(),
+              changes: data['description'].toString(),
+            ),
+            denyButtonAction: () => _callSnackBar(message: ':('),
+            confirmButtonAction: () =>
+                _downloadUpdate(data['version'].toString()));
       } else {
         // It's a normal update
-        DialogBuilder(context).invokeUpdateDialog(
-          latestVersion: data['version'].toString(),
-          content: UpdaterDialogContent(
-            latestVersion: data['version'].toString(),
-            changes: data['description'].toString(),
-          ),
-          denyButtonAction: () => _callSnackBar(message: ':('),
-          confirmButtonAction: () =>
-              _downloadUpdate(data['version'].toString()),
-        );
+        UpdateDialogBuilder(
+            context: context,
+            content: UpdateDialogContent(
+              latestVersion: data['version'].toString(),
+              changes: data['description'].toString(),
+            ),
+            denyButtonAction: () => _callSnackBar(message: ':('),
+            confirmButtonAction: () =>
+                _downloadUpdate(data['version'].toString()));
       }
     }
     // _downloadUpdate('1.1.0');

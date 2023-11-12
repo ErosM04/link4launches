@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:link4launches/view/updater/dialog_contents/dialog_content.dart';
 
 /// [Widget] used to create the content to insert into a [Dialog]. The content is the latest changes in the GitHub release.
-class UpdaterDialogContent extends StatelessWidget {
+class UpdateDialogContent extends DialogContent {
   /// The latest available version of the app.
   final String latestVersion;
 
   /// The string containg the body of the release.
   final String? changes;
 
-  const UpdaterDialogContent({
+  const UpdateDialogContent({
     super.key,
     required this.latestVersion,
     this.changes,
@@ -150,7 +150,7 @@ class UpdaterDialogContent extends StatelessWidget {
   }
 
   /// Graphically build the content for the [AlertDialog] using a Column and adding all the elemnts that are not null.
-  /// To check if an element is null and not empty ``[_safeBuild]`` method is used.
+  /// To check if an element is null and not empty ``[safeBuild]`` method is used.
   ///
   /// #### Parameters
   /// - ``String [mainText]`` : the text on the top ``'Vuoi scaricale la versione vx.x.x'``
@@ -178,7 +178,7 @@ class UpdaterDialogContent extends StatelessWidget {
     List<Widget> children = [];
 
     // Version title
-    children.add(_buildText(mainText, fontSize: 16.5));
+    children.add(buildCustomText(mainText, fontSize: 16.5));
     children.add(const SizedBox(height: 10));
     children.add(const Divider(
       height: 1,
@@ -187,31 +187,37 @@ class UpdaterDialogContent extends StatelessWidget {
     children.add(const SizedBox(height: 10));
 
     // Functionalities
-    children.add(_safeBuild(subTitle1, _buildText(subTitle1, isBold: true)));
-    children.add(_safeBuild(subTitle1, const SizedBox(height: 4)));
-    children.add(_safeBuild(text1, _buildText(text1)));
-    children.add(_safeBuild(text1, const SizedBox(height: 10)));
+    children
+        .add(safeBuild(subTitle1, buildCustomText(subTitle1, isBold: true)));
+    children.add(safeBuild(subTitle1, const SizedBox(height: 4)));
+    children.add(safeBuild(text1, buildCustomText(text1)));
+    children.add(safeBuild(text1, const SizedBox(height: 10)));
 
     // Changes
-    children.add(_safeBuild(subTitle2, _buildText(subTitle2, isBold: true)));
-    children.add(_safeBuild(subTitle2, const SizedBox(height: 4)));
-    children.add(_safeBuild(text2, _buildText(text2)));
-    children.add(_safeBuild(text2, const SizedBox(height: 10)));
+    children
+        .add(safeBuild(subTitle2, buildCustomText(subTitle2, isBold: true)));
+    children.add(safeBuild(subTitle2, const SizedBox(height: 4)));
+    children.add(safeBuild(text2, buildCustomText(text2)));
+    children.add(safeBuild(text2, const SizedBox(height: 10)));
 
     // Bug fixies
-    children.add(_safeBuild(subTitle3, _buildText(subTitle3, isBold: true)));
-    children.add(_safeBuild(subTitle3, const SizedBox(height: 4)));
-    children.add(_safeBuild(text3, _buildText(text3)));
-    children.add(_safeBuild(text3, const SizedBox(height: 10)));
+    children
+        .add(safeBuild(subTitle3, buildCustomText(subTitle3, isBold: true)));
+    children.add(safeBuild(subTitle3, const SizedBox(height: 4)));
+    children.add(safeBuild(text3, buildCustomText(text3)));
+    children.add(safeBuild(text3, const SizedBox(height: 10)));
     children.add(const SizedBox(height: 7));
 
     // Link
-    children.add(_safeBuild(
+    children.add(safeBuild(
         link,
         Row(children: [
-          _buildText(linkText),
-          _safeBuild(linkText, const SizedBox(width: 5)),
-          _buildLink(link),
+          buildCustomText(linkText),
+          safeBuild(linkText, const SizedBox(width: 5)),
+          buildLink(
+            text: link,
+            url: 'https://github.com/ErosM04/link4launches/releases/latest',
+          ),
         ])));
 
     children.add(const SizedBox(height: 10));
@@ -226,40 +232,4 @@ class UpdaterDialogContent extends StatelessWidget {
       children: children,
     );
   }
-
-  /// Allows to securely build ``[widget]`` only if the ``[str]`` is not null and not empty.
-  Widget _safeBuild(String? str, Widget widget) =>
-      (str != null && str.isNotEmpty) ? widget : Container();
-
-  /// Returns a [Text] widget. If ``[text]`` is null, then is converted to an empty String ('').
-  /// If ``[isLink]`` is true, then the text is blue and underlined. If ``[isBold]`` is true then the text is bold.
-  /// The two can be combined together.
-  Text _buildText(
-    String? text, {
-    bool isLink = false,
-    bool isBold = false,
-    double? fontSize,
-  }) =>
-      (isLink)
-          ? Text((text == null) ? '' : text.trim(),
-              style: TextStyle(
-                color: Colors.blue,
-                decoration: TextDecoration.underline,
-                decorationColor: Colors.blue,
-                fontWeight: (isBold) ? FontWeight.bold : null,
-                fontSize: fontSize,
-              ))
-          : Text(
-              (text == null) ? '' : text.trim(),
-              style: TextStyle(
-                  fontWeight: (isBold) ? FontWeight.bold : null,
-                  fontSize: fontSize),
-            );
-
-  /// Returns a clickable [Text] containg a link to the latest GitHub release. To build the [Text] uses ``[_buildText]``.
-  Widget _buildLink(String? text) => GestureDetector(
-        onTap: () => launchUrl(Uri.parse(
-            'https://github.com/ErosM04/link4launches/releases/latest')),
-        child: _buildText(text, isLink: true),
-      );
 }
