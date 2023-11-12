@@ -55,3 +55,4 @@ flutter:
     - 'assets/snackbar/space_devs_rocket.svg'
     - 'assets/dialog/upgrade.png'
     - 'assets/dialog/error.png'
+    - 'assets/dialog/alert.png'

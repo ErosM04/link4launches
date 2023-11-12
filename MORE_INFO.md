@@ -205,11 +205,12 @@ This is the full 3th container:
 </div>
 
 ## TODO
-- [ ] Add beta release support to the ``Updater`` (with custom dialog);
+- [x] Add prerelease support to the ``Updater`` (with custom dialog);
+- [ ] In ``Updater`` dialog improve list impagination.
 - [x] In the download completed SnackBar, improve string split method;
 - [x] After downloading the update file, use ``open_filex`` package to run the APK directly from the app;
 - [x] Use ``file_picker`` package to manually pick-up the apk update if ``open_filex`` crashes (use a dialog);
 - [x] Sperated ``Updater``'s widgets from logic to view folder.
 - [x] Moved installation code from ``Updater`` to ``Installer``. 
 - [x] ~~Implement ``dio`` package for both api and download~~;
-- [x] Use ``flutter_animate`` package to animate the launch list in home page.
+- [x] ~~Use ``flutter_animate`` package to animate the launch list in home page~~.

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:link4launches/logic/updater/updater.dart';
 import 'package:link4launches/view/pages/components/snackbar.dart';
 import 'package:link4launches/view/updater/custom_dialog.dart';
-import 'package:link4launches/view/updater/installer_dialog_content.dart';
+import 'package:link4launches/view/updater/dialog_builder.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -16,56 +16,22 @@ class Installer {
 
   /// Installs the downloaded ``.apk`` file (which is the app update) located at ``[path]``.
   /// To open and execute the file ``[OpenFilex]`` is used.
+  /// If an error occurs, then use [DialogBuilder] to invoke a dialog used to ask to the user to perform a manual installation.
   ///
   /// #### Parameters:
   /// - ``String [path]`` : the absolute path of the file (file included), e.g. ``storage/emulated/0/Download/link4launches.apk``
   Future<void> installUpdate(String path) async {
     OpenFilex.open(path).then(
       (result) => (result.type != ResultType.done)
-          ? _invokeDialog(
+          ? DialogBuilder(context).invokeInstallationErrorDialog(
               errorType: result.message,
               shortPath: _getShortPath(path),
+              denyButtonAction: () => _callSnackBar(message: ':('),
+              confirmButtonAction: () => _manuallySelectAndInstallUpdate(),
             )
           : null,
     );
   }
-
-  /// Uses ``[showGeneralDialog]`` to show a [CustomDialog] over the screen using both a fade and a slide animation.
-  /// This [Dialog] informs the user that something went wrong while installing the downloaded update file, so he
-  /// will be redirected to the file manager to manualy select it.
-  ///
-  /// #### Parameters
-  /// - ``String [errorType]`` : the error message.
-  /// - ``DialogContent [shortPath]`` : the short version of the path.
-  void _invokeDialog({required String errorType, required String shortPath}) =>
-      showGeneralDialog(
-        context: context,
-        pageBuilder: (context, animation, secondaryAnimation) => Container(),
-        transitionDuration: const Duration(milliseconds: 180),
-        transitionBuilder: (context, animation, secondaryAnimation, child) =>
-            SlideTransition(
-                position: Tween<Offset>(
-                        begin: const Offset(0.0, 0.5), end: Offset.zero)
-                    .animate(animation),
-                child: FadeTransition(
-                  opacity: Tween<double>(begin: 0.5, end: 1).animate(animation),
-                  child: CustomDialog(
-                    image: Image.asset(
-                      'assets/dialog/error.png',
-                      scale: 9,
-                      color: Colors.red,
-                    ),
-                    title: 'Error while installing the update',
-                    denyButtonAction: () => _callSnackBar(message: ':('),
-                    confirmButtonAction: () =>
-                        _manuallySelectAndInstallUpdate(),
-                    child: InstallerDialogContent(
-                      errorType: errorType,
-                      path: shortPath,
-                    ),
-                  ),
-                )),
-      );
 
   /// Method used to manually install the apk by letting the user select it from the file manager, if [installUpdate] didn't work.
   /// To access the file uses [FilePicker].
