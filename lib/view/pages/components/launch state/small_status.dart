@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:link4launches/view/pages/components/status.dart';
+import 'package:link4launches/view/pages/components/launch%20state/status.dart';
 import 'package:link4launches/view/pages/components/snackbar.dart';
 
 /// Creates a customizable [Widget] that represent the launch state showed in the home page ('TBD', 'GO', 'TBC', ...).

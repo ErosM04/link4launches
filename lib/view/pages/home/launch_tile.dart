@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:link4launches/view/pages/components/small_status.dart';
+import 'package:link4launches/view/pages/components/launch%20state/small_status.dart';
 
 /// [StatelessWidget] used to create the tile of a single launch in the home page.
 class LaunchTile extends StatelessWidget {

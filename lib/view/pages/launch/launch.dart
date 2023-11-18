@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:link4launches/view/pages/components/status.dart';
+import 'package:link4launches/view/pages/components/launch%20state/status.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/agency_box.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/box.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/launch_box.dart';
