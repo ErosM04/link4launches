@@ -1,24 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:link4launches/view/updater/custom_dialog.dart';
+import 'package:link4launches/view/updater/dialog_builders/prerelease_dialog_builder.dart';
 import 'package:link4launches/view/updater/dialog_contents/update_dialog_content.dart';
 
-/// [Widget] used to create the content to insert into a [Dialog]. The content is the latest changes in the GitHub release.
+/// Overrides [UpdateDialogContent] to create a content to display inside a ``[PrereleaseDialogBuilder]``.
+///
+/// This widget creates a [Column] of widgets which:
+/// - asks the user if he/she wants to update the app;
+/// - infroms the user that he is about to install an unstable version;
+/// - informs the user about what has changed (Features, Changes and Bug fixes);
+/// - offers a link to redirect the user to the ``GitHub`` latest release page containg all the detailed release infromations.
+///
+/// This widget is a extended version of [UpdateDialogContent] which only adds a warning yellow text.
 class PrereleaseDialogContent extends UpdateDialogContent {
   const PrereleaseDialogContent(
       {super.key, required super.latestVersion, super.changes});
 
-  /// Graphically build the content for the [AlertDialog] using a Column and adding all the elemnts that are not null.
-  /// To check if an element is null and not empty ``[safeBuild]`` method is used.
+  /// Graphically builds the content for the [CustomDialog] using a [Column] and adding all the elements that are not
+  /// null or not empty. To check whether an element is null and not empty the ``[safeBuild]`` method is used.
+  /// Also adds a warning yellow text that informs the user that this is an unstable version.
   ///
   /// #### Parameters
-  /// - ``String [mainText]`` : the text on the top ``'Vuoi scaricale la versione vx.x.x'``
-  /// - ``String? [subTitle1]`` : the first subtitle
-  /// - ``String? [subTitle2]`` : the second subtitle
-  /// - ``String? [subTitle3]`` : the third subtitle
-  /// - ``String? [text1]`` : the first text (under the 1st subtitle)
-  /// - ``String? [text2]`` : the second text (under the 2nd subtitle)
-  /// - ``String? [text3]`` : the third text (under the 3th subtitle)
-  /// - ``String? [linkText]`` : the text befor the link
-  /// - ``String? [link]`` : the link text
+  /// - ``String [mainText]`` : the question text on the top ``'Downalod version vx.x.x?'``.
+  /// - ``String? [subTitle1]`` : the first subtitle.
+  /// - ``String? [subTitle2]`` : the second subtitle.
+  /// - ``String? [subTitle3]`` : the third subtitle.
+  /// - ``String? [text1]`` : the first text (under [subTitle1]).
+  /// - ``String? [text2]`` : the second text (under [subTitle2]).
+  /// - ``String? [text3]`` : the third text (under [subTitle3]).
+  /// - ``String? [linkText]`` : the text befor the link.
+  /// - ``String? [link]`` : the text to show before the link to the latest ``GitHub``.
   ///
   /// #### Returns
   /// ``[Column]`` : the column with all the children.

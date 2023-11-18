@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:link4launches/view/updater/dialog_contents/dialog_content.dart';
 
-/// [Widget] used to create the content to insert into a [Dialog]. The content is the latest changes in the GitHub release.
+/// Overrides [DialogContent] to create a content to display inside an ``[ErrorDialogContent]``.
+///
+/// This widget creates a [Column] of widgets which:
+/// - asks the user if he/she wants to manually install the update;
+/// - informs the user about the error that occurred while installing the update file (e.g. ``'File not found'``);
+/// - informs the user that he/she is about to be redirected to the file manager and that he/she has to pick a file
+/// located at a specific path;
 class ErrorDialogContent extends DialogContent {
   /// The error message (e.g. ``'File not found'``).
   final String errorType;
 
-  /// The absolute path of the file (file included).
+  /// The path of the file (filename and extension included).
   final String path;
 
   const ErrorDialogContent({

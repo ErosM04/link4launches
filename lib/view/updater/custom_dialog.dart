@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-/// Class used to create a custom [Dialog].
+/// Creates a custom [Dialog].
 class CustomDialog extends StatelessWidget {
   /// The path (of the assets) where thw icon image is stored
   final Image image;
@@ -25,7 +25,7 @@ class CustomDialog extends StatelessWidget {
   /// The function to execute after the confirm button is pressed
   final Function confirmButtonAction;
 
-  /// If true then after either ``[denyButtonAction]`` or ``[confirmButtonAction]`` are executed,
+  /// If it's true then after either ``[denyButtonAction]`` or ``[confirmButtonAction]`` are executed,
   /// ``Navigator.pop(context);`` is called and the dialog is dismissed.
   final bool popAtActionEnd;
 

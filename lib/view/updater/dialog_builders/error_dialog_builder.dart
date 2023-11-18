@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:link4launches/view/updater/custom_dialog.dart';
 import 'package:link4launches/view/updater/dialog_builders/dialog_builder.dart';
+import 'package:link4launches/view/updater/dialog_contents/error_dialog_content.dart';
 
+/// Extends ``[DialogBuilder]`` in order to create a [CustomDialog] suitable to infrom the user that something went
+/// wrong while trying to install the downloaded updated ``.apk`` file.
+///
+/// The dialog ``[content]`` should be a ``[ErrorDialogContent]`` widget.
 class ErrorDialogBuilder extends DialogBuilder {
   const ErrorDialogBuilder({
     required super.context,
@@ -11,15 +16,9 @@ class ErrorDialogBuilder extends DialogBuilder {
     super.animate,
   });
 
-  /// Uses ``[_invokeDialog]`` to show a [CustomDialog] that informs the user that something went wrong while installing the downloaded
-  /// update file, so he/she will be redirected to the file manager to manually select it.
-  ///
-  /// #### Parameters
-  /// - ``String [errorType]`` : the error message.
-  /// - ``DialogContent [shortPath]`` : the short version of the path.
-  /// - ``Function [denyButtonAction]`` : the function to execute after the deny button is pressed.
-  /// - ``Function [confirmButtonAction]`` : the function to execute after the confirm button is pressed.
-  /// - ``bool [animate]`` : whether to animate the [CustomDialog], the paramter is used by ``[_invokeDialog]``.
+  /// Ovverrides the main [buildDialog] method in order to create an installation error widget.
+  /// The alert informs that while trying to install the downloaded updated ``.apk`` file somwthing went wrong
+  /// and shows a red X image.
   @override
   CustomDialog buildDialog() => CustomDialog(
         image: Image.asset(

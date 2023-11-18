@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:link4launches/view/updater/custom_dialog.dart';
+import 'package:link4launches/view/updater/dialog_builders/update_dialog_builder.dart';
 import 'package:link4launches/view/updater/dialog_contents/dialog_content.dart';
 
-/// [Widget] used to create the content to insert into a [Dialog]. The content is the latest changes in the GitHub release.
+/// Overrides [DialogContent] to create a content to display inside an ``[UpdateDialogBuilder]``.
+///
+/// This widget creates a [Column] of widgets which:
+/// - asks the user if he/she wants to update the app;
+/// - informs the user about what has changed (Features, Changes and Bug fixes);
+/// - offers a link to redirect the user to the ``GitHub`` latest release page containg all the detailed release infromations.
 class UpdateDialogContent extends DialogContent {
   /// The latest available version of the app.
   final String latestVersion;
@@ -15,12 +22,42 @@ class UpdateDialogContent extends DialogContent {
     this.changes,
   });
 
-  /// Reads the changes and extracts different types of data (than calls [buildContent]):
-  /// - Features
-  /// - Changes
-  /// - Bug fixes
-  /// Each element has it's own list of information (max 3 rows).
-  /// Apart from these, it also creates a title and a link to the release.
+  /// Reads the changes and extracts various type of data, than creates the widget by calling ``[buildContent]``:
+  /// - Main text: the question to the user "Download version x.x.x?";
+  /// - The changes:
+  ///   - Features: new functionalities, such as the ability to zoom an image;
+  ///   - Changes: modifies some things that already exited, usually improving the behavior or the code structure;
+  ///   - Bug fixes: code bugs adjusted or bad code that was modified. For this only "Various bug fixes" is shown.
+  /// - In the end adds a link to the latest release.
+  ///
+  /// Except for 'Bug fixies', each of the 3 changes has it's own list of information (max 3 rows), obtained with
+  /// ``[_composeRows]``. If the amount of information is higher than 3, some dots ('...') are showed.
+  /// If the entry of the list is too long, it's shortened and '...' are added at the end.
+  ///
+  /// E.g.:
+  /// ```
+  /// "Download version x.x.x?"
+  /// ------------------------------------------------
+  /// "Features
+  /// - Changed package name (app id) to ErosM04.link4launches
+  /// - Lunch page images are now zoomable
+  /// - Divided readme info in 2 files, README.md and MORE_INFO.md
+  /// - ...
+  ///
+  /// Changes
+  /// - Added date to launch tile in home page
+  /// - Modified code and style of Updater
+  /// - Created a file for the theme
+  /// - ...
+  ///
+  /// Bug fixes
+  /// - Various bug fixes
+  ///
+  /// More info at: link4launches"
+  /// ------------------------------------------------
+  /// ```
+  ///
+  /// This method also extracts markdown links using ``[_extractLinks]``.
   @override
   Widget build(BuildContext context) {
     String? title1;
@@ -37,7 +74,7 @@ class UpdateDialogContent extends DialogContent {
           .replaceAll('\r', '')
           .replaceAll('\n', '')
           .replaceAll('``', '');
-      formattedChanges = removeLinks(formattedChanges);
+      formattedChanges = _extractLinks(formattedChanges);
 
       if (formattedChanges.contains('###') &&
           (formattedChanges.contains('Features') ||
@@ -90,9 +127,9 @@ class UpdateDialogContent extends DialogContent {
   /// #### Returns
   /// ``String`` : the input text with the normal links.
   ///
-  /// ``ATTENTION!!`` This code breakes the app if there are ``[`` and ``]`` characters which are not used for links,
+  /// ``ATTENTION!!`` This code breakes the ``Updater`` if there are ``[`` and ``]`` characters which are not used for links,
   /// but for other pourposes.
-  String removeLinks(String changes) {
+  String _extractLinks(String changes) {
     while (true) {
       int startSquare = changes.indexOf('[');
       int endSquare = changes.indexOf(']');
@@ -121,12 +158,13 @@ class UpdateDialogContent extends DialogContent {
   /// Result:
   /// ```
   /// """
-  /// - AAdded this cool thing
+  /// - Added this cool thing
   /// - Now you can do that
   /// - Very long long long lon...
   /// - . . .
   /// """
   /// ```
+  /// Apart from the example the entryes of the list can also be 2 rows long.
   ///
   /// #### Parameters
   /// - ``List<String> [rows]`` : the list of rows where each rows is a element of the list. Apart from the first element which is the title.
@@ -149,19 +187,19 @@ class UpdateDialogContent extends DialogContent {
     return str;
   }
 
-  /// Graphically build the content for the [AlertDialog] using a Column and adding all the elemnts that are not null.
-  /// To check if an element is null and not empty ``[safeBuild]`` method is used.
+  /// Graphically builds the content for the [CustomDialog] using a [Column] and adding all the elements that are not
+  /// null or not empty. To check whether an element is null and not empty the ``[safeBuild]`` method is used.
   ///
   /// #### Parameters
-  /// - ``String [mainText]`` : the text on the top ``'Vuoi scaricale la versione vx.x.x'``
-  /// - ``String? [subTitle1]`` : the first subtitle
-  /// - ``String? [subTitle2]`` : the second subtitle
-  /// - ``String? [subTitle3]`` : the third subtitle
-  /// - ``String? [text1]`` : the first text (under the 1st subtitle)
-  /// - ``String? [text2]`` : the second text (under the 2nd subtitle)
-  /// - ``String? [text3]`` : the third text (under the 3th subtitle)
-  /// - ``String? [linkText]`` : the text befor the link
-  /// - ``String? [link]`` : the link text
+  /// - ``String [mainText]`` : the question text on the top ``'Downalod version vx.x.x?'``.
+  /// - ``String? [subTitle1]`` : the first subtitle.
+  /// - ``String? [subTitle2]`` : the second subtitle.
+  /// - ``String? [subTitle3]`` : the third subtitle.
+  /// - ``String? [text1]`` : the first text (under [subTitle1]).
+  /// - ``String? [text2]`` : the second text (under [subTitle2]).
+  /// - ``String? [text3]`` : the third text (under [subTitle3]).
+  /// - ``String? [linkText]`` : the text befor the link.
+  /// - ``String? [link]`` : the text to show before the link to the latest ``GitHub``.
   ///
   /// #### Returns
   /// ``[Column]`` : the column with all the children.
