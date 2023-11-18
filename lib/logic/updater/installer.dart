@@ -3,25 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:link4launches/logic/updater/updater.dart';
 import 'package:link4launches/view/pages/components/snackbar.dart';
 import 'package:link4launches/view/updater/custom_dialog.dart';
-import 'package:link4launches/view/updater/dialog_builders/dialog_builder.dart';
 import 'package:link4launches/view/updater/dialog_builders/error_dialog_builder.dart';
 import 'package:link4launches/view/updater/dialog_contents/error_dialog_content.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:file_picker/file_picker.dart';
 
-/// This class is used by the [Updater] class in order to install the downloaded apk file.
+/// This class is used by the ``[Updater]`` object in order to install the downloaded apk file.
 class Installer {
-  /// Context used to call both the [CustomSnackBar] and the [CustomDialog].
+  /// Context used to call both the ``[CustomSnackBar]`` and the ``[CustomDialog]``.
   final BuildContext context;
 
   const Installer(this.context);
 
   /// Installs the downloaded ``.apk`` file (which is the app update) located at ``[path]``.
   /// To open and execute the file ``[OpenFilex]`` is used.
-  /// If an error occurs, then use [DialogBuilder] to invoke a dialog used to ask to the user to perform a manual installation.
+  ///
+  /// If an error occurs, then ``[_manuallySelectAndInstallUpdate]`` is used to invoke a ``[ErrorDialogBuilder]`` that asks to
+  /// the user to perform a manual installation.
+  /// If he/she accepts will be redirected to a system File Manager to select (click on) the apk file so that the installation will start.
   ///
   /// #### Parameters:
-  /// - ``String [path]`` : the absolute path of the file (file included), e.g. ``storage/emulated/0/Download/link4launches.apk``
+  /// - ``String [path]`` : the absolute path of the file (filename and extension included),
+  /// e.g. ``storage/emulated/0/Download/link4launches.apk``
   Future<void> installUpdate(String path) async {
     OpenFilex.open(path).then(
       (result) => (result.type != ResultType.done)
@@ -36,8 +39,9 @@ class Installer {
     );
   }
 
-  /// Method used to manually install the apk by letting the user select it from the file manager, if [installUpdate] didn't work.
-  /// To access the file uses [FilePicker].
+  /// Method used if ``[installUpdate]`` didn't work, allows to manually install the apk by redirecting the user form the app to the
+  /// system file manager, using ``[FilePicker]``, in order select the update apk file.
+  ///
   /// If something goes wrong while opening the file a [CustomSnackBar] with an error message is shown.
   Future<void> _manuallySelectAndInstallUpdate() async {
     try {
@@ -58,11 +62,13 @@ class Installer {
     }
   }
 
-  /// Returns a short path format (only last 2 positions). Used for [CustomSnackBar] message.
+  /// Returns a short path format (only last 2 positions). Used for [ErrorDialogContent] message.
+  ///
+  /// E.g.: ``storage/emulated/0/Download/link4launches.apk`` --> ``Download/link4launches.apk``
   String _getShortPath(String path, {String splitCarachter = '/'}) =>
       '${path.split(splitCarachter)[path.split(splitCarachter).length - 2]}/${path.split(splitCarachter).last}';
 
-  /// Function used to simplify the invocation of a ``[CustomSnackBar]``.
+  /// Function used to simplify the invocation of the ``[CustomSnackBar]``.
   void _callSnackBar(
           {required String message,
           int durationInSec = 2,
