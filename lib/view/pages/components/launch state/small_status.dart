@@ -11,7 +11,8 @@ class SmallLaunchStatus extends LaunchState {
   });
 
   /// Overrided method that uses ``[widgetBuilder]`` to create a custom icon of the state.
-  /// In this case a smaller version of the [Widget] is created by overriding the [buildStatusWidget] of the parent class ([LaunchState]).
+  /// In this case a smaller version of the [LaunchState] is created by overriding the [buildStatusWidget] of
+  /// the parent class.
   ///
   /// #### Parameters
   /// - ``BuildContext [context]`` : the app context for [widgetBuilder] to call the [CustomSnackBar].
@@ -22,7 +23,7 @@ class SmallLaunchStatus extends LaunchState {
   Widget buildStatusWidget(BuildContext context) => widgetBuilder(
         context,
         _cropStatusName(state),
-        getStatusBoxWidth(_cropStatusName(state).length),
+        getStatusTextWidth(_cropStatusName(state), fontSize: 19) + 13,
         height: 28,
         fontSize: 19,
       );
@@ -45,15 +46,4 @@ class SmallLaunchStatus extends LaunchState {
       return (state.length > 4) ? state.substring(0, 4) : state;
     }
   }
-
-  /// Returns the width of the status [Widget] based on the length of the status name (like 'GO').
-  ///
-  /// #### Parameters
-  /// - ``int [length]`` : the length of the cropped name, meaning that was processed by [_cropStatusName]. E.g. 'TBD', 'GO', 'FLIG'.
-  ///
-  /// #### Returns
-  /// ``double`` : the width of the status [Widget].
-  @override
-  double getStatusBoxWidth(int length) =>
-      (length < 3) ? length * 20 : length * 16;
 }

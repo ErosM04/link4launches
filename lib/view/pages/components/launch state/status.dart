@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:link4launches/view/pages/components/snackbar.dart';
 
@@ -22,7 +24,7 @@ class LaunchState extends StatelessWidget {
   Widget buildStatusWidget(BuildContext context) => widgetBuilder(
         context,
         state.toUpperCase(),
-        getStatusBoxWidth(state.length),
+        getStatusTextWidth(state) + log(pow(getStatusTextWidth(state), 7)),
       );
 
   /// Creates a customizable [Widget] that represent the launch state.
@@ -38,40 +40,60 @@ class LaunchState extends StatelessWidget {
       GestureDetector(
         onTap: () => ScaffoldMessenger.of(context).showSnackBar(
             CustomSnackBar(message: _getStatusDescription(state)).build()),
-        child: Stack(
-          fit: StackFit.loose,
-          alignment: AlignmentDirectional.center,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-                width: width,
-                height: height,
-                decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(25.0)),
-                    color: _getStatusColor(state))),
-            Text(
-              state,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+            Stack(
+              fit: StackFit.loose,
+              alignment: AlignmentDirectional.center,
+              children: [
+                Container(
+                    width: width,
+                    height: height,
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(25.0)),
+                        color: _getStatusColor(state))),
+                Text(
+                  state,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: fontSize,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       );
 
-  /// Returns the width of the status [Widget] based on the length of the status name (like 'GO').
+  /// Uses ``[text]`` to create a ``[Text]`` with a fontsize based on ``[fontSize]``, then calculate the width in pixels
+  /// and returns that value.
+  ///
+  /// This is then used to set the width of the status widget.
   ///
   /// #### Parameters
-  /// - ``int [length]`` : the length of the name. E.g. 'TBD', 'GO', 'SUCCESS'.
+  /// - ``String [text]`` : the status name. E.g. 'TBD', 'GO', 'SUCCESS'.
+  /// - ``double [fontSize]`` : the font size of the [Text] widget to calculate.
   ///
   /// #### Returns
-  /// ``double`` : the width of the status [Widget].
-  double getStatusBoxWidth(int length) =>
-      (length < 5) ? (length * ((length < 3) ? 26 : 23)) : length * 18;
+  /// ``double`` : the width of the [Text] containg ``[text]``.
+  double getStatusTextWidth(String text, {double fontSize = 25}) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(
+          text: text,
+          style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold)),
+      maxLines: 1,
+      textDirection: TextDirection.ltr,
+    )..layout(minWidth: 0, maxWidth: double.infinity);
 
-  /// Based on the state text returns its description.
+    return textPainter.width;
+  }
+
+  /// Depending on the state text returns its description.
   ///
   /// #### Parameters
   /// - ``String [state]`` : the text of the status.
@@ -100,7 +122,7 @@ class LaunchState extends StatelessWidget {
     }
   }
 
-  /// Based on the state text returns its color.
+  /// Depending on the state text returns its color.
   ///
   /// #### Parameters
   /// - ``String [state]`` : the text of the status.
