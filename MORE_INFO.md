@@ -206,7 +206,8 @@ This is the full 3th container:
 
 ## TODO
 - [x] Add prerelease support to the ``Updater`` (with custom dialog);
-- [ ] In ``Updater`` dialog improve list impagination;
+- [x] Improved list layout in ``Updater`` dialog;
+- [x] Fixed theme color bug;
 - [x] In the download completed SnackBar, improve string split method;
 - [x] After downloading the update file, use ``open_filex`` package to run the APK directly from the app;
 - [x] Use ``file_picker`` package to manually pick-up the apk update if ``open_filex`` crashes (use a dialog);

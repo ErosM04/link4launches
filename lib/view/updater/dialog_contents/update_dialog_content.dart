@@ -31,8 +31,7 @@ class UpdateDialogContent extends DialogContent {
   /// - In the end adds a link to the latest release.
   ///
   /// Except for 'Bug fixies', each of the 3 changes has it's own list of information (max 3 rows), obtained with
-  /// ``[_composeRows]``. If the amount of information is higher than 3, some dots ('...') are showed.
-  /// If the entry of the list is too long, it's shortened and '...' are added at the end.
+  /// a split on '- '.
   ///
   /// E.g.:
   /// ```
@@ -56,6 +55,7 @@ class UpdateDialogContent extends DialogContent {
   /// More info at: link4launches"
   /// ------------------------------------------------
   /// ```
+  ///(the "-" and the "- ..." are added in later methods)
   ///
   /// This method also extracts markdown links using ``[_extractLinks]``.
   @override
@@ -63,9 +63,9 @@ class UpdateDialogContent extends DialogContent {
     String? title1;
     String? title2;
     String? title3;
-    String text1 = '';
-    String text2 = '';
-    String text3 = '';
+    List<String>? list1;
+    List<String>? list2;
+    List<String>? list3;
     String? link;
     String? linkText;
 
@@ -85,18 +85,19 @@ class UpdateDialogContent extends DialogContent {
         title2 = '';
         title3 = '';
 
+        // Every if inside the for-loop is executed only one time (in order)
         for (var element in arr) {
           if (element.contains('Features') && element.contains('-')) {
             title1 = 'Features';
             // Uses sublist() to remove the first element which is the title ('Features')
-            // To split '- ' is used, beacuse '-' would also include words like 'drop-down' or 'ahead-of-time'.
-            text1 = _composeRows(element.split('- ').sublist(1));
+            // To split '- ' is used, beacuse '-' would also split on words like 'drop-down' or 'ahead-of-time'.
+            list1 = element.split('- ').sublist(1);
           } else if (element.contains('Changes')) {
             title2 = 'Changes';
-            text2 = _composeRows(element.split('- ').sublist(1));
+            list2 = element.split('- ').sublist(1);
           } else if (element.contains('Bug fixes')) {
             title3 = 'Bug fixes';
-            text3 += '- Various bug fixes';
+            list3 = ['Various bug fixes'];
           }
         }
         linkText = 'More info at:';
@@ -109,9 +110,9 @@ class UpdateDialogContent extends DialogContent {
       subTitle1: title1,
       subTitle2: title2,
       subTitle3: title3,
-      text1: text1,
-      text2: text2,
-      text3: text3,
+      list1: list1,
+      list2: list2,
+      list3: list3,
       linkText: linkText,
       link: link,
     );
@@ -148,58 +149,19 @@ class UpdateDialogContent extends DialogContent {
     return changes;
   }
 
-  /// Takes a list of strings where each string is a description of a change and returns the complete list version.
-  /// If the single row is too long (over 60), is clamped at the end and '...' are added.
-  /// If there are more than 3 rows, only 4 rows are displayed and the 4th is will be '. . .'
-  /// E.g.:
-  /// ```
-  /// rows = ['### Features', 'Added this cool thing', 'Now you can do that', 'Very long long long long string', 'bla bla bla bla']
-  /// ```
-  /// Result:
-  /// ```
-  /// """
-  /// - Added this cool thing
-  /// - Now you can do that
-  /// - Very long long long lon...
-  /// - . . .
-  /// """
-  /// ```
-  /// Apart from the example the entryes of the list can also be 2 rows long.
-  ///
-  /// #### Parameters
-  /// - ``List<String> [rows]`` : the list of rows where each rows is a element of the list. Apart from the first element which is the title.
-  ///
-  /// #### Returns
-  /// ``String`` : The complete text with every row starting with a '-'.
-  String _composeRows(List<String> rows) {
-    String str = '';
-
-    for (var i = 0; i < ((rows.length <= 3) ? rows.length : 3); i++) {
-      if (rows[i].trim().length <= 60) {
-        str += '- ${rows[i].trim()}\n';
-      } else {
-        str += '- ${rows[i].trim().substring(0, 60).trim()}...\n';
-      }
-    }
-
-    if (rows.length > 3) str += '- . . .';
-
-    return str;
-  }
-
   /// Graphically builds the content for the [CustomDialog] using a [Column] and adding all the elements that are not
-  /// null or not empty. To check whether an element is null and not empty the ``[safeBuild]`` method is used.
+  /// null or not empty. To check whether an element is null and not empty the ``[isSafe]`` method is used.
   ///
   /// #### Parameters
   /// - ``String [mainText]`` : the question text on the top ``'Downalod version vx.x.x?'``.
   /// - ``String? [subTitle1]`` : the first subtitle.
   /// - ``String? [subTitle2]`` : the second subtitle.
   /// - ``String? [subTitle3]`` : the third subtitle.
-  /// - ``String? [text1]`` : the first text (under [subTitle1]).
-  /// - ``String? [text2]`` : the second text (under [subTitle2]).
-  /// - ``String? [text3]`` : the third text (under [subTitle3]).
+  /// - ``String? [list1]`` : the first list of stuff (under [subTitle1]).
+  /// - ``String? [list2]`` : the second list of stuff (under [subTitle2]).
+  /// - ``String? [list3]`` : the third list of stuff (under [subTitle3]).
   /// - ``String? [linkText]`` : the text befor the link.
-  /// - ``String? [link]`` : the text to show before the link to the latest ``GitHub``.
+  /// - ``String? [link]`` : the text to show before the link to the latest ``GitHub`` release.
   ///
   /// #### Returns
   /// ``[Column]`` : the column with all the children.
@@ -208,9 +170,9 @@ class UpdateDialogContent extends DialogContent {
       String? subTitle1,
       String? subTitle2,
       String? subTitle3,
-      String? text1,
-      String? text2,
-      String? text3,
+      List<String>? list1,
+      List<String>? list2,
+      List<String>? list3,
       String? linkText,
       String? link}) {
     List<Widget> children = [];
@@ -225,38 +187,29 @@ class UpdateDialogContent extends DialogContent {
     children.add(const SizedBox(height: 10));
 
     // Functionalities
-    children
-        .add(safeBuild(subTitle1, buildCustomText(subTitle1, isBold: true)));
-    children.add(safeBuild(subTitle1, const SizedBox(height: 4)));
-    children.add(safeBuild(text1, buildCustomText(text1)));
-    children.add(safeBuild(text1, const SizedBox(height: 10)));
+    buildAndAddSubtitle(subTitle1, children);
+    buildAndAddList(list1, children);
 
     // Changes
-    children
-        .add(safeBuild(subTitle2, buildCustomText(subTitle2, isBold: true)));
-    children.add(safeBuild(subTitle2, const SizedBox(height: 4)));
-    children.add(safeBuild(text2, buildCustomText(text2)));
-    children.add(safeBuild(text2, const SizedBox(height: 10)));
+    buildAndAddSubtitle(subTitle2, children);
+    buildAndAddList(list2, children);
 
     // Bug fixies
-    children
-        .add(safeBuild(subTitle3, buildCustomText(subTitle3, isBold: true)));
-    children.add(safeBuild(subTitle3, const SizedBox(height: 4)));
-    children.add(safeBuild(text3, buildCustomText(text3)));
-    children.add(safeBuild(text3, const SizedBox(height: 10)));
+    buildAndAddSubtitle(subTitle3, children);
+    buildAndAddList(list3, children);
     children.add(const SizedBox(height: 7));
 
     // Link
-    children.add(safeBuild(
-        link,
-        Row(children: [
-          buildCustomText(linkText),
-          safeBuild(linkText, const SizedBox(width: 5)),
-          buildLink(
-            text: link,
-            url: 'https://github.com/ErosM04/link4launches/releases/latest',
-          ),
-        ])));
+    if (isSafe(link)) {
+      children.add(Row(children: [
+        buildCustomText(linkText),
+        isSafe(linkText) ? const SizedBox(width: 5) : Container(),
+        buildLink(
+          text: link,
+          url: 'https://github.com/ErosM04/link4launches/releases/latest',
+        ),
+      ]));
+    }
 
     children.add(const SizedBox(height: 10));
     children.add(const Divider(
@@ -269,5 +222,41 @@ class UpdateDialogContent extends DialogContent {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: children,
     );
+  }
+
+  /// Iterates a ``[list]`` and add the first 3 elements to ``[children]`` using ``[buildListText]``. If the list has more than
+  /// 3 elements the ". . ." elements is added. Also adds a [SizedBox].
+  ///
+  /// #### Parameters
+  /// - ``List<String>? [list]`` : the list of elements.
+  /// - ``List<Widget> [children]`` : the list of widget, that is going to contain the final list (plus the [SizedBox]).
+  ///
+  /// #### Returns
+  /// ``[Column]`` : the column with all the children.
+  void buildAndAddList(List<String>? list, List<Widget> children) {
+    if (list != null) {
+      for (int i = 0; (i < list.length && i < 3); i++) {
+        children.add(buildListText(list[i]));
+      }
+      if (list.length > 3) {
+        children.add(buildListText(". . ."));
+      }
+      children.add(const SizedBox(height: 10));
+    }
+  }
+
+  /// Checks on [subTitle] with [isSafe] and than it's added to ``[children]`` using ``[buildCustomText]``. Also adds a [SizedBox].
+  ///
+  /// #### Parameters
+  /// - ``String? [subTitle]`` : a text.
+  /// - ``List<Widget> [children]`` : the list of widget, that is going to contain the final list (plus the [SizedBox]).
+  ///
+  /// #### Returns
+  /// ``[Column]`` : the column with all the children.
+  void buildAndAddSubtitle(String? subTitle, List<Widget> children) {
+    if (isSafe(subTitle)) {
+      children.add(buildCustomText(subTitle, isBold: true));
+      children.add(const SizedBox(height: 4));
+    }
   }
 }

@@ -30,16 +30,24 @@ class ErrorDialogContent extends DialogContent {
             'Do you want to manually install the update apk file?',
             style: TextStyle(fontSize: 16),
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 10),
+          const Divider(),
+          const SizedBox(height: 5),
           const Text(
               'While trying to install the update you just downloaded an error occurred:'),
           const SizedBox(height: 3),
-          safeBuild(errorType, buildCustomText(errorType, color: Colors.red)),
+          (isSafe(errorType))
+              ? buildCustomText(errorType, color: Colors.red)
+              : Container(),
           const SizedBox(height: 10),
           const Text(
               'Now you will be redirected to the file manager in order to select the update file, located at:'),
           const SizedBox(height: 5),
-          safeBuild(path, buildCustomText(path, color: Colors.blue)),
+          (isSafe(path))
+              ? buildCustomText(path, color: Colors.blue)
+              : Container(),
+          const SizedBox(height: 5),
+          const Divider(),
         ],
       );
 }

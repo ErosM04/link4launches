@@ -17,7 +17,7 @@ class PrereleaseDialogContent extends UpdateDialogContent {
       {super.key, required super.latestVersion, super.changes});
 
   /// Graphically builds the content for the [CustomDialog] using a [Column] and adding all the elements that are not
-  /// null or not empty. To check whether an element is null and not empty the ``[safeBuild]`` method is used.
+  /// null or not empty. To check whether an element is null and not empty the ``[isSafe]`` method is used.
   /// Also adds a warning yellow text that informs the user that this is an unstable version.
   ///
   /// #### Parameters
@@ -25,9 +25,9 @@ class PrereleaseDialogContent extends UpdateDialogContent {
   /// - ``String? [subTitle1]`` : the first subtitle.
   /// - ``String? [subTitle2]`` : the second subtitle.
   /// - ``String? [subTitle3]`` : the third subtitle.
-  /// - ``String? [text1]`` : the first text (under [subTitle1]).
-  /// - ``String? [text2]`` : the second text (under [subTitle2]).
-  /// - ``String? [text3]`` : the third text (under [subTitle3]).
+  /// - ``String? [list1]`` : the first list of elements (under [subTitle1]).
+  /// - ``String? [list2]`` : the second list of elements (under [subTitle2]).
+  /// - ``String? [list3]`` : the third list of elements (under [subTitle3]).
   /// - ``String? [linkText]`` : the text befor the link.
   /// - ``String? [link]`` : the text to show before the link to the latest ``GitHub``.
   ///
@@ -39,9 +39,9 @@ class PrereleaseDialogContent extends UpdateDialogContent {
       String? subTitle1,
       String? subTitle2,
       String? subTitle3,
-      String? text1,
-      String? text2,
-      String? text3,
+      List<String>? list1,
+      List<String>? list2,
+      List<String>? list3,
       String? linkText,
       String? link}) {
     List<Widget> children = [];
@@ -63,38 +63,29 @@ class PrereleaseDialogContent extends UpdateDialogContent {
     children.add(const SizedBox(height: 10));
 
     // Functionalities
-    children
-        .add(safeBuild(subTitle1, buildCustomText(subTitle1, isBold: true)));
-    children.add(safeBuild(subTitle1, const SizedBox(height: 4)));
-    children.add(safeBuild(text1, buildCustomText(text1)));
-    children.add(safeBuild(text1, const SizedBox(height: 10)));
+    buildAndAddSubtitle(subTitle1, children);
+    buildAndAddList(list1, children);
 
     // Changes
-    children
-        .add(safeBuild(subTitle2, buildCustomText(subTitle2, isBold: true)));
-    children.add(safeBuild(subTitle2, const SizedBox(height: 4)));
-    children.add(safeBuild(text2, buildCustomText(text2)));
-    children.add(safeBuild(text2, const SizedBox(height: 10)));
+    buildAndAddSubtitle(subTitle2, children);
+    buildAndAddList(list2, children);
 
     // Bug fixies
-    children
-        .add(safeBuild(subTitle3, buildCustomText(subTitle3, isBold: true)));
-    children.add(safeBuild(subTitle3, const SizedBox(height: 4)));
-    children.add(safeBuild(text3, buildCustomText(text3)));
-    children.add(safeBuild(text3, const SizedBox(height: 10)));
+    buildAndAddSubtitle(subTitle3, children);
+    buildAndAddList(list3, children);
     children.add(const SizedBox(height: 7));
 
     // Link
-    children.add(safeBuild(
-        link,
-        Row(children: [
-          buildCustomText(linkText),
-          safeBuild(linkText, const SizedBox(width: 5)),
-          buildLink(
-            text: link,
-            url: 'https://github.com/ErosM04/link4launches/releases/latest',
-          ),
-        ])));
+    if (isSafe(link)) {
+      children.add(Row(children: [
+        buildCustomText(linkText),
+        isSafe(linkText) ? const SizedBox(width: 5) : Container(),
+        buildLink(
+          text: link,
+          url: 'https://github.com/ErosM04/link4launches/releases/latest',
+        ),
+      ]));
+    }
 
     children.add(const SizedBox(height: 10));
     children.add(const Divider(

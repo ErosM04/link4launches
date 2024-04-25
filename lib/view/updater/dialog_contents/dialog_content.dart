@@ -10,10 +10,10 @@ class DialogContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) => const Column();
 
-  /// Allows to securely build a ``[widget]`` only if ``[str]`` is not null and not empty.
-  /// Otherwise returns an empty [Container].
-  Widget safeBuild(String? str, Widget widget) =>
-      (str != null && str.isNotEmpty) ? widget : Container();
+  /// Checks on the ``[str]`` to verify that it isn't neither null nor false.
+  /// #### Returns
+  /// ``bool`` : true if the string isn't null and empty, false otherwise.
+  bool isSafe(String? str) => (str != null && str.isNotEmpty);
 
   /// Allows to create a customizable ``[Text]`` widget.
   ///
@@ -46,6 +46,40 @@ class DialogContent extends StatelessWidget {
                   fontWeight: (isBold) ? FontWeight.bold : null,
                   fontSize: fontSize),
             );
+
+  /// Allows to create a customizable ``[Text]`` widget that can be used as a list elements since before the
+  /// text contained in ``[text]`` there is a ``"-"`` character to mark this is a list element.
+  /// E.g.
+  /// ```
+  /// "- This is the text..."
+  /// ```
+  /// The [SizedBox] is used to prevent the text from overlowing horizontally.
+  ///
+  /// #### Parameters:
+  /// - ``String? [text]`` : the literal content of the text. if it's null, then a empty [Text] is returned.
+  /// - ``double? [fontSize]`` : the font size of the text.
+  /// - ``Color? [color]`` : the color of the text.
+  Widget buildListText(
+    String? text, {
+    double? fontSize,
+    Color? color,
+  }) =>
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text("-"),
+          const SizedBox(width: 3),
+          Expanded(
+            // width: 230,
+            child: Text(
+              (text == null) ? '' : text.trim(),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      );
 
   /// Returns a clickable ``[Text]`` containg a blue and underlined text that acts as a link to the ``[url]``.
   /// In order to build the custom [Text], ``[buildCustomText]`` is used.
