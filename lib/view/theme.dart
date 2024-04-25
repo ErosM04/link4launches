@@ -30,6 +30,15 @@ ThemeData l4lDarkTheme = ThemeData(
     backgroundColor: const Color.fromARGB(255, 57, 58, 59),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
   ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: MaterialStateProperty.all<Color>(
+          const Color.fromARGB(255, 4, 117, 162)),
+      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+    ),
+  ),
+  dividerTheme:
+      const DividerThemeData(color: Color.fromRGBO(158, 158, 158, 0.5)),
 );
 
 /// Light theme for Link4Launches app.
@@ -66,4 +75,13 @@ ThemeData l4lLightTheme = ThemeData(
     backgroundColor: Colors.white,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
   ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: MaterialStateProperty.all<Color>(
+          const Color.fromARGB(255, 4, 117, 162)),
+      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+    ),
+  ),
+  dividerTheme:
+      const DividerThemeData(color: Color.fromRGBO(158, 158, 158, 0.27)),
 );
