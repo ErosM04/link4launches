@@ -218,4 +218,5 @@ This is the full 3th container:
 - [x] Fixed graphic bug with large launch status widget in launch page.
 - [ ] Improve API limited request use;
 - [ ] Add a welcome dialog that opens only the very first time;
-- [ ] Add a script that runs only the very first time and locates "link4launches*.apk" files in the DOwnload folder and asks if the app can remove them.
+- [ ] Add a script that runs only the very first time and locates "link4launches*.apk" files in the DOwnload folder and asks if the app can remove them;
+- [ ] Remove useless folders (like ios, windows, linux...) that can be recreated with a command if needed.
