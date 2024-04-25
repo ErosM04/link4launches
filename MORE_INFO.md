@@ -216,3 +216,6 @@ This is the full 3th container:
 - [x] ~~Use ``flutter_animate`` package to animate the launch list in home page~~;
 - [x] Create a class hierachy for both dialog builders and dialog contents;
 - [x] Fixed graphic bug with large launch status widget in launch page.
+- [ ] Improve API limited request use;
+- [ ] Add a welcome dialog that opens only the very first time;
+- [ ] Add a script that runs only the very first time and locates "link4launches*.apk" files in the DOwnload folder and asks if the app can remove them.
