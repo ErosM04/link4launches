@@ -20,7 +20,7 @@ The app idea and style are both inspired to the YouTube channel [link4universe](
 To install the app, just download the apk file that you can find in the [latest release](https://api.github.com/repos/ErosM04/link4launches/releases/latest) or in the ``apk_release`` folder of this repository.
 After you downloaded the file, on your Android smartphone just click on it and the installation process will start.
 
-Don't worry if the system says that it's unsafe, that's because you are not downloading the app from the Play Store, trust me 😉.
+Don't worry if the system says that it's unsafe, that's because you are not downloading the app from the Play Store, trust me 😉 (I can barely run the microwave, how am I supposed to run a virus? except for covid).
 
 
 ## API
