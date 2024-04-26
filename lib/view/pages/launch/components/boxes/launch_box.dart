@@ -43,7 +43,7 @@ class LaunchDataBox extends DataBox {
   /// #### Parameters
   /// - ``String link`` : the google maps link to the pad location.
   Widget _buildPadItem(String link) => SizedBox(
-        width: 80,
+        width: 100,
         child: TextButton(
             onPressed: () => launcher.launchUrl(Uri.parse(link)),
             child: const Row(
