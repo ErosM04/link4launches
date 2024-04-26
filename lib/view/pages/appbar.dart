@@ -78,7 +78,7 @@ class L4LAppBar extends StatelessWidget implements PreferredSizeWidget {
         itemBuilder: (context) => List<PopupMenuItem>.generate(
             titlesListPopUp.length, (index) => _getPopUpMenuTile(index)),
         offset: const Offset(0, 60),
-        elevation: 2,
+        elevation: 5,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(18))),
         onSelected: (value) => launchUrl(Uri.parse(linksListPopUp[value])),

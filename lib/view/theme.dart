@@ -39,6 +39,8 @@ ThemeData l4lDarkTheme = ThemeData(
   ),
   dividerTheme:
       const DividerThemeData(color: Color.fromRGBO(158, 158, 158, 0.5)),
+  popupMenuTheme:
+      const PopupMenuThemeData(color: Color.fromARGB(255, 50, 51, 52)),
 );
 
 /// Light theme for Link4Launches app
