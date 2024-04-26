@@ -10,6 +10,8 @@ This is the full guide to the app functionalities.
 2. [API](#api)
     - [Requests](#requests)
 3. [Auto Update](#auto-update)
+    - [New Version](#new-version)
+    - [Auto Installation](#auto-installation)
 4. [Interface & Functions](#interface-and-functions)
     - [Home page](#home-page)
         - [AppBar](#appbar)
@@ -42,33 +44,59 @@ Here some example of request to the API:
 
 
 ## Auto update
+Uses to components:
+- ``Updater``: to look for a new version and download it;
+- ``Installer``: to install the new version apk just donwloaded.
+
+### New Version
 Every time the app is loaded a request to the Github API (limited to 60/h) is performed, at the following link: https://api.github.com/repos/ErosM04/link4launches/releases/latest
 
-This url returns a json containing data about the latest **Github release**.
+This url returns a json containing data about the latest **Github release**. If the version of the app is different from the one of the release, a dialog appears and asks to the user if he/she wants to downalod the new version (or the prerelease).
 
-If the version of the app is different from the one of the release, a dialog appears and asks to the user if he/she wants to downalod the new version.
-
-If the user gives his/her consent then a download of the latest app version ``link4launches.apk`` is performed and the file ends up in the ``Downloads`` folder.
+If the user gives his/her consent then a download of the latest app version ``link4launches.apk`` is performed and the file ends up in the ``Downloads`` folder. **Attention!! During the process the system will ask for the app's permission to access the Downloads folder**
 
 Here is the link that allows to download the apk directly from GitHub: https://github.com/ErosM04/link4launches/releases/latest/download/link4launches.apk
 
 Example of the different stages of the update process:
-<div align='center'>
-    <img src='./readme_images/home page/updater/update_banner_dark.jpg' width='200'>
-    <img src='./readme_images/home page/updater/update_banner_light.jpg' width='200'>
-</div>
-<div align='center'>
-    <img src='./readme_images/home page/updater/update_download_started_dark.jpg' width='200'>
-    <img src='./readme_images/home page/updater/update_download_started_light.jpg' width='200'>
-</div>
-<div align='center'>
-    <img src='./readme_images/home page/updater/update_download_finished_dark.jpg' width='200'>
-    <img src='./readme_images/home page/updater/update_download_finished_light.jpg' width='200'>
-</div>
+- Update banner:
 
-Thanks to the Android buil-in functions, when building an apk file is possible to specify the version, so the new apk file is going to be automatically recognized as an update by Android.
+    <div align='center'>
+        <img src='./readme_images/home page/updater/update_banner_dark.jpg' width='200'>
+        <img src='./readme_images/home page/updater/update_banner_light.jpg' width='200'>
+    </div>
 
-If the app hasn't been updated (despite having downloaded the update), even if the download ``Snackbar`` on the bottom of the screen appears, a new download won't be really performed if the update file in the ``Download`` folder is still there.
+- Update banner for prerelease:
+
+    <div align='center'>
+        <img src='./readme_images/home page/updater/update_prerelease_banner_dark.jpg' width='200'>
+        <img src='./readme_images/home page/updater/update_prerelease_banner_light.jpg' width='200'>
+    </div>
+
+- Download start:
+
+    <div align='center'>
+        <img src='./readme_images/home page/updater/update_download_started_dark.jpg' width='200'>
+        <img src='./readme_images/home page/updater/update_download_started_light.jpg' width='200'>
+    </div>
+
+- Download completed:
+
+    <div align='center'>
+        <img src='./readme_images/home page/updater/update_download_finished_dark.jpg' width='200'>
+        <img src='./readme_images/home page/updater/update_download_finished_light.jpg' width='200'>
+    </div>
+
+Thanks to the Android built-in functions, when building an apk file is possible to specify the version, so the new apk file is going to be automatically recognized as an update by Android.
+
+### Auto Installation
+Now tanks to the [``open_filex``](https://pub.dev/packages/open_filex) package (and the address of the downloaded apk) the app is able to open the update apk file and automatically start the update. **Attention!! During the process the system will ask for the app's permission to access the Downloads folder and install content**
+
+If the installation fails, a banner will apper and will ask to the user if he wants to manually install the update; if the answer is Yes, thanks to the [``file_picker``](https://pub.dev/packages/file_picker) package a system file manager will appear and the user has to manually select the apk file in the Downloads folder.
+
+<div align='center'>
+        <img src='./readme_images/home page/installer/installer_banner_dark.jpg' width='200'>
+        <img src='./readme_images/home page/installer/installer_banner_light.jpg' width='200'>
+    </div>
 
 
 ## Interface and Functions
@@ -208,4 +236,5 @@ This is the full 3th container:
 - [ ] Improve API limited request use;
 - [ ] Add a welcome dialog that opens only the very first time;
 - [ ] Add a script that runs only the very first time and locates "link4launches*.apk" files in the DOwnload folder and asks if the app can remove them;
-- [ ] Remove useless folders (like ios, windows, linux...) that can be recreated with a command if needed.
+- [ ] Remove useless folders (like ios, windows, linux...) that can be recreated with a command if needed;
+- [ ] Look for a better download package.
