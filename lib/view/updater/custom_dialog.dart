@@ -46,6 +46,7 @@ class CustomDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // Animated image
             Container(
               decoration: const BoxDecoration(
                   color: Color.fromARGB(255, 81, 92, 110),
@@ -75,6 +76,7 @@ class CustomDialog extends StatelessWidget {
                 ),
               ),
             ),
+            // Title and child
             Padding(
               padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
               child: Column(
@@ -91,6 +93,7 @@ class CustomDialog extends StatelessWidget {
                 ],
               ),
             ),
+            // Action Buttons
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Row(

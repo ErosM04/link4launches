@@ -205,18 +205,6 @@ This is the full 3th container:
 </div>
 
 ## TODO
-- [x] Add prerelease support to the ``Updater`` (with custom dialog);
-- [x] Improved list layout in ``Updater`` dialog;
-- [x] Fixed theme color bug;
-- [x] In the download completed SnackBar, improve string split method;
-- [x] After downloading the update file, use ``open_filex`` package to run the APK directly from the app;
-- [x] Use ``file_picker`` package to manually pick-up the apk update if ``open_filex`` crashes (use a dialog);
-- [x] Sperated ``Updater``'s widgets from logic to view folder;
-- [x] Moved installation code from ``Updater`` to ``Installer``; 
-- [x] ~~Implement ``dio`` package for both api and download~~;
-- [x] ~~Use ``flutter_animate`` package to animate the launch list in home page~~;
-- [x] Create a class hierachy for both dialog builders and dialog contents;
-- [x] Fixed graphic bug with large launch status widget in launch page.
 - [ ] Improve API limited request use;
 - [ ] Add a welcome dialog that opens only the very first time;
 - [ ] Add a script that runs only the very first time and locates "link4launches*.apk" files in the DOwnload folder and asks if the app can remove them;

@@ -68,7 +68,6 @@ class Updater {
         ).invokeDialog();
       }
     }
-    // _downloadUpdate('1.1.0');
   }
 
   /// Performs a request to the Github API to obtain a json within info about the latest release data, the link used is
@@ -102,7 +101,6 @@ class Updater {
           'description': data['body'].toString(),
           'draft': data['draft'],
           'prerelease': data['prerelease'],
-          // 'prerelease': true,
         };
       } else {
         throw Exception();
