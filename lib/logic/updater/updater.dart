@@ -17,7 +17,7 @@ import 'package:link4launches/view/updater/dialog_contents/update_dialog_content
 /// Then uses the ``[Installer]`` object to install the downloaded ``.apk`` file.
 class Updater {
   /// The actual version of the app (``!!! it has to be change every release !!!``).
-  final String actualVersion = '1.0.0';
+  final String actualVersion = '1.2.0';
 
   /// Link to the GitHub API used to get the json containg the latest release data.
   final String _latestReleaseLink =
