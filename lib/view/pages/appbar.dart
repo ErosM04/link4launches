@@ -46,7 +46,10 @@ class L4LAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) => SliverAppBar(
-        title: Text(title),
+        title: Text(
+          title,
+          style: const TextStyle(fontWeight: FontWeight.w500),
+        ),
         actions: _buildActions(),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
