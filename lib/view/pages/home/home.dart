@@ -92,11 +92,7 @@ class _L4LHomePageState extends State<L4LHomePage> {
           L4LAppBar(actions: [
             // Hides the TBD launches
             IconButton(
-              // onPressed: () => setState(() => showTBD = !showTBD),
-              onPressed: () => updater.updateToNewVersion(),
-              // onPressed: () => Installer(context)
-              //   ..installUpdate(
-              //       'storage/emulated/0/Download/link4launches.apk'),
+              onPressed: () => setState(() => showTBD = !showTBD),
               icon: Text(
                 'TBD',
                 style: TextStyle(color: showTBD ? Colors.white : Colors.grey),
