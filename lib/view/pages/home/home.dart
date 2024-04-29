@@ -28,15 +28,17 @@ class _L4LHomePageState extends State<L4LHomePage> {
   /// Map used to save api retrived data.
   Map<String, dynamic> data = {};
 
-  /// Amount of upcoming launches to requesto to the api.
-  final int launchAmount = 14;
+  /// API link
+  static const link =
+      'https://ll.thespacedevs.com/2.2.0/launch/upcoming/?format=json';
+
+  /// Amount of upcoming launches to requesto to the api (non all of them will be displayed).
+  /// For more info go to [api logic](.\lib\logic\api\api.dart).
+  final int launchAmount = 50;
 
   /// Whether to show the launches which state is TBD (To Be Defined).
   /// This varaible is managed by an [IconButton] contained in the [L4LAppBar].
   bool showTBD = true;
-
-  /// Object used to manage the update of the app.
-  late Updater updater;
 
   /// Reusable appbar for launch pages.
   final L4LAppBar launchAppBar = const L4LAppBar();
@@ -45,9 +47,9 @@ class _L4LHomePageState extends State<L4LHomePage> {
   void initState() {
     super.initState();
 
-    // Creates a api Object and perform a request
+    // Creates a api Object and performs a request
     _ll2API = LaunchLibrary2API(
-      link: 'https://ll.thespacedevs.com/2.2.0/launch/upcoming/?format=json',
+      link: link,
       context: context,
     );
     _ll2API.launch(launchAmount).then((value) => setState(() => data = value));
@@ -61,11 +63,10 @@ class _L4LHomePageState extends State<L4LHomePage> {
     // Checks if a new version exists and asks for download consent.
     // The 2 seconds delay is to avoid errors (trust me).
     // Probably because without the delay, the push of the consent dialog would
-    // be performed before the completion of the initState()
-    updater = Updater(context);
+    // be performed before the completion of the initState().
     Future.delayed(
       const Duration(seconds: 2),
-      () => updater.updateToNewVersion(),
+      () => Updater(context).updateToNewVersion(),
     );
   }
 
