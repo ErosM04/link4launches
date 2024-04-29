@@ -69,7 +69,6 @@ class BackupJsonManager {
   }
 
   /// Loads the file using ``[_getJsonFile]`` and overwrites the original content with ``[content]``.
-  /// Loads the If the file exist loads it from the app directory and returns it as a String.
   ///
   /// #### Parameters
   /// - ``String [content]`` : the text to write in the file.
