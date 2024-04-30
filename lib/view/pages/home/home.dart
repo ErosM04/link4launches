@@ -8,6 +8,7 @@ import 'package:link4launches/view/pages/home/launch_tile.dart';
 import 'package:link4launches/view/pages/launch/launch.dart';
 import 'package:link4launches/view/pages/appbar.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:link4launches/model/launches.dart';
 
 /// The home page of the app. Uses [LaunchLibrary2API] to fetch the data and [Updater] to look for the latest version.
 class L4LHomePage extends StatefulWidget {
@@ -26,7 +27,7 @@ class _L4LHomePageState extends State<L4LHomePage> {
   late final LaunchLibrary2API _ll2API;
 
   /// Map used to save api retrived data.
-  Map<String, dynamic> data = {};
+  Launches launches = Launches.empty(availableRequests: 0);
 
   /// API link
   static const link =
@@ -52,7 +53,9 @@ class _L4LHomePageState extends State<L4LHomePage> {
       link: link,
       context: context,
     );
-    _ll2API.launch(launchAmount).then((value) => setState(() => data = value));
+    _ll2API
+        .launch(launchAmount)
+        .then((value) => setState(() => launches = value));
 
     //Orientation lock in portrait (vertical) mode
     SystemChrome.setPreferredOrientations([
@@ -76,10 +79,11 @@ class _L4LHomePageState extends State<L4LHomePage> {
   /// - ``int [index]`` : the position of the launch in the list inside ``data['results']``.
   /// - ``LaunchStatus [status]`` : the status small [widget] to use in the launch page.
   void _goToLaunchInfo(int index, LaunchState status) {
-    if (data.isNotEmpty) {
+    if (launches.isNotEmpty) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => LaunchInfoPage(
-                data: data['results'][index],
+                launches: launches,
+                launchIndex: index,
                 status: status,
                 appBar: launchAppBar,
               )));
@@ -101,23 +105,23 @@ class _L4LHomePageState extends State<L4LHomePage> {
             ),
             // Refresh data by performing a new request to the api
             IconButton(
-                onPressed: () => {
-                      setState(() => data = {}),
-                      _ll2API
-                          .launch(launchAmount)
-                          .then((value) => setState(() => data = value))
-                    },
+                onPressed: () {
+                  setState(() => launches.clearData());
+                  _ll2API
+                      .launch(launchAmount)
+                      .then((value) => setState(() => launches = value));
+                },
                 icon: const Icon(Icons.autorenew)),
           ]),
         ],
-        body: data.isEmpty
+        body: launches.isEmpty
             ? Center(
                 child: LoadingAnimationWidget.dotsTriangle(
                     color: Colors.white, size: 50))
             : ListView.builder(
                 padding: EdgeInsets.zero,
                 controller: ScrollController(),
-                itemCount: data['count'],
+                itemCount: launches.totalLaunches,
                 itemBuilder: (context, index) => _buildListItem(index),
               ),
       ));
@@ -127,14 +131,12 @@ class _L4LHomePageState extends State<L4LHomePage> {
   /// #### Parameters
   /// - ``int [index]`` : the position of the launch in the list inside ``data['results']``.
   Widget _buildListItem(int index) => LaunchTile(
-        onPressed: () => _goToLaunchInfo(index,
-            LaunchState(state: data['results'][index]['status']['abbrev'])),
-        condition:
-            (data['results'][index]['status']['abbrev'] == 'TBD' && !showTBD),
-        title: data['results'][index]['name'],
-        smallText: _clearDate(data['results'][index]['net'].toString()),
-        status: SmallLaunchStatus(
-            state: data['results'][index]['status']['abbrev']),
+        onPressed: () => _goToLaunchInfo(
+            index, LaunchState(state: launches.getShortStatus(index))),
+        condition: (launches.getShortStatus(index) == 'TBD' && !showTBD),
+        title: launches.getLaunchName(index),
+        date: launches.getLaunchDate(index),
+        status: SmallLaunchStatus(state: launches.getShortStatus(index)),
       );
 
   /// Removes all the unwanted characters from the date of the json and reverse it.

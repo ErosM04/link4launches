@@ -6,14 +6,14 @@ class LaunchTile extends StatelessWidget {
   /// The function to execute when the tile is pressed.
   final Function onPressed;
 
-  /// The condition that allows the tile to be hidden.
+  /// The condition that allows the tile to be hidden when the ``TBD`` button is pressed.
   final bool condition;
 
   /// The title of the tile.
   final String title;
 
-  /// The smaller text below the title (used for the date).
-  final String smallText;
+  /// The smaller text below the title used for the date.
+  final String date;
 
   /// The [Widget] used to create the staus icon at the right.
   final SmallLaunchStatus status;
@@ -23,7 +23,7 @@ class LaunchTile extends StatelessWidget {
     required this.onPressed,
     required this.condition,
     required this.title,
-    required this.smallText,
+    required this.date,
     required this.status,
   });
 
@@ -51,7 +51,7 @@ class LaunchTile extends StatelessWidget {
                           ),
                           const SizedBox(height: 5),
                           Text(
-                            smallText,
+                            date,
                             style: TextStyle(
                               fontSize: 12,
                               color: Theme.of(context).colorScheme.tertiary,
