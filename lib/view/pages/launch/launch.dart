@@ -8,10 +8,13 @@ import 'package:link4launches/view/pages/launch/components/boxes/rocket_box.dart
 import 'package:link4launches/view/pages/appbar.dart';
 
 /// Is the second page of the app, that depends on the launch it is releated to.
-/// This page is used to display different [DataBox] containg informations about the launchm the agency/company an the rocket.
+/// This page is used to display different [DataBox] containg informations about the launch's agency/company an the rocket
+/// used.
 class LaunchInfoPage extends StatelessWidget {
+  /// The data container.
   final Launches launches;
 
+  /// The index to access the specific launch.
   final int launchIndex;
 
   /// The [Widget] used to create the status icon.
@@ -38,9 +41,11 @@ class LaunchInfoPage extends StatelessWidget {
         ),
       ));
 
-  /// Uses the information contained in [data] to build the 3 different containers:
+  /// Uses the information contained in ``[launches]`` to build the 3 different containers:
   /// ``[LaunchDataBox]``, ``[AgencyDataBox]`` and ``[RocketDataBox]``.
-  /// To avoid exception with un-existing json fields, the values are read with ``[_readJsonField]``.
+  ///
+  /// #### Returns:
+  /// ``List<Widget>`` : [[LaunchDataBox], [AgencyDataBox], [RocketDataBox]]
   List<Widget> _buildDataBoxList() => [
         // First container (launch data)
         LaunchDataBox(
@@ -53,7 +58,7 @@ class LaunchInfoPage extends StatelessWidget {
           padMapLink: launches.getLaunchPadLocation(launchIndex),
         ),
 
-        //Second container (agency data)
+        // Second container (agency data)
         AgencyDataBox(
           imageLink: launches.getLaunchManLogo(launchIndex),
           title: launches.getLaunchManName(launchIndex),
@@ -63,7 +68,7 @@ class LaunchInfoPage extends StatelessWidget {
           text: launches.getLaunchManDescription(launchIndex),
         ),
 
-        //Third container (rocket data)
+        // Third container (rocket data)
         RocketDataBox(
           imageLink: (launches.getLauncherImage(launchIndex) ==
                   launches.getLaunchImage(launchIndex))

@@ -1,7 +1,9 @@
 import 'package:link4launches/model/data.dart';
 
-/// Class used to manage the JSON containg all the launches data and the amount of free API requests left.
+/// Class the extends [DataMould] to create a daa manager to store the launches information retrived by the API
+/// and keep tracking of the free API requests.
 class Launches extends DataMould {
+  /// The free remainig request that can be performed to the API.
   int _requestsLeft;
 
   Launches({
@@ -9,6 +11,7 @@ class Launches extends DataMould {
     required super.data,
   }) : _requestsLeft = availableRequests;
 
+  /// Instantiates a [Launches] object with empty data.
   factory Launches.empty({required int availableRequests}) =>
       Launches(availableRequests: availableRequests, data: {});
 

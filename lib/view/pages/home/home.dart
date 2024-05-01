@@ -12,8 +12,7 @@ import 'package:link4launches/model/launches.dart';
 
 /// The home page of the app. Uses [LaunchLibrary2API] to fetch the data and [Updater] to look for the latest version.
 class L4LHomePage extends StatefulWidget {
-  /// The name of the launch, composed by the name of the launcher and the name of the payload, separated by '|'.
-  /// E.g. ``Falcon 9 Block 5 | Starlink Group 6-22``.
+  /// The name of the app to display in the ``[L4LAppBar]``.
   final String title;
 
   const L4LHomePage({super.key, required this.title});
@@ -23,17 +22,14 @@ class L4LHomePage extends StatefulWidget {
 }
 
 class _L4LHomePageState extends State<L4LHomePage> {
-  /// Object used to manage api interactions.
+  /// Object used to manage Launch Libray 2 API interactions.
   late final LaunchLibrary2API _ll2API;
 
-  /// Map used to save api retrived data.
+  /// Object that uses a [Map] to save the API retrived data.
   Launches launches = Launches.empty(availableRequests: 0);
 
-  /// API link
-  static const link =
-      'https://ll.thespacedevs.com/2.2.0/launch/upcoming/?format=json';
-
-  /// Amount of upcoming launches to requesto to the api (non all of them will be displayed).
+  /// Amount of upcoming launches to request to the api (not all of them will be displayed depending on
+  /// how much launchers data cna be retrived using the free requests).
   /// For more info go to [api logic](.\lib\logic\api\api.dart).
   final int launchAmount = 50;
 
@@ -50,7 +46,6 @@ class _L4LHomePageState extends State<L4LHomePage> {
 
     // Creates a api Object and performs a request
     _ll2API = LaunchLibrary2API(
-      link: link,
       context: context,
     );
     _ll2API
@@ -73,13 +68,14 @@ class _L4LHomePageState extends State<L4LHomePage> {
     );
   }
 
-  /// Redirects to the launch page for the specific launch. Only if [data] is not empty.
+  /// Redirects to the launch page for the specific launch. Only if tha data of that specific launch
+  /// contained in the ``[launches]`` onject exists.
   ///
   /// #### Parameters
-  /// - ``int [index]`` : the position of the launch in the list inside ``data['results']``.
-  /// - ``LaunchStatus [status]`` : the status small [widget] to use in the launch page.
+  /// - ``int [index]`` : the position of the launch in the list of launches contained in [launches].
+  /// - ``LaunchStatus [status]`` : the small launch status used in the launch page.
   void _goToLaunchInfo(int index, LaunchState status) {
-    if (launches.isNotEmpty) {
+    if (launches.getLaunchesList()[index].isNotEmpty) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => LaunchInfoPage(
                 launches: launches,
@@ -114,6 +110,7 @@ class _L4LHomePageState extends State<L4LHomePage> {
                 icon: const Icon(Icons.autorenew)),
           ]),
         ],
+        // Show the launches list only when the launchers obj is not empty
         body: launches.isEmpty
             ? Center(
                 child: LoadingAnimationWidget.dotsTriangle(
@@ -126,10 +123,10 @@ class _L4LHomePageState extends State<L4LHomePage> {
               ),
       ));
 
-  /// Builds the single ``[LaunchTile]`` of the list.
+  /// Builds a ``[LaunchTile]`` that is going to be part of the list.
   ///
   /// #### Parameters
-  /// - ``int [index]`` : the position of the launch in the list inside ``data['results']``.
+  /// - ``int [index]`` : the position of the launch in the list of launches contained in [launches].
   Widget _buildListItem(int index) => LaunchTile(
         onPressed: () => _goToLaunchInfo(
             index, LaunchState(state: launches.getShortStatus(index))),
@@ -138,20 +135,4 @@ class _L4LHomePageState extends State<L4LHomePage> {
         date: launches.getLaunchDate(index),
         status: SmallLaunchStatus(state: launches.getShortStatus(index)),
       );
-
-  /// Removes all the unwanted characters from the date of the json and reverse it.
-  ///
-  /// #### Parameters
-  /// - ``String [str]`` : the [String] containg the date if the json.
-  ///
-  /// #### Returns
-  /// ``String`` : the reversed string without the unwanted characters and in the correct format.
-  String _clearDate(String str) => str
-      .split('T')[0]
-      .split('-')
-      .reversed
-      .toString()
-      .replaceAll('(', '')
-      .replaceAll(')', '')
-      .replaceAll(', ', ' / ');
 }

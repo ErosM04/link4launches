@@ -6,33 +6,35 @@ import 'package:link4launches/logic/api/requester.dart';
 import 'package:link4launches/model/launches.dart';
 import 'package:link4launches/view/pages/components/snackbar.dart';
 
-/// Class used to manage api requests to the Launch Library 2 API which also manages the backup json file used to store data regarding launches
+/// Class used to manage API requests to the Launch Library 2 API which also manages the backup json file used to store data regarding launches
 /// to overcome the api limitation. This class also provide smart reuse of data when performing the subrequestes for each launch in order to
-/// perform the smallest amount of request possible.
+/// perform the smallest amount of requests possible.
 class LaunchLibrary2API {
   /// The backup file manager.
   late final BackupJsonManager _backupManager;
 
-  /// The link to use in order to perform the api request for the launches.
-  final String _linkLL2;
+  /// The link to use in order to perform the API request for the launches.
+  static const String _linkLL2 =
+      'https://ll.thespacedevs.com/2.2.0/launch/upcoming/?format=json';
 
+  // The link of the API used to translate cca3 country code to the cca2 version.
   static const String _countryAPILink = 'https://restcountries.com/v3.1/alpha/';
 
+  // The object used to perform request to the Launch Library 2 API.
   final Requester _requesterLL2;
 
-  /// Maximum amount of free request to the api.
+  /// Maximum amount of free request to the LL2 API.
   static const int _maxRequest = 15;
 
+  // The object used to perform request to the Country Code API.
   final Requester _requesterCountry;
 
-  /// The app cotext used to call the [CustomSnackBar].
+  /// The app context used to call the [CustomSnackBar].
   final BuildContext context;
 
   LaunchLibrary2API({
-    required String link,
     required this.context,
-  })  : _linkLL2 = link,
-        _requesterLL2 = Requester(link: link),
+  })  : _requesterLL2 = const Requester(link: _linkLL2),
         _requesterCountry = const Requester(link: _countryAPILink) {
     _backupManager = BackupJsonManager(
       backupFile: 'll2data.json',
@@ -40,19 +42,24 @@ class LaunchLibrary2API {
     );
   }
 
+  /// The link used to access to the Launch Library 2 API.
   String get link => _linkLL2;
 
-  /// Performs a main request to the api (at ``[_linkLL2]``) to obtain the next ``[limit]`` launches (also may contain latest success, failures or
-  /// in progress launches) as a json. Than for each launch performs another request using the ``[_fetchAllRocketData]`` method to obtain
-  /// information about the launcher.
-  /// Everything is than saved in a backup json file using ``[_backupManager]``. If anything goes wrong a [CustomSnackBar] is called and the
-  /// pre-existing backup file is returned.
+  /// Performs a main request to the api (at ``[_linkLL2]``) to obtain the next ``[_maxRequest]`` launches (also may contain
+  /// latest successes, failures or in progress launches) as a json. To perform the request the ``[_requesterLL2]`` object is used.
+  ///
+  /// If the request is successful the data is saved in a [Launches] object.
+  /// Than uses ``[_addLaunchersData]`` to get the data of each launcher.
+  ///
+  /// Everything is than saved in a backup json file using ``[_backupManager]``. If anything goes wrong a [CustomSnackBar] is called
+  /// and the pre-existing backup file is returned. The data are always managed by the [Launches] object.
   ///
   /// #### Parameters
-  /// - ``int [limit]`` : the amount of launch requested in the main request (for every launch than a 2nd request is performed in [_fetchAllRocketData]).
+  /// - ``int [limit]`` : the amount of launch requested in the main request (for every launch than a 2nd request may performed in
+  /// [_addLaunchersData]).
   ///
   /// #### Returns
-  /// ``Future<Map<String, dynamic>>`` : the map containing all the data of each launch. The list of launches is stored at the voice ``map['result']``.
+  /// ``Future<Launches>`` : the ``[Launches]`` object containing all the data of each launch.
   Future<Launches> launch(int limit) async {
     Launches launches = Launches.empty(availableRequests: _maxRequest);
 
@@ -60,9 +67,9 @@ class LaunchLibrary2API {
       parameters: '&limit=$limit',
       onSuccess: (response) async {
         launches.updateData =
-            (_safeDecoding(input: response.bodyBytes, replacingsList: [
+            _safeDecoding(input: response.bodyBytes, replacingsList: [
           [' | Unknown Payload', '']
-        ]) as Map<String, dynamic>);
+        ]);
 
         await _addLaunchersData(launches: launches);
 
@@ -101,6 +108,20 @@ class LaunchLibrary2API {
     return launches;
   }
 
+  /// Adds to the ``[launches]`` the missing data for each launcher. To avoid wasting the requests the data is saved
+  /// in a [Map] where the key is the id of the launcher and the corresponding value is the [Map] containg the data; every
+  /// time that a launcher with the same id needs the data, the [Map] is used.
+  ///
+  /// In order to minimize the requests performed to the API this method also uses the launchers data contained in the
+  /// ``[_backupManager]``.
+  ///
+  /// If the data aren't contained neither in the [Map] nor in the backup, a request to the API si performed using the
+  /// method ``[_fetchLauncherJson]``. If this request returns the error ``429`` the available free requests are set to 0,
+  /// otherwise the new data are saved in the [launches] object (before saving the data the country code is modifyed using
+  /// ``[_fetchCountryCode]``).
+  ///
+  /// #### Parameters
+  /// - ``Launches [launches]`` : the object where the data about the launches are saved.
   Future<void> _addLaunchersData({required Launches launches}) async {
     Map<String, Map<String, dynamic>> launcherMap = {};
     Launches backup = (await _backupManager.fileExists())
@@ -109,6 +130,7 @@ class LaunchLibrary2API {
             data: json.decode(await _backupManager.loadStringFromFile()),
           )
         : Launches.empty(availableRequests: 0);
+    // Keeps track of the launches for which data could be retrived (to later discard the remaining ones).
     int usableLaunches = 0;
 
     for (int i = 0; i < launches.totalLaunches; i++) {
@@ -158,6 +180,13 @@ class LaunchLibrary2API {
     }
   }
 
+  /// Uses the ``[_requesterLL2]`` object to retrive data about a launcher.
+  /// If the request is successful the data are returned. If an error occurs the error code is saved in the [Map] and
+  /// than returned. In the end ig an exception is thrown the retruned value is an empty [Map].
+  ///
+  /// #### Parameters
+  /// - ``String [launcherLink]`` : the link used to perform the request;
+  /// - ``String [launcherName]`` : the name used in the ``[CustomSnackBar]``;
   Future<Map<String, dynamic>> _fetchLauncherJson({
     required String launcherLink,
     required String launcherName,
@@ -207,14 +236,24 @@ class LaunchLibrary2API {
     return cca2;
   }
 
-  /// Reads the byteCode of a http resonse, converts it into an utf8 string and than decodes the JSON in a [Map].
+  /// Reads the byteCode of a http resonse, converts it into an ``utf8`` [String] and than decodes the JSON in a [Map].
+  /// It also uses a [List] where each element is [List] of 2 [String] elements, the first is the one to replace and the
+  /// second is the one to use as a replacement in the [String] before converting it to a JSON.
+  ///
+  /// E.g.:
+  /// ```
+  /// _safeDecoding(input : '{"abcd(f)g" : "cacca"}', replacingsList : [['(', ''], [')', '']],);
+  /// // Result: {"abcdfg" : "cacca"}
+  /// ```
   ///
   /// #### Parameters
   /// - ``Uint8List [input]`` : The byteCode of a http resonse.
+  /// - ``List<List<String>>? replacingsList`` : The list contain a diffrent lists of 2 elements, the first is the one to
+  /// replace and the second is the one to use as a replacement.
   ///
   /// #### Returns
   /// ``Map<String, dynamic>`` : the JSON content converted into a Map.
-  _safeDecoding({
+  Map<String, dynamic> _safeDecoding({
     required Uint8List input,
     List<List<String>>? replacingsList,
     bool replaceAll = true,
