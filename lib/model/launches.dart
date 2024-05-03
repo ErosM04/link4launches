@@ -3,7 +3,7 @@ import 'package:link4launches/model/data.dart';
 /// Class the extends [DataMould] to create a daa manager to store the launches information retrived by the API
 /// and keep tracking of the free API requests.
 class Launches extends DataMould {
-  /// The free remainig request that can be performed to the API.
+  /// The free remainig requests that can be performed to the API.
   int _requestsLeft;
 
   Launches({
@@ -26,8 +26,7 @@ class Launches extends DataMould {
   int get totalLaunches => getLaunchesList().length;
 
   // Main getters
-  List<Map<String, dynamic>> getLaunchesList() =>
-      getValueFromNestedMap(keys: ['results']);
+  List<dynamic> getLaunchesList() => getValueFromNestedMap(keys: ['results']);
 
   //  - Launch:
   String getShortStatus(int index) =>

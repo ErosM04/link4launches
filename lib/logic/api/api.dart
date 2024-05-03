@@ -213,7 +213,11 @@ class LaunchLibrary2API {
     return data;
   }
 
-  /// Takes the cca3 country code (from the main api) and then use https://restcountries.com api to convert it to the cca2 format.
+  /// Takes the ``cca3`` country code (from the main api) and then use the https://restcountries.com api to convert
+  /// it to the ``cca2`` format. This function is used as the api that takes the country code and returns the flag
+  /// image use the cca2 format.
+  ///
+  /// To perform the request uese the ``[_requesterCountry]`` object.
   ///
   /// #### Parameters
   /// - ``String [countryCode]`` : the cca3 country code, e.g. ``USA`` (United States of America).
@@ -222,14 +226,17 @@ class LaunchLibrary2API {
   /// ``Future<String>`` : the cca2 country code, e.g. ``'USA'`` --> ``'US'``.
   Future<String> _fetchCountryCode({required String countryCode}) async {
     String cca2 = '';
+
     await _requesterCountry.get(
       parameters: countryCode,
-      onSuccess: (res) async =>
-          cca2 = (_safeDecoding(input: res.bodyBytes, replacingsList: [
-        ['\r', ''],
-        ['\n', '']
-      ]) as List)[0]['cca2']
-              .toString(),
+      onSuccess: (res) {
+        // Doesn't use _safeDecoding() because after its execution the newxt code is skipped and the
+        // executions skips to end of the .get() function.
+        cca2 = json.decode(utf8.decode(res.bodyBytes))[0]['cca2'].toString();
+        // This is necessary as onSuccess requires a an async function to be retunred (fix in future)
+        fun() async => {};
+        return fun();
+      },
       onError: (statusCode, reasonPhrase, responseBody) {},
     );
 
