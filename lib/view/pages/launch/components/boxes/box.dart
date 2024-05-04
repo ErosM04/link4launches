@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:link4launches/view/pages/launch/components/box_image.dart';
+import 'package:link4launches/view/pages/components/box_image.dart';
 
 /// An abstract class that defines the base structure for a box widget which contains an image and differents types of textual information.
 /// All the null parameters won't be displayed.
@@ -47,7 +47,7 @@ abstract class DataBox extends StatelessWidget {
   /// Creates a List of Widget using the class variables, but only if those varaibles are not null and not empty.
   /// To build the widgets uses other class methods.
   List<Widget> buildItemList() => [
-        if (isSafe(imageLink)) InteractiveImage(imageLink!),
+        if (isSafe(imageLink)) InteractiveImage(imageLink: imageLink!),
         buildTextItem(title, fontWeight: FontWeight.bold),
         if (isSafe(subTitle1)) buildTextItem(subTitle1!, fontSize: 21),
         if (isSafe(subTitle2)) buildTextItem(subTitle2!, fontSize: 21),

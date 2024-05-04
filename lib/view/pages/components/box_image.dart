@@ -7,8 +7,9 @@ import 'package:link4launches/view/pages/launch/shimmer.dart';
 class InteractiveImage extends StatefulWidget {
   /// Web link of the image.
   final String imageLink;
+  final BoxFit? fit;
 
-  const InteractiveImage(this.imageLink, {super.key});
+  const InteractiveImage({required this.imageLink, this.fit, super.key});
 
   @override
   State<InteractiveImage> createState() => _InteractiveImageState();
@@ -54,6 +55,7 @@ class _InteractiveImageState extends State<InteractiveImage>
               child: CachedNetworkImage(
                 fadeOutDuration: const Duration(milliseconds: 400),
                 imageUrl: widget.imageLink,
+                fit: widget.fit,
                 placeholder: (context, url) =>
                     const Center(child: ShimmerEffect()),
                 errorWidget: (context, error, stackTrace) => Container(),

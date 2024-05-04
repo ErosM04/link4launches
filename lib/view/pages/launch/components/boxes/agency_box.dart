@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:link4launches/view/pages/launch/components/box_image.dart';
+import 'package:link4launches/view/pages/components/box_image.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/box.dart';
 
 /// Box Widget that creates an usable version of [DataBox] for the company/agency data.
@@ -21,7 +21,7 @@ class AgencyDataBox extends DataBox {
 
   @override
   List<Widget> buildItemList() => [
-        if (isSafe(imageLink)) InteractiveImage(imageLink!),
+        if (isSafe(imageLink)) InteractiveImage(imageLink: imageLink!),
         buildTextItem(title, fontWeight: FontWeight.bold),
         if (isSafe(subTitle1) && isSafe(imageLink))
           _buildTextWithCountryFlag(text: subTitle1!, imageLink: imageLink!)

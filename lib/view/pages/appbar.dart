@@ -63,15 +63,12 @@ class L4LAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   /// Creates all the clickable icons on the right side of the appbar.
   /// If ``[showPopupMenu]`` is false, the pop-up menu is non shown.
-  List<Widget> _buildActions() {
-    if (showPopupMenu) {
-      return List<Widget>.from(
-        [...actions, _getPopUpMenuButton()],
-        growable: true,
-      );
-    }
-    return List<Widget>.from(actions);
-  }
+  List<Widget> _buildActions() => (showPopupMenu)
+      ? List<Widget>.from(
+          [...actions, _getPopUpMenuButton()],
+          growable: true,
+        )
+      : List<Widget>.from(actions);
 
   /// Creates the pop-up menu button.
   PopupMenuButton _getPopUpMenuButton() => PopupMenuButton(

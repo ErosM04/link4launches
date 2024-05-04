@@ -240,4 +240,5 @@ This is the full 3th container:
 - [x] Remove useless folders (like ios, windows, linux...) that can be recreated with a command if needed;
 - [ ] Look for a better download package;
 - [ ] Move backup json code to ``model``;
-- [ ] Use Streams to speed up the api data gathering process.
+- [ ] Use Streams to speed up the api data gathering process;
+- [ ] Imporve page Navigator logic with ids.

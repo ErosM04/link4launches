@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:link4launches/view/pages/components/launch%20state/status.dart';
-import 'package:link4launches/view/pages/launch/components/box_image.dart';
+import 'package:link4launches/view/pages/components/box_image.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/box.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
@@ -25,7 +25,7 @@ class LaunchDataBox extends DataBox {
 
   @override
   List<Widget> buildItemList() => [
-        if (isSafe(imageLink)) InteractiveImage(imageLink!),
+        if (isSafe(imageLink)) InteractiveImage(imageLink: imageLink!),
         buildTextItem(title, fontWeight: FontWeight.bold),
         if (status != null && isSafe(status!.state))
           Padding(

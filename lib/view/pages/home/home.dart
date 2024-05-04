@@ -7,6 +7,7 @@ import 'package:link4launches/view/pages/components/launch%20state/small_status.
 import 'package:link4launches/view/pages/home/launch_tile.dart';
 import 'package:link4launches/view/pages/launch/launch.dart';
 import 'package:link4launches/view/pages/appbar.dart';
+import 'package:link4launches/view/pages/news/news.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:link4launches/model/launches.dart';
 
@@ -99,15 +100,23 @@ class _L4LHomePageState extends State<L4LHomePage> {
                 style: TextStyle(color: showTBD ? Colors.white : Colors.grey),
               ),
             ),
+            // Redirects to Space News page
+            IconButton(
+                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => SpaceNewsPage(appBar: launchAppBar),
+                    )),
+                // change with \uf1ea
+                icon: const Icon(Icons.newspaper_rounded)),
             // Refresh data by performing a new request to the api
             IconButton(
-                onPressed: () {
-                  setState(() => launches.clearData());
-                  _ll2API
-                      .launch(launchAmount)
-                      .then((value) => setState(() => launches = value));
-                },
-                icon: const Icon(Icons.autorenew)),
+              onPressed: () {
+                setState(() => launches.clearData());
+                _ll2API
+                    .launch(launchAmount)
+                    .then((value) => setState(() => launches = value));
+              },
+              icon: const Icon(Icons.autorenew),
+            ),
           ]),
         ],
         // Show the launches list only when the launchers obj is not empty

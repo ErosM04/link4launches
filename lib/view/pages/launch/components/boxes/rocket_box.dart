@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:link4launches/view/pages/launch/components/box_image.dart';
+import 'package:link4launches/view/pages/components/box_image.dart';
 import 'package:link4launches/view/pages/launch/components/boxes/box.dart';
 import 'package:link4launches/view/pages/launch/components/detail.dart';
 
@@ -48,7 +48,7 @@ class RocketDataBox extends DataBox {
 
   @override
   List<Widget> buildItemList() => [
-        if (isSafe(imageLink)) InteractiveImage(imageLink!),
+        if (isSafe(imageLink)) InteractiveImage(imageLink: imageLink!),
         buildTextItem(title, fontWeight: FontWeight.bold),
         if (isSafe(subTitle1)) buildTextItem(subTitle1!, fontSize: 21),
         DetailSection(
