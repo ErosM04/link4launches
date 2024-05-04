@@ -76,7 +76,7 @@ class _L4LHomePageState extends State<L4LHomePage> {
   /// - ``int [index]`` : the position of the launch in the list of launches contained in [launches].
   /// - ``LaunchStatus [status]`` : the small launch status used in the launch page.
   void _goToLaunchInfo(int index, LaunchState status) {
-    if (launches.getLaunchesList()[index].isNotEmpty) {
+    if ((launches.getLaunchesList()[index] as Map).isNotEmpty) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => LaunchInfoPage(
                 launches: launches,
@@ -102,20 +102,11 @@ class _L4LHomePageState extends State<L4LHomePage> {
             ),
             // Redirects to Space News page
             IconButton(
-                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => SpaceNewsPage(appBar: launchAppBar),
-                    )),
-                // change with \uf1ea
-                icon: const Icon(Icons.newspaper_rounded)),
-            // Refresh data by performing a new request to the api
-            IconButton(
-              onPressed: () {
-                setState(() => launches.clearData());
-                _ll2API
-                    .launch(launchAmount)
-                    .then((value) => setState(() => launches = value));
-              },
-              icon: const Icon(Icons.autorenew),
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => SpaceNewsPage(appBar: launchAppBar),
+              )),
+              // change with \uf1ea
+              icon: const Icon(Icons.newspaper_rounded),
             ),
           ]),
         ],
@@ -124,11 +115,20 @@ class _L4LHomePageState extends State<L4LHomePage> {
             ? Center(
                 child: LoadingAnimationWidget.dotsTriangle(
                     color: Colors.white, size: 50))
-            : ListView.builder(
-                padding: EdgeInsets.zero,
-                controller: ScrollController(),
-                itemCount: launches.totalLaunches,
-                itemBuilder: (context, index) => _buildListItem(index),
+            : RefreshIndicator(
+                // Refresh data by performing a new request to the api
+                onRefresh: () async {
+                  setState(() => launches.clearData());
+                  _ll2API
+                      .launch(launchAmount)
+                      .then((value) => setState(() => launches = value));
+                },
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  controller: ScrollController(),
+                  itemCount: launches.totalLaunches,
+                  itemBuilder: (context, index) => _buildListItem(index),
+                ),
               ),
       ));
 

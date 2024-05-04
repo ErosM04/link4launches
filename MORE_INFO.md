@@ -234,11 +234,12 @@ This is the full 3th container:
 
 ## TODO
 - [x] Improve API limited request use;
-- [ ] Add [space news](https://thespacedevs.com/snapi);
+- [x] Add [space news](https://thespacedevs.com/snapi) page;
 - [ ] Add a welcome dialog that opens only the very first time;
 - [ ] Add a script that runs only the very first time and locates "link4launches*.apk" files in the Download folder and asks if the app can remove them;
 - [x] Remove useless folders (like ios, windows, linux...) that can be recreated with a command if needed;
 - [ ] Look for a better download package;
 - [ ] Move backup json code to ``model``;
 - [ ] Use Streams to speed up the api data gathering process;
-- [ ] Imporve page Navigator logic with ids.
+- [ ] Imporve page Navigator logic with ids;
+- [x] Substitute the refresh icon with pull and release.
