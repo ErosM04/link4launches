@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:link4launches/logic/api/api.dart';
 import 'package:link4launches/logic/updater/updater.dart';
 import 'package:link4launches/view/pages/components/launch%20state/status.dart';
@@ -106,7 +107,7 @@ class _L4LHomePageState extends State<L4LHomePage> {
                 builder: (context) => SpaceNewsPage(appBar: launchAppBar),
               )),
               // change with \uf1ea
-              icon: const Icon(Icons.newspaper_rounded),
+              icon: const FaIcon(FontAwesomeIcons.newspaper),
             ),
           ]),
         ],

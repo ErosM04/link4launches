@@ -242,4 +242,5 @@ This is the full 3th container:
 - [ ] Move backup json code to ``model``;
 - [ ] Use Streams to speed up the api data gathering process;
 - [ ] Imporve page Navigator logic with ids;
+- [ ] Add transition when switching page;
 - [x] Substitute the refresh icon with pull and release.

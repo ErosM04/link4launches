@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -64,8 +64,7 @@ class _SpaceNewsPageState extends State<SpaceNewsPage> {
             children: [
               Flexible(
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
                   child: Text(
                     item['title'],
                     textAlign: TextAlign.left,
@@ -75,16 +74,13 @@ class _SpaceNewsPageState extends State<SpaceNewsPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
+                padding: const EdgeInsets.only(left: 5, right: 8),
                 child: GestureDetector(
-                  onTap: () => launchUrl(Uri.parse(item['url'])),
-                  child: const Icon(
-                    // change with \uf44c
-                    Icons.link_outlined,
-                    color: Colors.blue,
-                    size: 30,
-                  ),
-                ),
+                    onTap: () => launchUrl(Uri.parse(item['url'])),
+                    child: FaIcon(
+                      FontAwesomeIcons.link,
+                      color: Theme.of(context).colorScheme.primary,
+                    )),
               ),
             ],
           ),

@@ -30,7 +30,7 @@ dependencies:
   change_app_package_name:
   open_filex:
   file_picker:
-
+  font_awesome_flutter:
 
 dev_dependencies:
   flutter_test:
